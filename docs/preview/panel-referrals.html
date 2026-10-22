@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>زیرمجموعه‌گیری — مدیر گروه بله</title>
-
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -154,10 +153,10 @@ svg{max-width:100%;height:auto;display:block}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-body{padding:14px}</style>
-<title>زیرمجموعه‌گیری — پیش‌نمایش</title>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
 </head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت (Static Preview)</b> — این صفحه یک اسکرین‌شات HTML از پنل واقعی است: دکمه‌ها و فرم‌ها در این فایل کار نمی‌کنند، اما چیدمان، رنگ‌ها و نمودارها همان چیزی است که روی سرور می‌بینید. همه چیز درون‌خطی است (بدون CSS/JS/CDN خارجی).</div>
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
@@ -168,27 +167,28 @@ body{padding:14px}</style>
       </div>
     </div>
     <nav class="nav">
-      <a href="http://localhost:8080/panel/index.php?p=dashboard" class="">📊 داشبورد</a>
-      <a href="http://localhost:8080/panel/index.php?p=groups" class="">👥 گروه‌ها</a>
-      <a href="http://localhost:8080/panel/index.php?p=moderation" class="">🛡 تخلفات</a>
-      <a href="http://localhost:8080/panel/index.php?p=users" class="">🙋 کاربران</a>
-      <a href="http://localhost:8080/panel/index.php?p=logs" class="">📜 رخدادها</a>
-      <a href="http://localhost:8080/panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
-      <a href="http://localhost:8080/panel/index.php?p=referrals" class="active">🌱 زیرمجموعه‌گیری</a>
-      <a href="http://localhost:8080/panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
-      <a href="http://localhost:8080/panel/index.php?p=store" class="">📦 انبار</a>
-      <a href="http://localhost:8080/panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="active">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
       <div class="sep">مدیریت سیستم</div>
-              <a href="http://localhost:8080/panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
-        <a href="http://localhost:8080/panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
-        <a href="http://localhost:8080/panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
-        <a href="http://localhost:8080/panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
-        <a href="http://localhost:8080/panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
-        <a href="http://localhost:8080/panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
-            <a href="http://localhost:8080/panel/index.php?p=account" class="">👤 حساب من</a>
-      <a href="http://localhost:8080/panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
       <div class="sep">خروج</div>
-      <a href="http://localhost:8080/panel/logout.php">🚪 خروج از پنل</a>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
     </nav>
   </aside>
 
@@ -200,7 +200,7 @@ body{padding:14px}</style>
               </div>
       <div class="inline">
                         <span class="pill">admin · مدیر ارشد</span>
-        <a class="btn ghost sm" href="http://localhost:8080/panel/logout.php">خروج</a>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
       </div>
     </div>
 
@@ -228,8 +228,8 @@ body{padding:14px}</style>
 
 <div class="card">
   <h2>⚙️ تنظیمات سامانه دعوت</h2>
-  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="grid g3">
-    <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">    <input type="hidden" name="a" value="referral_settings">
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g3">
+    <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">    <input type="hidden" name="a" value="referral_settings">
     <div>
       <label class="check"><input type="checkbox" name="referral_enabled" value="1" checked> سامانه دعوت فعال باشد</label>
       <label class="check"><input type="checkbox" name="referral_notify" value="1" checked> اطلاع به معرف هنگام تایید</label>
@@ -241,7 +241,7 @@ body{padding:14px}</style>
     </div>
     <div style="align-self:end"><button class="btn" type="submit">💾 ذخیره</button></div>
   </form>
-      <div class="hint mt">نمونه لینک شما: <code class="mono">https://ble.ir/mock_bot?start=ref_r21i3v99kfn</code></div>
+      <div class="hint mt">نمونه لینک شما: <code class="mono">https://ble.ir/mock_bot?start=ref_r21i3v9wn6w</code></div>
   </div>
 
 <div class="card">
@@ -262,7 +262,7 @@ body{padding:14px}</style>
       <thead><tr><th>#</th><th>معرف</th><th>دعوت‌شده</th><th>گروه</th><th>وضعیت</th><th>زمان</th><th>عملیات</th></tr></thead>
       <tbody>
               <tr>
-          <td class="small">۱۲</td>
+          <td class="small">۱۶</td>
           <td class="small">
             کاربر 900001            <span class="mono muted">900001</span>
           </td>
@@ -273,20 +273,20 @@ body{padding:14px}</style>
           <td>
                         <span class="badge b-err">ردشده</span>
           </td>
-          <td class="small">2026/10/22 19:27</td>
+          <td class="small">2026/10/22 19:43</td>
           <td>
             <div class="btn-group">
-                              <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php">
-                  <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                  <input type="hidden" name="a" value="referral_status">
+                              <form onsubmit="return false" method="post" action="#panel/index.php">
+                  <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="referral_status">
                   <input type="hidden" name="status" value="verified">
-                  <input type="hidden" name="id" value="12">
+                  <input type="hidden" name="id" value="16">
                   <button class="btn ok sm" type="submit">تایید</button>
                 </form>
                                         </div>
           </td>
         </tr>
               <tr>
-          <td class="small">۱۱</td>
+          <td class="small">۱۵</td>
           <td class="small">
             User910001            <span class="mono muted">910001</span>
           </td>
@@ -297,13 +297,13 @@ body{padding:14px}</style>
           <td>
                         <span class="badge b-ok">تاییدشده</span>
           </td>
-          <td class="small">2026/10/22 19:27</td>
+          <td class="small">2026/10/22 19:43</td>
           <td>
             <div class="btn-group">
-                                            <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php">
-                  <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                  <input type="hidden" name="a" value="referral_status">
+                                            <form onsubmit="return false" method="post" action="#panel/index.php">
+                  <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="referral_status">
                   <input type="hidden" name="status" value="rejected">
-                  <input type="hidden" name="id" value="11">
+                  <input type="hidden" name="id" value="15">
                   <button class="btn danger sm" type="submit">رد</button>
                 </form>
                           </div>
@@ -325,5 +325,6 @@ body{padding:14px}</style>
     </div>
   </main>
 </div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>

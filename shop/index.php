@@ -57,6 +57,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             'address'     => (string)input('address', ''),
             'note'        => (string)input('note', ''),
             'ref_code'    => (string)($user['referred_by'] ? '' : ''),
+            'coupon'      => (string)input('coupon', ''),
             'notify'      => true,
         ]);
         if (!$res['ok']) {
@@ -64,6 +65,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             redirect('shop/index.php', ['p' => 'product_view', 'id' => (int)$p['id']]);
         }
         Auth::flash('ok', 'سفارش ' . $res['code'] . ' ثبت شد. مبلغ: ' . money((int)$res['total'])
+            . ((int)($res['discount'] ?? 0) > 0
+                ? ' (تخفیف ' . money((int)$res['discount']) . ' با کد ' . (string)$res['coupon'] . ')'
+                : '')
             . ' — لطفاً رسید پرداخت را آپلود کن.');
         redirect('shop/index.php', ['p' => 'order', 'code' => $res['code']]);
     }
@@ -98,6 +102,47 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect('shop/index.php', ['p' => 'order', 'code' => $code]);
     }
 
+    if ($a === 'review_save') {
+        $code  = (string)input('code', '');
+        $order = Orders::byCode($code);
+        if (!$order || (int)$order['user_id'] !== (int)$user['user_id']) {
+            Auth::flash('err', 'سفارش پیدا نشد.');
+            redirect('shop/index.php', ['p' => 'orders']);
+        }
+        $res = Reviews::submit((int)$order['id'], (int)$user['user_id'],
+            (int)input('rating', 5), (string)input('comment', ''));
+        if (!$res['ok']) {
+            Auth::flash('err', (string)($res['error'] ?? 'ثبت نظر ناموفق.'));
+            redirect('shop/index.php', ['p' => 'order', 'code' => $code]);
+        }
+        Auth::flash('ok', $res['status'] === 'approved'
+            ? '⭐ ممنون! نظرت ثبت و منتشر شد.'
+            : '⭐ نظرت ثبت شد و بعد از تایید مدیر نمایش داده می‌شود.');
+        redirect('shop/index.php', ['p' => 'order', 'code' => $code]);
+    }
+
+    if ($a === 'csv_import') {
+        $sellerOk = Seller::approved((int)$user['user_id']);
+        if (!$sellerOk) {
+            Auth::flash('err', 'برای ورود انبار باید فروشنده تاییدشده باشی.');
+            redirect('shop/index.php', ['p' => 'seller']);
+        }
+        $f = $_FILES['csv'] ?? null;
+        if (!$f || (int)($f['error'] ?? 1) !== 0 || empty($f['tmp_name'])) {
+            Auth::flash('err', 'فایل CSV انتخاب نشد.');
+            redirect('shop/index.php', ['p' => 'products']);
+        }
+        $csv = (string)file_get_contents((string)$f['tmp_name']);
+        $res = Store::importCsv($csv, (int)$sellerOk['id'], null);
+        if (!$res['ok']) {
+            Auth::flash('err', (string)($res['error'] ?? 'ورود CSV ناموفق.'));
+            redirect('shop/index.php', ['p' => 'products']);
+        }
+        Auth::flash('ok', 'ورود CSV: ' . digits_fa((int)$res['created']) . ' کالای جدید، '
+            . digits_fa((int)$res['updated']) . ' به‌روزرسانی، ' . digits_fa((int)$res['skipped']) . ' رد‌شده.');
+        redirect('shop/index.php', ['p' => 'products']);
+    }
+
     if ($a === 'withdraw') {
         $r = Wallet::requestWithdraw((int)$user['user_id'], (int)input('amount', 0), (string)input('card', ''));
         Auth::flash($r['ok'] ? 'ok' : 'err', $r['ok']
@@ -116,6 +161,24 @@ $data  = [];
 $myId  = (int)$user['user_id'];
 $seller = Seller::forUser($myId);
 $super  = false;
+
+// خروجی CSV کالاهای همین فروشنده
+if ($page === 'csv') {
+    $sellerOk = Seller::approved($myId);
+    if (!$sellerOk) {
+        Auth::flash('err', 'برای خروجی انبار باید فروشنده تاییدشده باشی.');
+        redirect('shop/index.php', ['p' => 'seller']);
+    }
+    $csv = Store::exportCsv((int)$sellerOk['id']);
+    Logger::user(null, $myId, null, 'inventory_export_seller', 'rows=' . substr_count($csv, "\n"));
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="my-inventory-' . date('Ymd-His') . '.csv"');
+    header('Content-Length: ' . (string)strlen($csv));
+    header('X-Content-Type-Options: nosniff');
+    header('Cache-Control: no-store');
+    echo $csv;
+    exit;
+}
 
 switch ($page) {
     case 'products':
@@ -149,8 +212,28 @@ switch ($page) {
             redirect('shop/index.php');
         }
         DB::q("UPDATE products SET views=views+1 WHERE id=?", [(int)$p['id']]);
-        $data += ['product' => $p, 'me' => $user];
+        $data += [
+            'product'     => $p,
+            'me'          => $user,
+            'reviews'     => Reviews::forProduct((int)$p['id'], 20),
+            'rating'      => Reviews::summary((int)$p['id']),
+        ];
         $title = (string)$p['title'];
+        break;
+
+    case 'review':
+        $o = Orders::byCode((string)($_GET['code'] ?? ''));
+        if (!$o || (int)$o['user_id'] !== $myId) {
+            Auth::flash('err', 'سفارش پیدا نشد.');
+            redirect('shop/index.php', ['p' => 'orders']);
+        }
+        $check = Reviews::canReview((int)$o['id'], $myId);
+        $data += [
+            'order' => $o,
+            'can'   => $check,
+            'already' => (int)DB::val("SELECT COUNT(*) FROM product_reviews WHERE order_id=? AND user_id=?", [(int)$o['id'], $myId], 0) > 0,
+        ];
+        $title = 'ثبت نظر و امتیاز';
         break;
 
     case 'orders':

@@ -20,11 +20,24 @@ $labels = ['ثبت', 'پرداخت', 'آماده‌سازی', 'ارسال', 'ت�
     <?php endforeach; ?>
   </div>
 
+  <?php if ($o['status'] === 'delivered'): ?>
+    <div class="btn-group mb">
+      <a class="btn <?= (int)($o['reviewed'] ?? 0) === 1 ? 'ghost' : 'ok' ?> sm"
+         href="<?= h(url('shop/index.php', ['p' => 'review', 'code' => (string)$o['code']])) ?>">
+        <?= (int)($o['reviewed'] ?? 0) === 1 ? '⭐ نظر ثبت شده' : '⭐ ثبت نظر و امتیاز' ?>
+      </a>
+    </div>
+  <?php endif; ?>
+
   <div class="grid g2">
     <div>
       <div class="rowline"><span>کالا</span><b><?= h((string)($o['items'][0]['title_snapshot'] ?? '-')) ?></b></div>
       <div class="rowline"><span>تعداد</span><span><?= digits_fa((int)($o['items'][0]['qty'] ?? 1)) ?></span></div>
       <div class="rowline"><span>جمع کالا</span><span><?= money((int)$o['subtotal']) ?></span></div>
+      <?php if ((int)($o['discount'] ?? 0) > 0): ?>
+        <div class="rowline"><span>تخفیف (<?= h((string)($o['coupon_code'] ?? '')) ?>)</span>
+          <span style="color:#22c55e">-<?= money((int)$o['discount']) ?></span></div>
+      <?php endif; ?>
       <div class="rowline"><span>هزینه ارسال</span><span><?= money((int)$o['shipping']) ?></span></div>
       <div class="rowline"><span><b>مبلغ کل</b></span><b><?= money((int)$o['total']) ?></b></div>
       <div class="rowline"><span>وضعیت پرداخت</span>

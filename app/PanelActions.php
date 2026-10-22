@@ -58,13 +58,164 @@ final class PanelActions
                 case 'category_save':     self::categorySave($admin); break;
                 case 'withdraw_decide':   self::withdrawDecide($admin, $super); break;
                 case 'store_settings':    self::storeSettings($admin, $super); break;
+                case 'coupon_save':       self::couponSave($admin); break;
+                case 'coupon_toggle':     self::couponToggle($admin); break;
+                case 'coupon_delete':     self::couponDelete($admin); break;
+                case 'review_moderate':   self::reviewModerate($admin); break;
+                case 'review_delete':     self::reviewDelete($admin); break;
+                case 'store_reviews_auto':self::storeReviewsAuto($admin, $super); break;
+                case 'inventory_import':  self::inventoryImport($admin); break;
+                case 'module_toggle':     self::moduleToggle($admin, $super); break;
                 default:
-                    Auth::flash('err', 'عملیات ناشناخته.');
+                    if (!self::moduleAction($action, $admin)) {
+                        Auth::flash('err', 'عملیات ناشناخته.');
+                    }
             }
         } catch (Throwable $e) {
             Logger::error('panel', $action . ': ' . $e->getMessage(), ['at' => basename($e->getFile()) . ':' . $e->getLine()]);
             Auth::flash('err', 'خطا در انجام عملیات: ' . $e->getMessage());
         }
+    }
+
+    // ---------------- کد تخفیف، نظرات و CSV (۱.۴) ----------------
+
+    private static function couponSave(array $admin): void
+    {
+        $r = Coupon::save($_POST, (int)$admin['id']);
+        if ($r['ok']) {
+            Auth::flash('ok', 'کد تخفیف «' . h((string)$r['code']) . '» ذخیره شد.');
+        } else {
+            Auth::flash('err', (string)($r['error'] ?? 'خطا در ذخیره کد.'));
+        }
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'coupons']);
+    }
+
+    private static function couponToggle(array $admin): void
+    {
+        $id = (int)input('id', 0);
+        $on = (string)input('on', '0') === '1';
+        Coupon::toggle($id, $on, (int)$admin['id']);
+        Auth::flash('ok', $on ? 'کد فعال شد.' : 'کد خاموش شد.');
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'coupons']);
+    }
+
+    private static function couponDelete(array $admin): void
+    {
+        Coupon::delete((int)input('id', 0), (int)$admin['id']);
+        Auth::flash('ok', 'کد تخفیف حذف شد.');
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'coupons']);
+    }
+
+    private static function reviewModerate(array $admin): void
+    {
+        $ok = Reviews::moderate((int)input('id', 0), (string)input('status', ''), (int)$admin['id']);
+        Auth::flash($ok ? 'ok' : 'err', $ok ? 'وضعیت نظر تغییر کرد.' : 'نظر پیدا نشد.');
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'reviews']);
+    }
+
+    private static function reviewDelete(array $admin): void
+    {
+        Reviews::delete((int)input('id', 0), (int)$admin['id']);
+        Auth::flash('ok', 'نظر حذف شد.');
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'reviews']);
+    }
+
+    private static function storeReviewsAuto(array $admin, bool $super): void
+    {
+        if (!$super) {
+            Auth::flash('err', 'فقط مدیر ارشد.');
+            redirect('panel/index.php', ['p' => 'store', 'tab' => 'reviews']);
+        }
+        $on = (string)input('on', '1') === '1';
+        Schema::setSetting('store_reviews_auto', $on ? '1' : '0');
+        Logger::audit((int)$admin['id'], (string)$admin['username'], 'store_reviews_auto', 'store', $on ? 'خودکار' : 'بازبینی');
+        Auth::flash('ok', 'حالت نمایش نظرات: ' . ($on ? 'خودکار' : 'بازبینی دستی'));
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'reviews']);
+    }
+
+    private static function inventoryImport(array $admin): void
+    {
+        $f = $_FILES['csv'] ?? null;
+        if (!$f || (int)($f['error'] ?? 1) !== 0 || empty($f['tmp_name'])) {
+            Auth::flash('err', 'فایل CSV انتخاب نشد.');
+            redirect('panel/index.php', ['p' => 'store', 'tab' => 'csv']);
+        }
+        if ((int)$f['size'] > 4 * 1024 * 1024) {
+            Auth::flash('err', 'حجم فایل بیش از ۴ مگابایت است.');
+            redirect('panel/index.php', ['p' => 'store', 'tab' => 'csv']);
+        }
+        $csv = (string)file_get_contents((string)$f['tmp_name']);
+        $r   = Store::importCsv($csv, null, (int)$admin['id']);
+        if (!$r['ok']) {
+            Auth::flash('err', (string)($r['error'] ?? 'ورود CSV ناموفق.'));
+            redirect('panel/index.php', ['p' => 'store', 'tab' => 'csv']);
+        }
+        $msg = 'ورود CSV: ' . digits_fa((int)$r['created']) . ' کالای جدید، '
+            . digits_fa((int)$r['updated']) . ' به‌روزرسانی، ' . digits_fa((int)$r['skipped']) . ' رد‌شده.';
+        if (!empty($r['errors'])) {
+            $msg .= ' نمونه خطا: ' . mb_strimwidth(implode(' | ', array_slice((array)$r['errors'], 0, 3)), 0, 220, '…');
+        }
+        Auth::flash(empty($r['errors']) ? 'ok' : 'warn', $msg);
+        redirect('panel/index.php', ['p' => 'store', 'tab' => 'csv']);
+    }
+
+    // ---------------- ماژول‌ها ----------------
+
+    /** روشن/خاموش کردن یک ماژول */
+    private static function moduleToggle(array $admin, bool $super): void
+    {
+        $key   = (string)input('m', '');
+        $class = ModuleManager::get($key);
+        if ($class === null) {
+            Auth::flash('err', 'ماژول پیدا نشد.');
+            self::back('modules');
+            return;
+        }
+        $on = (string)input('on', '1') === '1';
+        $class::setEnabled($on);
+        Logger::audit((int)$admin['id'], (string)$admin['username'], 'module_toggle', $key, $on ? 'روشن' : 'خاموش');
+        Auth::flash('ok', 'ماژول «' . $class::title() . '» ' . ($on ? 'روشن' : 'خاموش') . ' شد.');
+        self::back('modules');
+    }
+
+    /**
+     * فرم‌های داخل صفحه ماژول‌ها؛ اگر ماژولی اکشن را بشناسد اجرا می‌شود.
+     * @return bool آیا اکشنی هندل شد؟
+     */
+    private static function moduleAction(string $action, array $admin): bool
+    {
+        $key = (string)input('m', '');
+        if ($key !== '' && ($class = ModuleManager::get($key)) !== null) {
+            $class::resetError();
+            $msg = $class::handleAction($action, $admin);
+            if ($msg !== null) {
+                Auth::flash('ok', $msg);
+            } elseif ($class::$lastError !== null) {
+                Auth::flash('err', (string)$class::$lastError);
+            } else {
+                Auth::flash('err', 'این عملیات در ماژول «' . $class::title() . '» انجام نشد.');
+            }
+            self::back('module', ['m' => $key]);
+            return true;
+        }
+        foreach (ModuleManager::all() as $k => $class) {
+            if (!is_subclass_of($class, Module::class)) {
+                continue;
+            }
+            $class::resetError();
+            $msg = $class::handleAction($action, $admin);
+            if ($msg !== null) {
+                Auth::flash('ok', $msg);
+                self::back('module', ['m' => $k]);
+                return true;
+            }
+            if ($class::$lastError !== null) {
+                Auth::flash('err', (string)$class::$lastError);
+                self::back('module', ['m' => $k]);
+                return true;
+            }
+        }
+        return false;
     }
 
     private static function back(string $p, array $q = []): void

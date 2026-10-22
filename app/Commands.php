@@ -89,6 +89,7 @@ final class Commands
         'خرید' => 'buy', 'buy' => 'buy', 'سفارشها' => 'my_orders', 'سفارش‌ها' => 'my_orders',
         'کیف_پول' => 'wallet', 'کیفپول' => 'wallet', 'موجودی' => 'wallet', 'wallet' => 'wallet',
         'فروشنده' => 'sell', 'فروشندگی' => 'sell',
+        'کدتخفیف' => 'coupons', 'کد_تخفیف' => 'coupons', 'تخفیف' => 'coupons', 'coupons' => 'coupons',
     ];
 
     public static function names(): array
@@ -103,13 +104,18 @@ final class Commands
         if ($raw === '' || str_starts_with($raw, '/')) {
             $raw = ltrim($raw, '/');
         }
-        $found = Text::looksLikeCommand($raw, self::names());
+        $names = self::names();
+        foreach (self::moduleCommands() as $mc) {
+            $names[] = $mc;
+        }
+        $found = Text::looksLikeCommand($raw, $names);
         if ($found === null) {
             return null;
         }
         $canonical = self::MAP[$found['cmd']] ?? null;
         if ($canonical === null) {
-            return null;
+            // ممکن است دستور یکی از ماژول‌ها باشد
+            $canonical = 'module:' . $found['cmd'];
         }
         return [
             'chat_id'  => $chatId,
@@ -126,9 +132,23 @@ final class Commands
         ];
     }
 
+    /** دستورهای ماژول‌های فعال (برای پارس و راهنما) @return array<int,string> */
+    public static function moduleCommands(): array
+    {
+        try {
+            return array_keys(ModuleManager::commands());
+        } catch (Throwable $e) {
+            Logger::warn('commands', 'module commands: ' . $e->getMessage());
+            return [];
+        }
+    }
+
     public static function dispatch(array $ctx): bool
     {
         $cmd = (string)$ctx['cmd'];
+        if (str_starts_with($cmd, 'module:')) {
+            return ModuleManager::dispatchCommand((string)$ctx['cmd_name'], $ctx);
+        }
         if (in_array($cmd, self::ADMIN_ONLY, true) && !$ctx['is_admin']) {
             if (!empty($ctx['prefixed'])) {
                 self::say($ctx, "⛔ این دستور فقط برای ادمین‌های گروه است.");
@@ -362,6 +382,56 @@ final class Commands
             . "برداشت و گردش حساب: " . url('shop/index.php', ['p' => 'wallet']));
     }
 
+    /** کد تخفیف: بدون آرگومان = لیست کدهای فعال، با کد = بررسی اعتبار */
+    private static function do_coupons(array $ctx): void
+    {
+        $code = trim((string)$ctx['rest']);
+        if ($code !== '') {
+            $c = Coupon::find($code);
+            if (!$c) {
+                self::say($ctx, "❌ کد <code>" . h($code) . "</code> پیدا نشد.");
+                return;
+            }
+            $now = time();
+            $problems = [];
+            if ((int)$c['is_active'] !== 1) {
+                $problems[] = 'غیرفعال شده است';
+            }
+            if ((int)$c['expires_at'] > 0 && (int)$c['expires_at'] < $now) {
+                $problems[] = 'منقضی شده است (' . dt((int)$c['expires_at'], 'Y/m/d') . ')';
+            }
+            if ((int)$c['max_uses'] > 0 && (int)$c['used_count'] >= (int)$c['max_uses']) {
+                $problems[] = 'ظرفیت استفاده تکمیل شده';
+            }
+            if ($problems) {
+                self::say($ctx, "⚠️ کد <code>" . h($c['code']) . "</code>: " . implode(' و ', $problems));
+                return;
+            }
+            $off = $c['type'] === 'percent' ? digits_fa((int)$c['value']) . '٪' : money((int)$c['value']);
+            self::say($ctx, "✅ کد <code>" . h($c['code']) . "</code> معتبر است.\n"
+                . "تخفیف: <b>" . $off . "</b>"
+                . ((int)$c['min_total'] > 0 ? "\nحداقل خرید: " . money((int)$c['min_total']) : '')
+                . ((int)$c['expires_at'] > 0 ? "\nمعتبر تا: " . dt((int)$c['expires_at'], 'Y/m/d') : '')
+                . "\n\nاین کد را هنگام ثبت سفارش در پنل فروشگاه وارد کن: " . url('shop/'));
+            return;
+        }
+        $rows = DB::all("SELECT * FROM coupons WHERE is_active=1 AND (expires_at IS NULL OR expires_at=0 OR expires_at > ?)
+                         ORDER BY id DESC LIMIT 8", [time()]);
+        if (!$rows) {
+            self::say($ctx, "🎟 در حال حاضر کد تخفیف فعالی وجود ندارد.");
+            return;
+        }
+        $lines = ["🎟 <b>کدهای تخفیف فعال</b>"];
+        foreach ($rows as $c) {
+            $off = $c['type'] === 'percent' ? digits_fa((int)$c['value']) . '٪' : money((int)$c['value']);
+            $lines[] = "• <code>" . h((string)$c['code']) . "</code> — " . $off
+                . ((int)$c['min_total'] > 0 ? ' · حداقل ' . money((int)$c['min_total']) : '')
+                . ((int)$c['expires_at'] > 0 ? ' · تا ' . dt((int)$c['expires_at'], 'Y/m/d') : '');
+        }
+        $lines[] = "\nبرای بررسی یک کد بنویس: <code>کدتخفیف CODE</code>";
+        self::say($ctx, implode("\n", $lines));
+    }
+
     private static function do_sell(array $ctx): void
     {
         $uid = (int)$ctx['user_id'];
@@ -453,6 +523,7 @@ final class Commands
             . "سفارشها — وضعیت سفارش‌های من\n"
             . "فروشگاه — لینک ورود به پنل فروشگاه\n"
             . "کیف_پول — موجودی و کمیسیون\n"
+            . "کدتخفیف [کد] — لیست/بررسی کدهای تخفیف\n"
             . "فروشنده — درخواست فروشندگی\n\n"
             . "<b>دعوت و آمار</b>\n"
             . "دعوت — لینک دعوت اختصاصی\n"
@@ -460,8 +531,27 @@ final class Commands
             . "تاپ_دعوت — بهترین دعوت‌کننده‌ها\n"
             . "نمودار [روز] — خلاصه آماری (ادمین)\n"
             . "بکاپ — گرفتن نسخه پشتیبان (ادمین)\n\n"
+            . self::moduleHelp()
             . "🔐 پنل مدیریت: " . url('panel/');
         self::say($ctx, $t);
+    }
+
+    /** بخش راهنما برای دستورهای ماژول‌های فعال */
+    private static function moduleHelp(): string
+    {
+        $lines = [];
+        try {
+            foreach (ModuleManager::enabled() as $class) {
+                $cmds = array_keys($class::commands());
+                if ($cmds) {
+                    $lines[] = '<b>' . $class::icon() . ' ' . h($class::title()) . '</b>\n'
+                        . implode(' | ', array_map(static fn($c) => '<code>' . h((string)$c) . '</code>', $cmds));
+                }
+            }
+        } catch (Throwable $e) {
+            Logger::warn('commands', 'module help: ' . $e->getMessage());
+        }
+        return $lines ? "<b>ماژول‌ها</b>\n" . implode("\n", $lines) . "\n\n" : '';
     }
 
     private static function do_rules_view(array $ctx): void

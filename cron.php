@@ -133,6 +133,19 @@ try {
         Logger::error('cron', 'store jobs: ' . $e->getMessage());
     }
 
+    // 6.۸) کارهای دوره‌ای ماژول‌ها (اخبار زمان‌بندی‌شده، …)
+    try {
+        $mods = ModuleManager::runCron();
+        $bad = array_filter($mods, static fn($v) => $v !== 'ok');
+        if ($bad) {
+            $done['modules_errors'] = $bad;
+        } elseif ($mods) {
+            $done['modules'] = implode(',', array_keys($mods));
+        }
+    } catch (Throwable $e) {
+        Logger::error('cron', 'modules: ' . $e->getMessage());
+    }
+
     // 7) تمیزکاری‌ها
     $done['cache_files'] = Cache::gc();
     DB::q("DELETE FROM bot_updates WHERE handled_at < ?", [time() - 3 * 86400]);

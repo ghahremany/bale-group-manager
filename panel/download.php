@@ -9,10 +9,25 @@ require_once dirname(__DIR__) . '/app/bootstrap.php';
 
 security_headers(false);
 Auth::boot();
-$admin = (string)($_GET['type'] ?? '') === 'receipt' ? Auth::requireLogin() : Auth::requireSuper();
+$needsLoginOnly = (string)($_GET['type'] ?? '') === 'receipt' || (string)($_GET['p'] ?? '') === 'csv';
+$admin = $needsLoginOnly ? Auth::requireLogin() : Auth::requireSuper();
 
 $type = (string)($_GET['type'] ?? 'backup');
 $file = (string)($_GET['file'] ?? '');
+
+// خروجی CSV انبار (کالا + موجودی) — در دسترس همه ادمین‌های پنل
+if ((string)($_GET['p'] ?? '') === 'csv') {
+    $csv = Store::exportCsv();
+    Logger::audit((int)$admin['id'], (string)$admin['username'], 'inventory_export', 'csv',
+        'rows=' . substr_count($csv, "\n"));
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="inventory-' . date('Ymd-His') . '.csv"');
+    header('Content-Length: ' . (string)strlen($csv));
+    header('X-Content-Type-Options: nosniff');
+    header('Cache-Control: no-store');
+    echo $csv;
+    exit;
+}
 
 // رسیدهای پرداخت: مدیر ارشد و اپراتور، با همان قواعد ضد Path Traversal
 if ($type === 'receipt') {

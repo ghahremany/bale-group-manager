@@ -73,7 +73,25 @@ final class Orders
         $price    = Store::price($p);
         $subtotal = $price * $qty;
         $shipping = self::shipping();
-        $total    = $subtotal + $shipping;
+
+        // کد تخفیف (اختیاری)
+        $discount   = 0;
+        $coupon     = null;
+        $couponCode = Coupon::normalize((string)($in['coupon'] ?? ''));
+        if ($couponCode !== '') {
+            $check = Coupon::validate($couponCode, [
+                'user_id'    => $userId,
+                'subtotal'   => $subtotal,
+                'product_id' => $productId,
+                'seller_id'  => (int)$p['seller_id'],
+            ]);
+            if (!$check['ok']) {
+                return ['ok' => false, 'error' => (string)($check['error'] ?? 'کد تخفیف نامعتبر است.')];
+            }
+            $coupon   = $check['coupon'];
+            $discount = (int)$check['discount'];
+        }
+        $total    = max(0, $subtotal - $discount) + $shipping;
         $rate     = self::commissionRate();
         $commission = (int)round($total * $rate / 100);
 
@@ -91,11 +109,12 @@ final class Orders
         $code = self::newCode();
         DB::q("INSERT INTO orders (code,user_id,seller_id,ref_code,affiliate_user_id,status,payment_status,
                  subtotal,discount,shipping,total,commission_rate,commission_amount,commission_released,
-                 buyer_name,buyer_phone,address,note,created_at,updated_at)
-               VALUES (?,?,?,?,?, 'awaiting_payment', 'unpaid', ?,0,?,?,?,?,0, ?,?,?,?,?,?)",
+                 coupon_id,coupon_code,buyer_name,buyer_phone,address,note,created_at,updated_at)
+               VALUES (?,?,?,?,?, 'awaiting_payment', 'unpaid', ?,?,?,?,?,?,0, ?,?,?,?,?,?,?,?)",
             [
                 $code, $userId, (int)$p['seller_id'] ?: null, $refCode ?: null, $affiliate,
-                $subtotal, $shipping, $total, $rate, $commission,
+                $subtotal, $discount, $shipping, $total, $rate, $commission,
+                $coupon ? (int)$coupon['id'] : null, $couponCode !== '' ? $couponCode : null,
                 str_limit((string)($in['buyer_name'] ?? ''), 118) ?: null,
                 str_limit((string)($in['buyer_phone'] ?? ''), 30) ?: null,
                 str_limit((string)($in['address'] ?? ''), 900) ?: null,
@@ -106,16 +125,24 @@ final class Orders
 
         DB::q("INSERT INTO order_items (order_id,product_id,title_snapshot,price_snapshot,qty,total) VALUES (?,?,?,?,?,?)",
             [$orderId, $productId, (string)$p['title'], $price, $qty, $subtotal]);
+        // ثبت استفاده از کد تخفیف (تا لغو سفارش)
+        if ($coupon !== null && $discount > 0) {
+            Coupon::recordUse((int)$coupon['id'], $userId, $orderId, $discount);
+        }
         // رزرو موجودی
         DB::q("UPDATE products SET reserved=reserved+? WHERE id=?", [$qty, $productId]);
         DB::q("INSERT INTO payments (order_id,method,amount,status,created_at) VALUES (?, 'card', ?, 'pending', ?)",
             [$orderId, $total, $now]);
 
-        Logger::user(null, $userId, null, 'order_create', $code . ' · ' . $p['title'] . ' × ' . $qty);
+        Logger::user(null, $userId, null, 'order_create', $code . ' · ' . $p['title'] . ' × ' . $qty
+            . ($discount > 0 ? ' · تخفیف ' . $discount . ' (' . $couponCode . ')' : ''));
         if (!empty($in['notify'])) {
             self::notify($orderId, 'create');
         }
-        return ['ok' => true, 'id' => $orderId, 'code' => $code, 'total' => $total, 'qty' => $qty];
+        return [
+            'ok' => true, 'id' => $orderId, 'code' => $code, 'total' => $total, 'qty' => $qty,
+            'discount' => $discount, 'coupon' => $couponCode !== '' ? $couponCode : null,
+        ];
     }
 
     public static function order(int $id): ?array
@@ -259,6 +286,11 @@ final class Orders
         $now = time();
         DB::q("UPDATE orders SET status=?, updated_at=? WHERE id=?", [$status, $now, $orderId]);
 
+        // آزادسازی کد تخفیف در لغو/مرجوعی
+        if (in_array($status, ['canceled', 'returned'], true)) {
+            Coupon::release($orderId);
+        }
+
         // آزادسازی رزرو در لغو/مرجوعی
         if (in_array($status, ['canceled', 'returned'], true)) {
             foreach ($o['items'] as $it) {
@@ -298,6 +330,9 @@ final class Orders
         }
         Logger::audit($adminId, 'panel', 'order_status', 'order#' . $orderId, $o['status'] . ' → ' . $status . ' ' . $note);
         self::notify($orderId, 'status', $status);
+        if ($status === 'delivered' && (int)($o['reviewed'] ?? 0) === 0) {
+            self::notify($orderId, 'review');
+        }
         return ['ok' => true, 'commission' => $commissionNote];
     }
 
@@ -319,12 +354,21 @@ final class Orders
             case 'create':
                 $text = "🛒 <b>سفارش ثبت شد</b>\nکد: <code>" . h((string)$o['code']) . "</code>\n"
                     . "کالا: " . h((string)$item) . " × " . digits_fa((int)($o['items'][0]['qty'] ?? 1)) . "\n"
+                    . ((int)($o['discount'] ?? 0) > 0
+                        ? "تخفیف (" . h((string)($o['coupon_code'] ?? '')) . "): -" . money((int)$o['discount']) . "\n" : '')
                     . "مبلغ: " . money((int)$o['total']) . "\n\n"
                     . ($card !== '' ? "💳 پرداخت کارت‌به‌کارت:\n<code>" . h($card) . "</code>\n" . ($name !== '' ? h($name) . "\n" : '') . "\n" : '')
                     . "رسید را از پنل آپلود کن:\n" . $link;
                 break;
             case 'paid':
                 $text = "✅ پرداخت سفارش <code>" . h((string)$o['code']) . "</code> تایید شد. کالا در حال آماده‌سازی است.";
+                break;
+            case 'review':
+                $pid = (int)($o['items'][0]['product_id'] ?? 0);
+                $text = "⭐ <b>نظرت برای ما ارزشمند است</b>\n"
+                    . "سفارش <code>" . h((string)$o['code']) . "</code> تحویل شد.\n"
+                    . "با ثبت امتیاز (۱ تا ۵ ستاره) به بقیه خریدارها کمک کن:\n"
+                    . url('shop/index.php', ['p' => 'review', 'code' => (string)$o['code'], 'id' => $pid]);
                 break;
             case 'payment_rejected':
                 $text = "❌ رسید سفارش <code>" . h((string)$o['code']) . "</code> تایید نشد. لطفاً رسید درست را آپلود کن یا با پشتیبانی تماس بگیر.";

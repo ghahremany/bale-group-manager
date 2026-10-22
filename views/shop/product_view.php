@@ -11,6 +11,12 @@
     <div class="rowline"><span>موجودی</span><span><?= digits_fa($avail) ?> <?= h((string)$product['unit']) ?></span></div>
     <div class="rowline"><span>فروش‌رفته</span><span><?= digits_fa((int)$product['sold_count']) ?></span></div>
     <div class="rowline"><span>کد خرید</span><span class="mono" dir="ltr"><?= h((string)$product['code']) ?></span></div>
+    <div class="rowline"><span>امتیاز خریداران</span><span>
+      <?php if ((int)$rating['count'] > 0): ?>
+        <b><?= Reviews::stars((float)$rating['avg']) ?></b> <?= digits_fa((float)$rating['avg']) ?>
+        <span class="muted small">(<?= digits_fa((int)$rating['count']) ?> نظر)</span>
+      <?php else: ?><span class="muted">هنوز امتیازی ثبت نشده</span><?php endif; ?>
+    </span></div>
   </div>
   <div class="card">
     <h2>🛒 ثبت سفارش</h2>
@@ -31,9 +37,31 @@
         <textarea name="address" rows="3"></textarea>
         <label>یادداشت (اختیاری)</label>
         <input type="text" name="note">
+        <label>کد تخفیف (اختیاری)</label>
+        <input type="text" name="coupon" class="mono" dir="ltr" placeholder="مثلاً YALDA20">
         <div class="btn-group mt"><button class="btn" type="submit">ثبت سفارش</button></div>
       </form>
       <div class="hint mt">پس از ثبت، مبلغ و شماره کارت نمایش داده می‌شود و رسید را آپلود می‌کنی.</div>
     <?php endif; ?>
   </div>
 </div>
+
+<?php if (!empty($reviews)): ?>
+<div class="card mt">
+  <h2>⭐ نظرات خریداران</h2>
+  <?php foreach ($reviews as $r): ?>
+    <div class="rowline" style="align-items:flex-start">
+      <div>
+        <div><b><?= Reviews::stars((float)$r['rating']) ?></b>
+          <span class="muted small"><?= h(trim((string)($r['first_name'] ?? '') . ' ' . (string)($r['last_name'] ?? '')) ?: 'خریدار') ?></span>
+          <span class="muted small mono"><?= dt((int)$r['created_at'], 'Y/m/d') ?></span>
+        </div>
+        <?php if (!empty($r['comment'])): ?>
+          <div class="small"><?= nl2br(h((string)$r['comment'])) ?></div>
+        <?php endif; ?>
+      </div>
+      <span class="badge b-ok">خرید تاییدشده</span>
+    </div>
+  <?php endforeach; ?>
+</div>
+<?php endif; ?>

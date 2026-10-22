@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>ورود به پنل — مدیر گروه بله</title>
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<title>داشبورد — مدیر گروه بله</title>
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -152,60 +152,309 @@ svg{max-width:100%;height:auto;display:block}
 .kpi .v small{font-size:12px;color:var(--muted);font-weight:normal}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
-</style><title>بازیابی دسترسی — پیش‌نمایش</title></head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت</b> — صفحه واقعی «بازیابی دسترسی» پنل (وقتی به بله دسترسی نداری یا رمز را فراموش کرده‌ای). فرم‌ها در این فایل غیرفعال‌اند.</div>
-<div class="auth-wrap">
-  <div style="width:100%;max-width:420px">
-    <div class="auth-card">
-      <div class="logo">🔐</div>
-      <h1 class="center" style="font-size:17px">پنل مدیریت ربات گروه</h1>
-      <p class="center muted small" style="margin-top:2px">ورود دو مرحله‌ای با رمز یکبارمصرف بله</p>
-            <p class="center small muted" style="margin-bottom:10px">
-  اگر به بله دسترسی نداری یا رمزت را فراموش کرده‌ای، با <b>کد بازیابی</b> وارد شو.
-</p>
 
-<div class="card tight" style="background:#0e1a2c;border:1px solid #1e2d47;margin-bottom:12px">
-  <h3 style="margin:2px 0 8px;font-size:13.5px">۱) رمز را دارم، ولی کد بله به دستم نمی‌رسد</h3>
-  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/recover.php" autocomplete="off">
-    <input type="hidden" name="_csrf" value="d01271d9bcc3f6802a26243451f6b41a9f5b54261a629ec4f2a61fc54f068f69">    <input type="hidden" name="mode" value="no_bale">
-    <label>نام کاربری</label>
-    <input type="text" name="username" class="mono" required placeholder="admin">
-    <label>رمز عبور</label>
-    <input type="password" name="password" required>
-    <label>کد بازیابی</label>
-    <input type="text" name="code" class="mono" required placeholder="BGM-XXXXX-XXXXX" dir="ltr" style="text-align:left">
-    <div class="mt"><button class="btn" type="submit" style="width:100%">ورود با کد بازیابی</button></div>
-  </form>
-</div>
-
-<div class="card tight" style="background:#0e1a2c;border:1px solid #1e2d47;margin-bottom:12px">
-  <h3 style="margin:2px 0 8px;font-size:13.5px">۲) رمز را فراموش کرده‌ام</h3>
-  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/recover.php" autocomplete="off">
-    <input type="hidden" name="_csrf" value="d01271d9bcc3f6802a26243451f6b41a9f5b54261a629ec4f2a61fc54f068f69">    <input type="hidden" name="mode" value="forgot_password">
-    <label>نام کاربری</label>
-    <input type="text" name="username" class="mono" required>
-    <label>کد بازیابی</label>
-    <input type="text" name="code" class="mono" required placeholder="BGM-XXXXX-XXXXX" dir="ltr" style="text-align:left">
-    <label>رمز جدید (حداقل ۸ کاراکتر)</label>
-    <input type="password" name="new_password" required minlength="8">
-    <div class="mt"><button class="btn warn" type="submit" style="width:100%">تغییر رمز و ورود</button></div>
-  </form>
-</div>
-
-<div class="hint center">
-  کد بازیابی فقط یک‌بار قابل استفاده است و هر تلاش در «لاگ امنیت» ثبت می‌شود.<br>
-  کد نداری؟ از ادمین ارشد بخواه در پنل → «کدهای بازیابی» برایت کد جدید بسازد،
-  یا در چت خصوصی ربات بنویس <code>ورود</code> تا لینک یک‌بارمصرف بگیری.
-</div>
-
-<div class="center mt">
-  <a class="btn ghost sm" href="http://localhost:8080/panel/login.php">بازگشت به ورود</a>
-</div>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">🤖</div>
+      <div>
+        <b>مدیر گروه بله</b>
+        <span>نسخه ۱.۰.۰</span>
+      </div>
     </div>
-    <div class="center muted small" style="margin-top:14px">
-      <a href="http://localhost:8080/panel/index.php?p=setup">راهنمای راه‌اندازی</a>
+    <nav class="nav">
+      <a href="#panel/index.php?p=dashboard" class="active">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <div class="sep">مدیریت سیستم</div>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+      <div class="sep">خروج</div>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <b>داشبورد</b>
+                  <span class="badge b-ok">وب‌هوک</span>
+              </div>
+      <div class="inline">
+                        <span class="pill">admin · مدیر ارشد</span>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
+      </div>
+    </div>
+
+    <div class="content">
+                  <div class="grid g4 mb">
+      <div class="kpi">
+      <div class="i">👥</div>
+      <div class="v">۳</div>
+      <div class="l">گروه فعال</div>
+    </div>
+      <div class="kpi">
+      <div class="i">🙋</div>
+      <div class="v">۱۷</div>
+      <div class="l">کاربر شناخته‌شده</div>
+    </div>
+      <div class="kpi">
+      <div class="i">📜</div>
+      <div class="v">۱۰۰</div>
+      <div class="l">رخداد ۲۴ ساعت</div>
+    </div>
+      <div class="kpi">
+      <div class="i">🚨</div>
+      <div class="v">۲</div>
+      <div class="l">گزارش باز</div>
+    </div>
+      <div class="kpi">
+      <div class="i">⛔</div>
+      <div class="v">۱</div>
+      <div class="l">بن</div>
+    </div>
+      <div class="kpi">
+      <div class="i">🔇</div>
+      <div class="v">۲</div>
+      <div class="l">در سکوت</div>
+    </div>
+      <div class="kpi">
+      <div class="i">⚠️</div>
+      <div class="v">۲</div>
+      <div class="l">اخطار فعال</div>
+    </div>
+      <div class="kpi">
+      <div class="i">🔑</div>
+      <div class="v">۲</div>
+      <div class="l">ادمین پنل</div>
     </div>
   </div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>🛒 فروشگاه</h2>
+    <div class="btn-group">
+      <a class="btn ghost sm" href="#panel/index.php?p=store">انبار</a>
+      <a class="btn ghost sm" href="#panel/index.php?p=orders">سفارش‌ها</a>
+    </div>
+  </div>
+  <div class="grid g4 mb">
+    <div class="kpi"><div class="v">۴</div><div class="l">کالای فعال</div></div>
+    <div class="kpi"><div class="v">۴</div><div class="l">سفارش امروز</div></div>
+    <div class="kpi"><div class="v">۰</div><div class="l">رسید در انتظار</div></div>
+    <div class="kpi"><div class="v">۲۷۰,۰۰۰</div><div class="l">فروش ۳۰ روز (تومان)</div></div>
+  </div>
+  <div class="small muted mb">فروش روزانه (تومان)</div>
+  <svg viewBox="0 0 760 180" width="100%" height="180" role="img" direction="ltr" style="font-family:Tahoma,sans-serif"><rect x="0" y="0" width="760" height="180" fill="#0b1424"/><line x1="46" y1="152" x2="748" y2="152" stroke="#1e2d47"/><text x="40" y="156" fill="#64748b" font-size="10" text-anchor="end">۰</text><line x1="46" y1="106" x2="748" y2="106" stroke="#1e2d47"/><text x="40" y="110" fill="#64748b" font-size="10" text-anchor="end">۱۰۸,۰۰۰</text><line x1="46" y1="60" x2="748" y2="60" stroke="#1e2d47"/><text x="40" y="64" fill="#64748b" font-size="10" text-anchor="end">۲۱۶,۰۰۰</text><line x1="46" y1="14" x2="748" y2="14" stroke="#1e2d47"/><text x="40" y="18" fill="#64748b" font-size="10" text-anchor="end">۳۲۴,۰۰۰</text><polygon points="46,152 46,152 100,152 154,152 208,152 262,152 316,152 370,152 424,152 478,152 532,152 586,152 640,152 694,152 748,37 748,152" fill="#22c55e" opacity="0.16"/><polyline points="46,152 100,152 154,152 208,152 262,152 316,152 370,152 424,152 478,152 532,152 586,152 640,152 694,152 748,37" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linejoin="round"/><circle cx="46" cy="152" r="2.8" fill="#22c55e"><title>10/09: ۰</title></circle><circle cx="100" cy="152" r="2.8" fill="#22c55e"><title>10/10: ۰</title></circle><circle cx="154" cy="152" r="2.8" fill="#22c55e"><title>10/11: ۰</title></circle><circle cx="208" cy="152" r="2.8" fill="#22c55e"><title>10/12: ۰</title></circle><circle cx="262" cy="152" r="2.8" fill="#22c55e"><title>10/13: ۰</title></circle><circle cx="316" cy="152" r="2.8" fill="#22c55e"><title>10/14: ۰</title></circle><circle cx="370" cy="152" r="2.8" fill="#22c55e"><title>10/15: ۰</title></circle><circle cx="424" cy="152" r="2.8" fill="#22c55e"><title>10/16: ۰</title></circle><circle cx="478" cy="152" r="2.8" fill="#22c55e"><title>10/17: ۰</title></circle><circle cx="532" cy="152" r="2.8" fill="#22c55e"><title>10/18: ۰</title></circle><circle cx="586" cy="152" r="2.8" fill="#22c55e"><title>10/19: ۰</title></circle><circle cx="640" cy="152" r="2.8" fill="#22c55e"><title>10/20: ۰</title></circle><circle cx="694" cy="152" r="2.8" fill="#22c55e"><title>10/21: ۰</title></circle><circle cx="748" cy="37" r="2.8" fill="#22c55e"><title>10/22: ۲۷۰,۰۰۰</title></circle><text x="46" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/09</text><text x="100" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/10</text><text x="154" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/11</text><text x="208" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/12</text><text x="262" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/13</text><text x="316" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/14</text><text x="370" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/15</text><text x="424" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/16</text><text x="478" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/17</text><text x="532" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/18</text><text x="586" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/19</text><text x="640" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/20</text><text x="694" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/21</text><text x="748" y="172" fill="#8098bb" font-size="10" text-anchor="middle">10/22</text></svg></div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>📈 ۱۴ روز اخیر</h2>
+    <a class="btn ghost sm" href="#panel/index.php?p=analytics">گزارش کامل</a>
+  </div>
+  <div class="grid g3">
+    <div>
+      <div class="small muted">پیام‌ها (۷ روز): <b>۹۳</b></div>
+      <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,4 184.2,9.5 206.9,14.9 229.7,20.4 252.5,25.8 275.2,31.3 298,33.1" fill="none" stroke="#3b82f6" stroke-width="1.8"/></svg>    </div>
+    <div>
+      <div class="small muted">تخلف/اقدام: <b>۱۱</b></div>
+      <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,44 184.2,28 206.9,36 229.7,44 252.5,28 275.2,36 298,4" fill="none" stroke="#ef4444" stroke-width="1.8"/></svg>    </div>
+    <div>
+      <div class="small muted">ورود اعضا: <b>۱۰</b></div>
+      <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,34 184.2,34 206.9,34 229.7,34 252.5,34 275.2,34 298,4" fill="none" stroke="#22c55e" stroke-width="1.8"/></svg>    </div>
+  </div>
+  <div class="rowline mt">
+    <span>🌱 دعوت‌های تاییدشده: <b>۱</b> · در انتظار: ۰</span>
+    <a class="btn ghost sm" href="#panel/index.php?p=referrals">مدیریت</a>
+  </div>
+  <div class="rowline">
+    <span>🗄 آخرین بکاپ: <b>2026/10/22 19:43</b></span>
+    <a class="btn ghost sm" href="#panel/index.php?p=backup">بکاپ</a>
+  </div>
 </div>
+
+<div class="card">
+  <div class="card-header"><h2>وضعیت سیستم</h2>
+    <a class="btn ghost sm" href="#panel/index.php?p=system">مدیریت</a>
+  </div>
+  <div class="rowline"><span>حالت دریافت پیام</span>
+    <span class="badge b-ok">وب‌هوک</span>
+  </div>
+  <div class="rowline"><span>ربات</span><span class="mono">@mock_bot</span></div>
+  <div class="rowline"><span>آخرین اجرای کرون</span>
+    <span>2026/10/22 19:43</span>
+  </div>
+  <div class="rowline"><span>آخرین پولینگ</span>
+    <span>—</span>
+  </div>
+  </div>
+
+<div class="grid g2">
+  <div class="card">
+    <div class="card-header"><h2>آخرین رخدادها</h2>
+      <a class="btn ghost sm" href="#panel/index.php?p=logs">همه</a></div>
+          <div class="table-wrap">
+        <table>
+          <thead><tr><th>زمان</th><th>گروه</th><th>اقدام</th><th>کاربر</th></tr></thead>
+          <tbody>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">warn</span></td>
+              <td class="mono small">222</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">mute</span></td>
+              <td class="mono small">4242</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">seller_request</span></td>
+              <td class="mono small">930001</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_receipt</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930003</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">command</span></td>
+              <td class="mono small">222</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">mute</span></td>
+              <td class="mono small">999</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">unmute</span></td>
+              <td class="mono small">999</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">command</span></td>
+              <td class="mono small">222</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">referral_pending</span></td>
+              <td class="mono small">910002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">referral_verified</span></td>
+              <td class="mono small">910002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small">-1009999990001</td>
+              <td><span class="badge b-info">command</span></td>
+              <td class="mono small">910001</td>
+            </tr>
+                    </tbody>
+        </table>
+      </div>
+      </div>
+
+  <div class="card">
+    <div class="card-header"><h2>گزارش‌های باز</h2>
+      <a class="btn ghost sm" href="#panel/index.php?p=moderation&amp;tab=reports">مدیریت</a></div>
+                  <div class="rowline">
+          <span>#۱۴ · گروه تست</span>
+          <span class="mono small">هدف 321</span>
+        </div>
+        <div class="small muted">تبلیغ</div>
+              <div class="rowline">
+          <span>#۱ · گروه تست خانواده</span>
+          <span class="mono small">هدف 777</span>
+        </div>
+        <div class="small muted">ارسال محتوای نامناسب</div>
+            </div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <div class="card-header"><h2>فعال‌ترین گروه‌ها (۷ روز)</h2></div>
+                  <div class="rowline">
+          <a href="#panel/index.php?p=group&amp;chat_id=-1009999990001">گروه تست</a>
+          <span class="badge b-info">۳۳ رخداد</span>
+        </div>
+              <div class="rowline">
+          <a href="#panel/index.php?p=group&amp;chat_id=-1001234567890">گروه تست خانواده</a>
+          <span class="badge b-info">۲ رخداد</span>
+        </div>
+              <div class="rowline">
+          <a href="#panel/index.php?p=group&amp;chat_id=-1005550001111">گروه تبلیغ تست</a>
+          <span class="badge b-info">۰ رخداد</span>
+        </div>
+            </div>
+
+  <div class="card">
+    <div class="card-header"><h2>آخرین بن‌ها</h2>
+      <a class="btn ghost sm" href="#panel/index.php?p=moderation">همه</a></div>
+                  <div class="rowline">
+          <span class="mono small">777</span>
+          <span class="small muted">تبلیغ · 10/22 18:26</span>
+        </div>
+            </div>
+</div>
+    </div>
+  </main>
+</div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>

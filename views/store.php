@@ -7,6 +7,9 @@ $base = ['p' => 'store', 'tab' => $tab];
   <a class="btn <?= $tab === 'sellers' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'sellers'])) ?>">🏪 فروشندگان</a>
   <a class="btn <?= $tab === 'campaigns' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'campaigns'])) ?>">📣 کمپین تبلیغ</a>
   <a class="btn <?= $tab === 'categories' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'categories'])) ?>">🗂 دسته‌بندی</a>
+  <a class="btn <?= $tab === 'coupons' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'coupons'])) ?>">🎟 کد تخفیف</a>
+  <a class="btn <?= $tab === 'reviews' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'reviews'])) ?>">⭐ نظرات</a>
+  <a class="btn <?= $tab === 'csv' ? '' : 'ghost' ?> sm" href="<?= h(url('panel/index.php', ['p' => 'store', 'tab' => 'csv'])) ?>">📄 CSV انبار</a>
   <a class="btn ghost sm" href="<?= h(url('shop/index.php')) ?>">👁 مشاهده فروشگاه</a>
 </div>
 
@@ -182,7 +185,11 @@ $base = ['p' => 'store', 'tab' => $tab];
             <td class="small"><?= digits_fa((int)$c['id']) ?></td>
             <td class="small"><?= h((string)($c['product_title'] ?? '—')) ?>
               <div class="mono muted"><?= h((string)($c['product_code'] ?? '')) ?></div></td>
-            <td class="small"><?= h(Broadcast::audiences()[$c['audience']] ?? (string)$c['audience']) ?></td>
+            <td class="small"><?= h(Broadcast::audiences()[$c['audience']] ?? (string)$c['audience']) ?>
+              <?php if (($c['mode'] ?? 'single') === 'rotate'): ?>
+                <span class="badge b-info">🔄 چرخشی (<?= digits_fa(count(Store::parsePool((string)($c['rotate_pool'] ?? '')))) ?>)</span>
+              <?php endif; ?>
+            </td>
             <td class="small"><?= digits_fa((int)$c['interval_hours']) ?> ساعت</td>
             <td class="small"><?= (int)$c['next_run_at'] ? h(dt((int)$c['next_run_at'], 'Y/m/d H:i')) : '—' ?></td>
             <td><span class="badge <?= $c['status'] === 'active' ? 'b-ok' : 'b-mute' ?>">
@@ -221,6 +228,14 @@ $base = ['p' => 'store', 'tab' => $tab];
         </select>
         <label>فاصله ارسال (ساعت)</label>
         <input type="number" name="interval_hours" value="24" min="1" max="720" dir="ltr">
+        <label>حالت ارسال</label>
+        <select name="mode">
+          <option value="single">یک کالای ثابت</option>
+          <option value="rotate">🔄 چرخش خودکار بین کالاها</option>
+        </select>
+        <label>استخر چرخش (آیدی کالاها، خالی = همه کالاهای فعال)</label>
+        <input type="text" name="rotate_pool" class="mono" dir="ltr" placeholder="12,15,18">
+        <div class="hint">در حالت چرخشی، هر بار نوبت کالای بعدی است و بعد از آخرین کالا به اول برمی‌گردد.</div>
       </div>
       <div>
         <label>قالب پیام</label>
@@ -236,6 +251,213 @@ $base = ['p' => 'store', 'tab' => $tab];
       </div>
       <div><button class="btn" type="submit">➕ ساخت کمپین</button></div>
     </form>
+  </div>
+
+<?php elseif ($tab === 'coupons'): ?>
+  <?php $cst = Coupon::stats(); ?>
+  <div class="grid g4 mb">
+    <div class="kpi"><div class="i">🎟</div><div class="v"><?= digits_fa((int)$cst['total']) ?></div><div class="l">کل کدها</div></div>
+    <div class="kpi"><div class="i">✅</div><div class="v"><?= digits_fa((int)$cst['active']) ?></div><div class="l">فعال</div></div>
+    <div class="kpi"><div class="i">🔁</div><div class="v"><?= digits_fa((int)$cst['uses']) ?></div><div class="l">بار استفاده</div></div>
+    <div class="kpi"><div class="i">💸</div><div class="v"><?= money((int)$cst['saved'], '') ?></div><div class="l">تخفیف داده‌شده</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>🎟 کدهای تخفیف</h2>
+      <span class="tag">درصدی یا مبلغ ثابت</span></div>
+    <?php if (!$coupons): ?>
+      <div class="empty">کدی ساخته نشده است.</div>
+    <?php else: ?>
+      <div class="table-wrap"><table>
+        <thead><tr><th>کد</th><th>نوع</th><th>مقدار</th><th>حداقل سبد</th><th>استفاده</th><th>محدوده</th><th>انقضا</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+        <tbody>
+        <?php foreach ($coupons as $c): ?>
+          <tr>
+            <td class="mono"><b><?= h((string)$c['code']) ?></b></td>
+            <td class="small"><?= $c['type'] === 'percent' ? 'درصدی' : 'مبلغ ثابت' ?></td>
+            <td class="small"><?= $c['type'] === 'percent' ? digits_fa((int)$c['value']) . '٪' : money((int)$c['value']) ?></td>
+            <td class="small"><?= (int)$c['min_total'] > 0 ? money((int)$c['min_total']) : '—' ?></td>
+            <td class="small"><?= digits_fa((int)$c['used_count']) ?><?= (int)$c['max_uses'] > 0 ? ' / ' . digits_fa((int)$c['max_uses']) : '' ?>
+              <div class="muted">هر کاربر: <?= digits_fa((int)$c['per_user']) ?></div></td>
+            <td class="small"><?= h((string)($c['product_title'] ?? ($c['shop_name'] ?? 'همه کالاها'))) ?></td>
+            <td class="small mono"><?= (int)$c['expires_at'] > 0 ? dt((int)$c['expires_at'], 'Y/m/d') : '—' ?></td>
+            <td><span class="badge <?= (int)$c['is_active'] ? 'b-ok' : 'b-mute' ?>"><?= (int)$c['is_active'] ? 'فعال' : 'خاموش' ?></span></td>
+            <td>
+              <div class="btn-group">
+                <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline"><?= Auth::csrfField() ?>
+                  <input type="hidden" name="a" value="coupon_toggle">
+                  <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
+                  <input type="hidden" name="on" value="<?= (int)$c['is_active'] ? '0' : '1' ?>">
+                  <button class="btn ghost sm" type="submit"><?= (int)$c['is_active'] ? '⏸' : '▶️' ?></button>
+                </form>
+                <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline" onsubmit="return confirm('حذف شود؟')"><?= Auth::csrfField() ?>
+                  <input type="hidden" name="a" value="coupon_delete">
+                  <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
+                  <button class="btn danger sm" type="submit">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table></div>
+    <?php endif; ?>
+    <hr>
+    <h3>کد جدید</h3>
+    <form method="post" action="<?= h(url('panel/index.php')) ?>" class="grid g3">
+      <?= Auth::csrfField() ?>
+      <input type="hidden" name="a" value="coupon_save">
+      <div>
+        <label>کد (خالی = تصادفی)</label>
+        <input type="text" name="code" class="mono" dir="ltr" placeholder="YALDA40">
+      </div>
+      <div>
+        <label>نوع</label>
+        <select name="type">
+          <option value="percent">درصدی</option>
+          <option value="fixed">مبلغ ثابت (تومان)</option>
+        </select>
+      </div>
+      <div>
+        <label>مقدار</label>
+        <input type="number" name="value" min="1" required dir="ltr" placeholder="20">
+      </div>
+      <div>
+        <label>حداقل مبلغ سبد (اختیاری)</label>
+        <input type="number" name="min_total" min="0" value="0" dir="ltr">
+      </div>
+      <div>
+        <label>سقف کل استفاده (۰ = بی‌نهایت)</label>
+        <input type="number" name="max_uses" min="0" value="0" dir="ltr">
+      </div>
+      <div>
+        <label>سقف هر کاربر</label>
+        <input type="number" name="per_user" min="1" value="1" dir="ltr">
+      </div>
+      <div>
+        <label>محدود به کالا (اختیاری)</label>
+        <select name="product_id">
+          <option value="0">همه کالاها</option>
+          <?php foreach ($products as $p): ?>
+            <option value="<?= (int)$p['id'] ?>"><?= h((string)$p['title']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div>
+        <label>محدود به فروشنده (اختیاری)</label>
+        <select name="seller_id">
+          <option value="0">همه فروشندگان</option>
+          <?php foreach ($sellers as $sl): ?>
+            <option value="<?= (int)$sl['id'] ?>"><?= h((string)$sl['shop_name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div>
+        <label>تاریخ انقضا (اختیاری)</label>
+        <input type="text" name="expires_at" class="mono" dir="ltr" placeholder="2026-12-31">
+      </div>
+      <div><button class="btn" type="submit">➕ ساخت کد</button></div>
+    </form>
+  </div>
+
+<?php elseif ($tab === 'reviews'): ?>
+  <?php $rst = Reviews::stats(); ?>
+  <div class="grid g4 mb">
+    <div class="kpi"><div class="i">⭐</div><div class="v"><?= digits_fa((int)$rst['total']) ?></div><div class="l">کل نظرات</div></div>
+    <div class="kpi"><div class="i">✅</div><div class="v"><?= digits_fa((int)$rst['approved']) ?></div><div class="l">تاییدشده</div></div>
+    <div class="kpi"><div class="i">⏳</div><div class="v"><?= digits_fa((int)$rst['pending']) ?></div><div class="l">در انتظار بازبینی</div></div>
+    <div class="kpi"><div class="i">📊</div><div class="v"><?= digits_fa((float)$rst['avg']) ?></div><div class="l">میانگین امتیاز</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>⭐ نظرات خریداران</h2>
+      <form method="get" class="inline">
+        <input type="hidden" name="p" value="store"><input type="hidden" name="tab" value="reviews">
+        <select name="rstatus" onchange="this.form.submit()">
+          <option value="">همه</option>
+          <?php foreach (['pending' => 'در انتظار', 'approved' => 'تاییدشده', 'rejected' => 'رد‌شده'] as $k => $l): ?>
+            <option value="<?= $k ?>" <?= ($rstatus ?? '') === $k ? 'selected' : '' ?>><?= h($l) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </form>
+    </div>
+    <div class="rowline mb">
+      <span>نمایش خودکار نظرات: <b><?= Reviews::autoApprove() ? 'روشن' : 'خاموش (نیاز به تایید مدیر)' ?></b></span>
+      <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline">
+        <?= Auth::csrfField() ?>
+        <input type="hidden" name="a" value="store_reviews_auto">
+        <input type="hidden" name="on" value="<?= Reviews::autoApprove() ? '0' : '1' ?>">
+        <button class="btn ghost sm" type="submit">تغییر به <?= Reviews::autoApprove() ? 'بازبینی دستی' : 'نمایش خودکار' ?></button>
+      </form>
+    </div>
+    <?php if (!$reviews): ?>
+      <div class="empty">نظری ثبت نشده است.</div>
+    <?php else: ?>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>کالا</th><th>خریدار</th><th>امتیاز</th><th>متن</th><th>سفارش</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+        <tbody>
+        <?php foreach ($reviews as $r): ?>
+          <tr>
+            <td class="small"><?= digits_fa((int)$r['id']) ?></td>
+            <td class="small"><?= h((string)($r['product_title'] ?? '—')) ?><div class="mono muted"><?= h((string)($r['product_code'] ?? '')) ?></div></td>
+            <td class="small"><?= h(trim((string)($r['first_name'] ?? '') . ' ' . (string)($r['last_name'] ?? '')) ?: ('#' . (int)$r['user_id'])) ?></td>
+            <td class="small"><?= Reviews::stars((float)$r['rating']) ?></td>
+            <td class="small"><?= h(mb_strimwidth((string)($r['comment'] ?? ''), 0, 70, '…')) ?></td>
+            <td class="mono small"><?= h((string)($r['order_code'] ?? '')) ?></td>
+            <td><span class="badge <?= $r['status'] === 'approved' ? 'b-ok' : ($r['status'] === 'pending' ? 'b-warn' : 'b-err') ?>">
+              <?= ['approved' => 'تایید', 'pending' => 'در انتظار', 'rejected' => 'رد'][(string)$r['status']] ?? h((string)$r['status']) ?></span></td>
+            <td>
+              <div class="btn-group">
+                <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline"><?= Auth::csrfField() ?>
+                  <input type="hidden" name="a" value="review_moderate">
+                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="status" value="approved">
+                  <button class="btn ok sm" type="submit">✅</button>
+                </form>
+                <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline"><?= Auth::csrfField() ?>
+                  <input type="hidden" name="a" value="review_moderate">
+                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="status" value="rejected">
+                  <button class="btn warn sm" type="submit">⛔</button>
+                </form>
+                <form method="post" action="<?= h(url('panel/index.php')) ?>" class="inline" onsubmit="return confirm('حذف شود؟')"><?= Auth::csrfField() ?>
+                  <input type="hidden" name="a" value="review_delete">
+                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <button class="btn danger sm" type="submit">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table></div>
+    <?php endif; ?>
+  </div>
+
+<?php elseif ($tab === 'csv'): ?>
+  <div class="grid g2">
+    <div class="card">
+      <h2>⬇️ خروجی CSV</h2>
+      <div class="hint">همه کالاهای انبار با ستون‌های: <code class="mono"><?= h(implode(',', Store::csvColumns())) ?></code></div>
+      <div class="btn-group mt">
+        <a class="btn" href="<?= h(url('panel/download.php', ['p' => 'csv'])) ?>">📄 دانلود inventory.csv</a>
+      </div>
+    </div>
+    <div class="card">
+      <h2>⬆️ ورود CSV</h2>
+      <form method="post" action="<?= h(url('panel/index.php')) ?>" enctype="multipart/form-data">
+        <?= Auth::csrfField() ?>
+        <input type="hidden" name="a" value="inventory_import">
+        <label>فایل CSV</label>
+        <input type="file" name="csv" accept=".csv,text/csv" required>
+        <div class="hint mt">
+          اگر ستون <code class="mono">code</code> با کد کالای موجود بخواند، همان کالا به‌روزرسانی می‌شود
+          (عنوان، قیمت، موجودی مطلق). ردیف بدون کد، کالای جدید می‌سازد.
+        </div>
+        <div class="btn-group mt"><button class="btn ok" type="submit">⬆️ بارگذاری</button></div>
+      </form>
+    </div>
   </div>
 
 <?php else: ?>

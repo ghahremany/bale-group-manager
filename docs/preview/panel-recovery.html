@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>کدهای بازیابی و لاگ امنیت — مدیر گروه بله</title>
-
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -154,10 +153,10 @@ svg{max-width:100%;height:auto;display:block}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-body{padding:14px}</style>
-<title>کدهای بازیابی و لاگ OTP — پیش‌نمایش</title>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
 </head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت (Static Preview)</b> — این صفحه یک اسکرین‌شات HTML از پنل واقعی است: دکمه‌ها و فرم‌ها در این فایل کار نمی‌کنند، اما چیدمان، رنگ‌ها و نمودارها همان چیزی است که روی سرور می‌بینید. همه چیز درون‌خطی است (بدون CSS/JS/CDN خارجی).</div>
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
@@ -168,27 +167,28 @@ body{padding:14px}</style>
       </div>
     </div>
     <nav class="nav">
-      <a href="http://localhost:8080/panel/index.php?p=dashboard" class="">📊 داشبورد</a>
-      <a href="http://localhost:8080/panel/index.php?p=groups" class="">👥 گروه‌ها</a>
-      <a href="http://localhost:8080/panel/index.php?p=moderation" class="">🛡 تخلفات</a>
-      <a href="http://localhost:8080/panel/index.php?p=users" class="">🙋 کاربران</a>
-      <a href="http://localhost:8080/panel/index.php?p=logs" class="">📜 رخدادها</a>
-      <a href="http://localhost:8080/panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
-      <a href="http://localhost:8080/panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
-      <a href="http://localhost:8080/panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
-      <a href="http://localhost:8080/panel/index.php?p=store" class="">📦 انبار</a>
-      <a href="http://localhost:8080/panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
       <div class="sep">مدیریت سیستم</div>
-              <a href="http://localhost:8080/panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
-        <a href="http://localhost:8080/panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
-        <a href="http://localhost:8080/panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
-        <a href="http://localhost:8080/panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
-        <a href="http://localhost:8080/panel/index.php?p=recovery" class="active">🔑 کدهای بازیابی</a>
-        <a href="http://localhost:8080/panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
-            <a href="http://localhost:8080/panel/index.php?p=account" class="">👤 حساب من</a>
-      <a href="http://localhost:8080/panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="active">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
       <div class="sep">خروج</div>
-      <a href="http://localhost:8080/panel/logout.php">🚪 خروج از پنل</a>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
     </nav>
   </aside>
 
@@ -200,7 +200,7 @@ body{padding:14px}</style>
               </div>
       <div class="inline">
                         <span class="pill">admin · مدیر ارشد</span>
-        <a class="btn ghost sm" href="http://localhost:8080/panel/logout.php">خروج</a>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
       </div>
     </div>
 
@@ -217,9 +217,9 @@ body{padding:14px}</style>
   <div class="card">
     <h2>🔑 کدهای بازیابی من</h2>
     <p class="small muted">اگر به بله دسترسی نداشتی یا رمزت را فراموش کردی، با این کدها وارد می‌شوی: <code class="mono">/panel/recover.php</code></p>
-    <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="inline"
+    <form method="post" action="#panel/index.php" class="inline"
           onsubmit="return confirm('کدهای استفاده‌نشده فعلی باطل و ۸ کد جدید ساخته می‌شود. ادامه؟')">
-      <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">      <input type="hidden" name="a" value="recovery_generate">
+      <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">      <input type="hidden" name="a" value="recovery_generate">
       <label style="margin:0">تعداد</label>
       <input type="number" name="count" value="8" min="1" max="20" style="width:80px" dir="ltr">
       <button class="btn" type="submit">تولید کد جدید</button>
@@ -229,21 +229,21 @@ body{padding:14px}</style>
           <thead><tr><th>شناسه</th><th>۴ رقم آخر</th><th>ساخت</th><th>وضعیت</th></tr></thead>
           <tbody>
                       <tr>
-              <td class="small">۱۱۰</td>
-              <td class="mono"><span dir="ltr">••••-Y2AQ</span></td>
-              <td class="small">2026/10/22 19:27</td>
+              <td class="small">۱۶۲</td>
+              <td class="mono"><span dir="ltr">••••-BTVS</span></td>
+              <td class="small">2026/10/22 19:43</td>
               <td><span class="badge b-mute">استفاده‌شده</span></td>
             </tr>
                       <tr>
-              <td class="small">۹۵</td>
-              <td class="mono"><span dir="ltr">••••-UC8Q</span></td>
-              <td class="small">2026/10/22 19:27</td>
+              <td class="small">۱۴۷</td>
+              <td class="mono"><span dir="ltr">••••-7ZT5</span></td>
+              <td class="small">2026/10/22 19:43</td>
               <td><span class="badge b-mute">استفاده‌شده</span></td>
             </tr>
                       <tr>
-              <td class="small">۹۴</td>
-              <td class="mono"><span dir="ltr">••••-V2E8</span></td>
-              <td class="small">2026/10/22 19:27</td>
+              <td class="small">۱۴۶</td>
+              <td class="mono"><span dir="ltr">••••-UBEK</span></td>
+              <td class="small">2026/10/22 19:43</td>
               <td><span class="badge b-mute">استفاده‌شده</span></td>
             </tr>
                     </tbody>
@@ -266,9 +266,9 @@ body{padding:14px}</style>
       • کد بازیابی: یک‌بار مصرف، ۱۰ کاراکتر تصادفی امن، ذخیره‌شده به‌صورت HMAC-SHA256.<br>
       • بعد از ۵ تلاش ناموفق بازیابی، حساب موقتاً ۱۵ دقیقه بسته می‌شود.
     </div>
-    <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="mt"
+    <form method="post" action="#panel/index.php" class="mt"
           onsubmit="return confirm('همه کدهای بازیابی استفاده‌نشده باطل شوند؟')">
-      <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">      <input type="hidden" name="a" value="recovery_revoke">
+      <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">      <input type="hidden" name="a" value="recovery_revoke">
       <button class="btn danger sm" type="submit">ابطال همه کدهای فعال</button>
     </form>
   </div>
@@ -299,31 +299,7 @@ body{padding:14px}</style>
       </thead>
       <tbody>
               <tr>
-          <td class="small">2026/10/22 19:27:34</td>
-          <td class="small">admin</td>          <td class="small">لینک جادویی</td>
-          <td class="small">link</td>
-          <td class="mono small">—</td>
-          <td><span class="badge b-ok">موفق</span></td>
-          <td class="mono small">127.0.0.1</td>
-        </tr>
-              <tr>
-          <td class="small">2026/10/22 19:27:24</td>
-          <td class="small">admin</td>          <td class="small">ورود با کد بازیابی</td>
-          <td class="small">panel</td>
-          <td class="mono small">—</td>
-          <td><span class="badge b-ok">موفق</span></td>
-          <td class="mono small">127.0.0.1</td>
-        </tr>
-              <tr>
-          <td class="small">2026/10/22 19:27:24</td>
-          <td class="small">admin</td>          <td class="small">تولید کد بازیابی</td>
-          <td class="small">panel</td>
-          <td class="mono small">—</td>
-          <td><span class="badge b-ok">generated:1</span></td>
-          <td class="mono small">0.0.0.0</td>
-        </tr>
-              <tr>
-          <td class="small">2026/10/22 19:27:24</td>
+          <td class="small">2026/10/22 19:43:28</td>
           <td class="small">—</td>          <td class="small">shop_login</td>
           <td class="small">link</td>
           <td class="mono small">—</td>
@@ -331,7 +307,7 @@ body{padding:14px}</style>
           <td class="mono small">127.0.0.1</td>
         </tr>
               <tr>
-          <td class="small">2026/10/22 19:27:24</td>
+          <td class="small">2026/10/22 19:43:28</td>
           <td class="small">—</td>          <td class="small">shop_link</td>
           <td class="small">bale</td>
           <td class="mono small">930001</td>
@@ -339,7 +315,47 @@ body{padding:14px}</style>
           <td class="mono small">0.0.0.0</td>
         </tr>
               <tr>
-          <td class="small">2026/10/22 19:27:21</td>
+          <td class="small">2026/10/22 19:43:28</td>
+          <td class="small">admin</td>          <td class="small">لینک جادویی</td>
+          <td class="small">link</td>
+          <td class="mono small">—</td>
+          <td><span class="badge b-ok">موفق</span></td>
+          <td class="mono small">127.0.0.1</td>
+        </tr>
+              <tr>
+          <td class="small">2026/10/22 19:43:14</td>
+          <td class="small">admin</td>          <td class="small">ورود با کد بازیابی</td>
+          <td class="small">panel</td>
+          <td class="mono small">—</td>
+          <td><span class="badge b-ok">موفق</span></td>
+          <td class="mono small">127.0.0.1</td>
+        </tr>
+              <tr>
+          <td class="small">2026/10/22 19:43:14</td>
+          <td class="small">admin</td>          <td class="small">تولید کد بازیابی</td>
+          <td class="small">panel</td>
+          <td class="mono small">—</td>
+          <td><span class="badge b-ok">generated:1</span></td>
+          <td class="mono small">0.0.0.0</td>
+        </tr>
+              <tr>
+          <td class="small">2026/10/22 19:43:13</td>
+          <td class="small">—</td>          <td class="small">shop_login</td>
+          <td class="small">link</td>
+          <td class="mono small">—</td>
+          <td><span class="badge b-ok">موفق</span></td>
+          <td class="mono small">127.0.0.1</td>
+        </tr>
+              <tr>
+          <td class="small">2026/10/22 19:43:13</td>
+          <td class="small">—</td>          <td class="small">shop_link</td>
+          <td class="small">bale</td>
+          <td class="mono small">930001</td>
+          <td><span class="badge b-ok">ارسال شد</span></td>
+          <td class="mono small">0.0.0.0</td>
+        </tr>
+              <tr>
+          <td class="small">2026/10/22 19:43:10</td>
           <td class="small">operator</td>          <td class="small">کد ورود (OTP)</td>
           <td class="small">panel</td>
           <td class="mono small">—</td>
@@ -347,7 +363,7 @@ body{padding:14px}</style>
           <td class="mono small">127.0.0.1</td>
         </tr>
               <tr>
-          <td class="small">2026/10/22 19:27:21</td>
+          <td class="small">2026/10/22 19:43:10</td>
           <td class="small">operator</td>          <td class="small">کد ورود (OTP)</td>
           <td class="small">bale</td>
           <td class="mono small">987654321</td>
@@ -355,7 +371,7 @@ body{padding:14px}</style>
           <td class="mono small">127.0.0.1</td>
         </tr>
               <tr>
-          <td class="small">2026/10/22 19:27:21</td>
+          <td class="small">2026/10/22 19:43:10</td>
           <td class="small">admin</td>          <td class="small">لینک جادویی</td>
           <td class="small">link</td>
           <td class="mono small">—</td>
@@ -369,5 +385,6 @@ body{padding:14px}</style>
     </div>
   </main>
 </div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>

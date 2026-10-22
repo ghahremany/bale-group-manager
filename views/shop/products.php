@@ -2,7 +2,10 @@
 <div class="card">
   <div class="card-header">
     <h2>📦 کالاهای من <span class="badge b-info"><?= digits_fa($total) ?></span></h2>
-    <a class="btn sm" href="<?= h(url('shop/index.php', ['p' => 'product'])) ?>">➕ کالای جدید</a>
+    <div class="btn-group">
+      <a class="btn ghost sm" href="<?= h(url('shop/index.php', ['p' => 'csv'])) ?>">⬇️ خروجی CSV</a>
+      <a class="btn sm" href="<?= h(url('shop/index.php', ['p' => 'product'])) ?>">➕ کالای جدید</a>
+    </div>
   </div>
   <?php if (!$products): ?>
     <div class="empty">هنوز کالایی اضافه نکرده‌ای.</div>
@@ -29,4 +32,16 @@
     </table></div>
   <?php endif; ?>
   <div class="hint mt">کالای جدید بعد از تایید ادمین در فروشگاه و پیام‌های تبلیغاتی نمایش داده می‌شود.</div>
+
+  <div class="card tight mt">
+    <h3>⬆️ ورود/به‌روزرسانی انبار با CSV</h3>
+    <form method="post" action="<?= h(url('shop/index.php')) ?>" enctype="multipart/form-data" class="inline">
+      <?= Auth::csrfField() ?>
+      <input type="hidden" name="a" value="csv_import">
+      <input type="file" name="csv" accept=".csv,text/csv" required>
+      <button class="btn ok sm" type="submit">بارگذاری</button>
+    </form>
+    <div class="hint">ستون‌ها: <code class="mono"><?= h(implode(',', Store::csvColumns())) ?></code>
+      — اگر <code class="mono">code</code> با کالای خودت بخواند، همان کالا به‌روزرسانی می‌شود؛ وگرنه کالای جدید (در انتظار تایید) ساخته می‌شود.</div>
+  </div>
 </div>

@@ -232,6 +232,23 @@ final class BaleApi
      * ارسال فایل/سند (برای بکاپ). بله محدودیت حجم دارد (معمولاً ~۲۰MB).
      * @return array<string,mixed>|null
      */
+    /** ارسال عکس با URL (برای ماژول اخبار) */
+    public static function sendPhoto(int|string $chatId, string $photoUrl, string $caption = '', ?array $replyMarkup = null): ?array
+    {
+        if (!self::hasToken() || trim($photoUrl) === '') {
+            return null;
+        }
+        $data = ['chat_id' => $chatId, 'photo' => $photoUrl];
+        if ($caption !== '') {
+            $data['caption'] = $caption;
+            $data['parse_mode'] = 'HTML';
+        }
+        if ($replyMarkup !== null) {
+            $data['reply_markup'] = json_encode($replyMarkup, JSON_UNESCAPED_UNICODE);
+        }
+        return self::call('sendPhoto', $data);
+    }
+
     public static function sendDocument(int|string $chatId, string $filePath, string $caption = ''): ?array
     {
         if (!is_file($filePath)) {

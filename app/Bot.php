@@ -409,6 +409,28 @@ final class Bot
         $text = Text::normalize(Moderation::textOf($message));
         $text = preg_replace('~^[/!#]~u', '', $text);
         $cmd  = explode(' ', $text, 2)[0];
+        $rest = trim((string)explode(' ', $text, 2)[1]);
+        $ctxP = [
+            'chat_id' => $userId, 'chat' => ['id' => $userId, 'type' => 'private'],
+            'from' => $from, 'user_id' => $userId, 'msg_id' => (int)($message['message_id'] ?? 0),
+            'message' => $message, 'cmd_name' => $cmd, 'cmd' => $cmd, 'rest' => $rest,
+            'is_admin' => false, 'prefixed' => false,
+        ];
+
+        // گیت عضویت/بازی (ماژول forcejoin) — پیش از دسترسی به بخش‌های فروشگاه و دعوت
+        if (class_exists('Modules\ForceJoin') && \Modules\ForceJoin::isEnabled()) {
+            $gated = ['کالاها', 'محصولات', 'products', 'خرید', 'buy', 'سفارشها', 'سفارش‌ها', 'orders',
+                      'فروشگاه', 'shop', 'کیف_پول', 'کیفپول', 'موجودی', 'wallet', 'فروشنده', 'فروشندگی', 'sell'];
+            if (in_array($cmd, $gated, true) && !\Modules\ForceJoin::gate($ctxP)) {
+                return;
+            }
+        }
+
+        // دستورهای ماژول‌ها در چت خصوصی (مثل عضو_شدم / اخبار / لینک_دعوت_من)
+        if ($cmd !== '' && !in_array($cmd, ['start', 'شروع', 'سلام'], true)
+            && ModuleManager::dispatchCommand($cmd, $ctxP)) {
+            return;
+        }
 
         if ($cmd === '' || in_array($cmd, ['start', 'شروع', 'سلام'], true)) {
             // پارامتر دعوت: /start ref_xxx
@@ -508,6 +530,12 @@ final class Bot
                 return;
             }
             BaleApi::sendMessage($userId, "🔐 لینک ورود یک‌بارمصرف (۳ دقیقه اعتبار):\n" . $link . "\n\nاگر درخواست ندادی، نادیده بگیر.", null, null, 'HTML');
+            return;
+        }
+        // سایر دستورهای عمومی (مثل «کدتخفیف») در چت خصوصی
+        $ctxC = Commands::parse($message, $userId, $from, $userId, (int)($message['message_id'] ?? 0), false);
+        if ($ctxC !== null && !in_array((string)$ctxC['cmd'], Commands::ADMIN_ONLY, true)
+            && Commands::dispatch($ctxC)) {
             return;
         }
         BaleApi::sendMessage($userId, "برای شروع بنویس: <code>start</code>", null, null, 'HTML');

@@ -275,20 +275,41 @@ final class Store
         if (!isset(Broadcast::audiences()[$audience])) {
             $audience = 'groups';
         }
+        // چرخش خودکار بین کالاها (v1.4)
+        $mode = (string)($in['mode'] ?? 'single') === 'rotate' ? 'rotate' : 'single';
+        $poolRaw = trim((string)($in['rotate_pool'] ?? ''));
+        $pool = self::parsePool($poolRaw);
+        if ($mode === 'rotate') {
+            if (!$pool) {
+                // اگر استخر خالی بود: همه کالاهای فعال
+                $all = DB::all("SELECT id FROM products WHERE status='active' ORDER BY id");
+                $pool = array_map(static fn($r) => (int)$r['id'], $all);
+                $poolRaw = implode(',', $pool);
+            }
+            if (count($pool) < 2) {
+                return ['ok' => false, 'error' => 'برای چرخش، حداقل دو کالای فعال انتخاب کن.'];
+            }
+            // کالای شروع، اولین کالای استخر (یا کالای انتخاب‌شده اگر داخل استخر باشد)
+            if (!in_array($productId, $pool, true)) {
+                $productId = $pool[0];
+            }
+        }
         $now = time();
         $id  = (int)($in['id'] ?? 0);
         if ($id > 0) {
             DB::q("UPDATE promo_campaigns SET product_id=?, title=?, template=?, audience=?, interval_hours=?,
-                     status='active', next_run_at=? WHERE id=?",
+                     mode=?, rotate_pool=?, status='active', next_run_at=? WHERE id=?",
                 [$productId, str_limit((string)($in['title'] ?? $p['title']), 118), $template, $audience,
-                 $interval, $now + (int)($in['delay_minutes'] ?? 0) * 60, $id]);
-            Logger::audit($adminId, 'panel', 'promo_update', 'campaign#' . $id, (string)$p['title']);
+                 $interval, $mode, $mode === 'rotate' ? $poolRaw : null,
+                 $now + (int)($in['delay_minutes'] ?? 0) * 60, $id]);
+            Logger::audit($adminId, 'panel', 'promo_update', 'campaign#' . $id,
+                (string)$p['title'] . ($mode === 'rotate' ? ' · چرخشی (' . count($pool) . ' کالا)' : ''));
             return ['ok' => true, 'id' => $id];
         }
-        DB::q("INSERT INTO promo_campaigns (product_id,title,template,audience,interval_hours,next_run_at,status,created_at)
-               VALUES (?,?,?,?,?,?, 'active', ?)",
+        DB::q("INSERT INTO promo_campaigns (product_id,title,template,audience,interval_hours,next_run_at,status,mode,rotate_pool,created_at)
+               VALUES (?,?,?,?,?,?, 'active', ?,?,?)",
             [$productId, str_limit((string)($in['title'] ?? $p['title']), 118), $template, $audience, $interval,
-             $now + (int)($in['delay_minutes'] ?? 0) * 60, $now]);
+             $now + (int)($in['delay_minutes'] ?? 0) * 60, $mode, $mode === 'rotate' ? $poolRaw : null, $now]);
         $newId = (int)DB::pdo()->lastInsertId();
         Logger::audit($adminId, 'panel', 'promo_create', 'campaign#' . $newId, (string)$p['title']);
         return ['ok' => true, 'id' => $newId];
@@ -334,6 +355,54 @@ final class Store
         return "https://ble.ir/{$bot}?start=buy_" . $product['code'];
     }
 
+    /** تبدیل رشته استخر (آیدی‌های جداشده با کاما) به آرایه یکتا */
+    public static function parsePool(string $raw): array
+    {
+        $ids = [];
+        foreach (preg_split('~[,\s،]+~u', $raw) ?: [] as $part) {
+            $part = trim($part);
+            if ($part === '') {
+                continue;
+            }
+            $id = (int)preg_replace('~[^0-9]~', '', $part);
+            if ($id > 0) {
+                $ids[$id] = $id;
+            }
+        }
+        return array_values($ids);
+    }
+
+    /**
+     * کالای بعدی برای کمپین چرخشی (بعد از last_product_id، با برگشت به ابتدا)
+     * کالاهای غیرفعال/ناموجود رد می‌شوند.
+     */
+    public static function nextRotateProduct(array $campaign): ?array
+    {
+        $pool = self::parsePool((string)($campaign['rotate_pool'] ?? ''));
+        if (!$pool) {
+            $all  = DB::all("SELECT id FROM products WHERE status='active' ORDER BY id");
+            $pool = array_map(static fn($r) => (int)$r['id'], $all);
+        }
+        if (!$pool) {
+            return null;
+        }
+        $last = (int)($campaign['last_product_id'] ?? 0);
+        $start = 0;
+        if ($last > 0) {
+            $pos = array_search($last, $pool, true);
+            $start = $pos === false ? 0 : ($pos + 1);
+        }
+        $n = count($pool);
+        for ($i = 0; $i < $n; $i++) {
+            $id = $pool[($start + $i) % $n];
+            $p  = self::product($id);
+            if ($p && $p['status'] === 'active' && self::available($p) > 0) {
+                return $p;
+            }
+        }
+        return null;
+    }
+
     /**
      * اجرای کمپین‌های سررسیده (از کرون) — هر کمپین یک دسته در صف ارسال
      * @return array<int,array<string,mixed>>
@@ -343,7 +412,10 @@ final class Store
         $rows = DB::all("SELECT * FROM promo_campaigns WHERE status='active' AND next_run_at <= ? ORDER BY next_run_at LIMIT " . max(1, $limit), [time()]);
         $out = [];
         foreach ($rows as $c) {
-            $p = self::product((int)$c['product_id']);
+            $rotate = (string)($c['mode'] ?? 'single') === 'rotate';
+            $p = $rotate
+                ? self::nextRotateProduct($c)
+                : self::product((int)$c['product_id']);
             if (!$p || $p['status'] !== 'active' || self::available($p) <= 0) {
                 DB::q("UPDATE promo_campaigns SET status='paused' WHERE id=?", [(int)$c['id']]);
                 $out[] = ['campaign' => (int)$c['id'], 'skipped' => 'product inactive/out of stock'];
@@ -357,14 +429,160 @@ final class Store
                 'rate'     => 12,
             ]);
             if ($res['ok']) {
-                DB::q("UPDATE promo_campaigns SET next_run_at=?, last_batch_id=?, sent_count=sent_count+1 WHERE id=?",
-                    [time() + (int)$c['interval_hours'] * 3600, (int)$res['batch'], (int)$c['id']]);
-                $out[] = ['campaign' => (int)$c['id'], 'batch' => (int)$res['batch'], 'targets' => (int)$res['queued']];
+                DB::q("UPDATE promo_campaigns SET next_run_at=?, last_batch_id=?, sent_count=sent_count+1,
+                         last_product_id=? WHERE id=?",
+                    [time() + (int)$c['interval_hours'] * 3600, (int)$res['batch'], (int)$p['id'], (int)$c['id']]);
+                $out[] = ['campaign' => (int)$c['id'], 'batch' => (int)$res['batch'],
+                          'targets' => (int)$res['queued'], 'product' => (int)$p['id']];
             } else {
                 $out[] = ['campaign' => (int)$c['id'], 'error' => (string)($res['error'] ?? '')];
             }
         }
         return $out;
+    }
+
+    // ---------------- CSV انبار (ورود/خروج) ----------------
+
+    /** ستون‌های استاندارد فایل CSV */
+    public static function csvColumns(): array
+    {
+        return ['code', 'title', 'price', 'discount_price', 'stock', 'unit', 'min_stock',
+                'sku', 'category_id', 'status', 'image', 'description'];
+    }
+
+    /** خروجی CSV انبار (کل یا یک فروشنده) */
+    public static function exportCsv(?int $sellerId = null): string
+    {
+        $where = $sellerId !== null ? 'WHERE p.seller_id=?' : '';
+        $rows  = DB::all("SELECT p.* FROM products p $where ORDER BY p.id", $sellerId !== null ? [$sellerId] : []);
+        $fh = fopen('php://temp', 'r+');
+        // BOM برای نمایش صحیح فارسی در اکسل
+        fwrite($fh, "\xEF\xBB\xBF");
+        fputcsv($fh, self::csvColumns(), ',', '"', '');
+        foreach ($rows as $r) {
+            fputcsv($fh, [
+                (string)$r['code'],
+                (string)$r['title'],
+                (int)$r['price'],
+                (int)$r['discount_price'],
+                (int)$r['stock'],
+                (string)($r['unit'] ?: 'عدد'),
+                (int)$r['min_stock'],
+                (string)($r['sku'] ?? ''),
+                (int)($r['category_id'] ?? 0),
+                (string)$r['status'],
+                (string)($r['image'] ?? ''),
+                str_replace(["\r\n", "\n", "\r"], ' ', (string)($r['description'] ?? '')),
+            ], ',', '"', '');
+        }
+        rewind($fh);
+        $csv = (string)stream_get_contents($fh);
+        fclose($fh);
+        return $csv;
+    }
+
+    /**
+     * ورود CSV انبار
+     * - اگر ستون code موجود و در انبار پیدا شود → به‌روزرسانی (قیمت/عنوان/موجودی)
+     * - وگرنه کالای جدید ساخته می‌شود (برای فروشنده: pending، برای ادمین: like status)
+     * - موجودی به‌صورت «مقدار مطلق» تنظیم می‌شود (نه اختلاف)
+     *
+     * @return array{ok:bool,created?:int,updated?:int,skipped?:int,errors?:array<int,string>,error?:string}
+     */
+    public static function importCsv(string $csv, ?int $sellerId = null, ?int $adminId = null): array
+    {
+        $csv = trim($csv);
+        if ($csv === '') {
+            return ['ok' => false, 'error' => 'فایل خالی است.'];
+        }
+        // حذف BOM
+        $csv = preg_replace('~^\xEF\xBB\xBF~', '', $csv) ?? $csv;
+        $lines = preg_split('~\r\n|\n|\r~', $csv) ?: [];
+        if (count($lines) < 2) {
+            return ['ok' => false, 'error' => 'فایل باید سطر عنوان و حداقل یک کالا داشته باشد.'];
+        }
+        $header = array_map(static fn($h) => strtolower(trim((string)$h)), str_getcsv((string)array_shift($lines), ',', '"', ''));
+        $need   = ['title', 'price'];
+        foreach ($need as $col) {
+            if (!in_array($col, $header, true)) {
+                return ['ok' => false, 'error' => 'ستون `' . $col . '` در فایل نیست. ستون‌های لازم: '
+                    . implode(' ، ', self::csvColumns())];
+            }
+        }
+        $created = 0;
+        $updated = 0;
+        $skipped = 0;
+        $errors  = [];
+        $lineNo  = 1;
+        foreach ($lines as $line) {
+            $lineNo++;
+            if (trim($line) === '') {
+                continue;
+            }
+            $vals = str_getcsv($line, ',', '"', '');
+            $row  = [];
+            foreach ($header as $i => $col) {
+                $row[$col] = isset($vals[$i]) ? trim((string)$vals[$i]) : '';
+            }
+            $title = (string)($row['title'] ?? '');
+            $price = (int)preg_replace('~[^0-9]~', '', (string)($row['price'] ?? '0'));
+            if (mb_strlen($title) < 3 || $price <= 0) {
+                $skipped++;
+                $errors[] = 'سطر ' . digits_fa($lineNo) . ': عنوان یا قیمت نامعتبر';
+                continue;
+            }
+            $code = strtoupper(preg_replace('~[^A-Za-z0-9_-]~', '', (string)($row['code'] ?? '')) ?? '');
+            $existing = null;
+            if ($code !== '') {
+                $existing = DB::one("SELECT * FROM products WHERE code=?", [$code]);
+                if ($existing && $sellerId !== null && (int)$existing['seller_id'] !== $sellerId) {
+                    $skipped++;
+                    $errors[] = 'سطر ' . digits_fa($lineNo) . ': کد ' . $code . ' متعلق به فروشنده دیگری است';
+                    continue;
+                }
+            }
+            $save = [
+                'id'             => $existing ? (int)$existing['id'] : 0,
+                'title'          => $title,
+                'price'          => $price,
+                'discount_price' => (int)preg_replace('~[^0-9]~', '', (string)($row['discount_price'] ?? '0')),
+                'stock'          => (int)preg_replace('~[^0-9-]~', '', (string)($row['stock'] ?? '0')),
+                'unit'           => (string)($row['unit'] ?? 'عدد'),
+                'min_stock'      => (int)preg_replace('~[^0-9]~', '', (string)($row['min_stock'] ?? '3')),
+                'sku'            => (string)($row['sku'] ?? ''),
+                'category_id'    => (int)($row['category_id'] ?? 0),
+                'image'          => (string)($row['image'] ?? ''),
+                'description'    => (string)($row['description'] ?? ''),
+                'actor'          => $sellerId !== null ? 'seller' : 'panel',
+            ];
+            if ($existing) {
+                $save['status'] = (string)$existing['status'];
+                if ($adminId !== null && isset(self::STATUSES[(string)($row['status'] ?? '')])) {
+                    $save['status'] = (string)$row['status'];
+                }
+                $res = self::save($save, $sellerId, $adminId);
+                if (!$res['ok']) {
+                    $skipped++;
+                    $errors[] = 'سطر ' . digits_fa($lineNo) . ': ' . (string)($res['error'] ?? 'خطا');
+                    continue;
+                }
+                $updated++;
+                continue;
+            }
+            $save['status'] = $adminId !== null && isset(self::STATUSES[(string)($row['status'] ?? '')])
+                ? (string)$row['status']
+                : ($sellerId !== null ? 'pending' : 'active');
+            $res = self::save($save, $sellerId, $adminId);
+            if (!$res['ok']) {
+                $skipped++;
+                $errors[] = 'سطر ' . digits_fa($lineNo) . ': ' . (string)($res['error'] ?? 'خطا');
+                continue;
+            }
+            $created++;
+        }
+        Logger::audit($adminId, $sellerId !== null ? 'seller' : 'panel', 'inventory_csv',
+            (string)($sellerId ?? 0), "created=$created updated=$updated skipped=$skipped");
+        return ['ok' => true, 'created' => $created, 'updated' => $updated, 'skipped' => $skipped, 'errors' => $errors];
     }
 
     // ---------------- کمکی ----------------

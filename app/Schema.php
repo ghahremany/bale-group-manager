@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 final class Schema
 {
-    public const VERSION = '1.3.0';
+    public const VERSION = '1.4.0';
 
     public static function statements(): array
     {
@@ -545,6 +545,93 @@ final class Schema
                 KEY idx_user (user_id, id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
+            // ---------- کد تخفیف (۱.۴) ----------
+            "CREATE TABLE IF NOT EXISTS coupons (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                code VARCHAR(32) NOT NULL,
+                type ENUM('percent','fixed') NOT NULL DEFAULT 'percent',
+                value BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                min_total BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                max_uses INT UNSIGNED NOT NULL DEFAULT 0,
+                used_count INT UNSIGNED NOT NULL DEFAULT 0,
+                per_user TINYINT UNSIGNED NOT NULL DEFAULT 1,
+                seller_id INT UNSIGNED NULL,
+                product_id INT UNSIGNED NULL,
+                expires_at INT UNSIGNED NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_code (code),
+                KEY idx_active (is_active, expires_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS coupon_uses (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                coupon_id INT UNSIGNED NOT NULL,
+                user_id BIGINT NOT NULL,
+                order_id BIGINT UNSIGNED NOT NULL,
+                amount BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_coupon (coupon_id),
+                KEY idx_user (user_id, coupon_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- نظرات و امتیاز خریدار (۱.۴) ----------
+            "CREATE TABLE IF NOT EXISTS product_reviews (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                product_id INT UNSIGNED NOT NULL,
+                user_id BIGINT NOT NULL,
+                order_id BIGINT UNSIGNED NULL,
+                rating TINYINT UNSIGNED NOT NULL DEFAULT 5,
+                comment VARCHAR(600) NULL,
+                status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved',
+                admin_id INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_user_product_order (user_id, product_id, order_id),
+                KEY idx_product (product_id, status)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: کانال‌ها ----------
+            "CREATE TABLE IF NOT EXISTS channels (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                chat_id BIGINT NOT NULL,
+                title VARCHAR(160) NOT NULL,
+                username VARCHAR(80) NULL,
+                kind ENUM('channel','group') NOT NULL DEFAULT 'channel',
+                signature VARCHAR(255) NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                post_count INT UNSIGNED NOT NULL DEFAULT 0,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_chat (chat_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: اخبار ----------
+            "CREATE TABLE IF NOT EXISTS news_posts (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                channel_id BIGINT NULL,
+                title VARCHAR(200) NULL,
+                body TEXT NOT NULL,
+                media_url VARCHAR(255) NULL,
+                status ENUM('draft','scheduled','sent','failed') NOT NULL DEFAULT 'draft',
+                scheduled_at INT UNSIGNED NOT NULL DEFAULT 0,
+                sent_at INT UNSIGNED NULL,
+                error VARCHAR(255) NULL,
+                admin_id INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_due (status, scheduled_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: اجبار عضویت / بازی ----------
+            "CREATE TABLE IF NOT EXISTS forcejoin_state (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                user_id BIGINT NOT NULL,
+                status ENUM('pending','passed','failed') NOT NULL DEFAULT 'pending',
+                quiz_ok TINYINT(1) NOT NULL DEFAULT 0,
+                attempts TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                verified_at INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_user (user_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
             // ---------- تنظیمات کلید/مقدار ----------
             "CREATE TABLE IF NOT EXISTS settings (
                 skey VARCHAR(64) PRIMARY KEY,
@@ -570,6 +657,16 @@ final class Schema
                 'attempts'    => "TINYINT UNSIGNED NOT NULL DEFAULT 0",
                 'next_try_at' => "INT UNSIGNED NOT NULL DEFAULT 0",
                 'chat_type'   => "VARCHAR(12) NULL",
+            ],
+            'promo_campaigns' => [
+                'mode'            => "ENUM('single','rotate') NOT NULL DEFAULT 'single'",
+                'last_product_id' => "INT UNSIGNED NULL",
+                'rotate_pool'     => "VARCHAR(500) NULL",
+            ],
+            'orders' => [
+                'coupon_id'   => "INT UNSIGNED NULL",
+                'coupon_code' => "VARCHAR(32) NULL",
+                'reviewed'    => "TINYINT(1) NOT NULL DEFAULT 0",
             ],
         ];
         foreach ($tableCols as $table => $cols) {
@@ -602,7 +699,16 @@ final class Schema
         } catch (Throwable $e) {
             $log[] = 'index failed: ' . $e->getMessage();
         }
-        foreach (self::statements() as $sql) {
+        $all = self::statements();
+        // جدول‌های اعلام‌شده توسط ماژول‌ها (پلاگین‌ها)
+        try {
+            if (class_exists('ModuleManager')) {
+                $all = array_merge($all, ModuleManager::migrations());
+            }
+        } catch (Throwable $e) {
+            $log[] = 'modules migrations: ' . $e->getMessage();
+        }
+        foreach ($all as $sql) {
             try {
                 DB::pdo()->exec($sql);
             } catch (Throwable $e) {
@@ -615,7 +721,15 @@ final class Schema
 
     public static function install(): void
     {
-        foreach (self::statements() as $sql) {
+        $all = self::statements();
+        try {
+            if (class_exists('ModuleManager')) {
+                $all = array_merge($all, ModuleManager::migrations());
+            }
+        } catch (Throwable $e) {
+            // ماژول‌ها در نصب اولیه حیاتی نیستند
+        }
+        foreach ($all as $sql) {
             DB::pdo()->exec($sql);
         }
     }

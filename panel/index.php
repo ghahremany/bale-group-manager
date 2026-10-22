@@ -322,7 +322,7 @@ switch ($page) {
         break;
 
     case 'store':
-        $tab = in_array($_GET['tab'] ?? '', ['products', 'sellers', 'campaigns', 'categories'], true)
+        $tab = in_array($_GET['tab'] ?? '', ['products', 'sellers', 'campaigns', 'categories', 'coupons', 'reviews', 'csv'], true)
             ? (string)$_GET['tab'] : 'products';
         $status  = (string)($_GET['status'] ?? '');
         $q       = trim((string)($_GET['q'] ?? ''));
@@ -337,6 +337,11 @@ switch ($page) {
             'categories' => Store::categories(),
             'stats' => Store::stats(),
             'sellerStats' => Seller::stats(),
+            'coupons' => Coupon::list((string)($_GET['cq'] ?? '')),
+            'reviews' => Reviews::list((string)($_GET['rstatus'] ?? ''), 60, 0),
+            'rstatus' => (string)($_GET['rstatus'] ?? ''),
+            'couponStats' => Coupon::stats(),
+            'reviewStats' => Reviews::stats(),
         ];
         $title = 'انبار و فروشگاه';
         break;
@@ -369,6 +374,33 @@ switch ($page) {
             'status' => $wStatus,
         ];
         $title = 'کیف پول و برداشت‌ها';
+        break;
+
+    case 'modules':
+        $data += [
+            'modules' => ModuleManager::summary(),
+        ];
+        $title = 'ماژول‌ها';
+        break;
+
+    case 'module':
+        $mkey   = (string)($_GET['m'] ?? '');
+        $mclass = ModuleManager::get($mkey);
+        if ($mclass === null) {
+            redirect('panel/index.php', ['p' => 'modules']);
+        }
+        $mdata = $mclass::panelData();
+        $mview = $mclass::panelView();
+        if ($mdata === null || $mview === null) {
+            redirect('panel/index.php', ['p' => 'modules']);
+        }
+        $data = array_merge($data, $mdata);
+        $data['module_key']   = $mkey;
+        $data['module_title'] = $mclass::title();
+        $data['module_icon']  = $mclass::icon();
+        $data['module_on']    = $mclass::isEnabled();
+        $data['module_view']  = $mview;
+        $title = $mclass::title() . ' — ماژول';
         break;
 
     case 'dashboard':
@@ -407,4 +439,8 @@ switch ($page) {
 }
 
 $data['title'] = $title;
-View::render($page === 'dashboard' ? 'dashboard' : $page, $data);
+if ($page === 'module' && !empty($data['module_view'])) {
+    View::render((string)$data['module_view'], $data);
+} else {
+    View::render($page === 'dashboard' ? 'dashboard' : $page, $data);
+}

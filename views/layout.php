@@ -27,6 +27,7 @@
       <a href="<?= h(url('panel/index.php', ['p' => 'logs'])) ?>" class="<?= $page === 'logs' ? 'active' : '' ?>">📜 رخدادها</a>
       <a href="<?= h(url('panel/index.php', ['p' => 'analytics'])) ?>" class="<?= $page === 'analytics' ? 'active' : '' ?>">📊 گزارش نموداری</a>
       <a href="<?= h(url('panel/index.php', ['p' => 'referrals'])) ?>" class="<?= $page === 'referrals' ? 'active' : '' ?>">🌱 زیرمجموعه‌گیری</a>
+      <a href="<?= h(url('panel/index.php', ['p' => 'modules'])) ?>" class="<?= $page === 'modules' || $page === 'module' ? 'active' : '' ?>">🧩 ماژول‌ها</a>
       <a href="<?= h(url('panel/index.php', ['p' => 'broadcast'])) ?>" class="<?= $page === 'broadcast' ? 'active' : '' ?>">📤 ارسال همگانی</a>
       <a href="<?= h(url('panel/index.php', ['p' => 'store'])) ?>" class="<?= $page === 'store' ? 'active' : '' ?>">📦 انبار</a>
       <a href="<?= h(url('panel/index.php', ['p' => 'orders'])) ?>" class="<?= $page === 'orders' ? 'active' : '' ?>">🧾 سفارش‌ها</a>

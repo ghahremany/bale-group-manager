@@ -12,9 +12,13 @@ if (!defined('BGM_ROOT')) {
 require_once BGM_ROOT . '/app/helpers.php';
 
 spl_autoload_register(static function (string $class): void {
-    $file = BGM_ROOT . '/app/' . $class . '.php';
-    if (is_file($file)) {
-        require_once $file;
+    // کلاس‌های بدون namespace در app/ و ماژول‌ها در app/Modules/ (namespace Modules)
+    foreach ([str_replace('\\', '/', $class), $class] as $rel) {
+        $file = BGM_ROOT . '/app/' . $rel . '.php';
+        if (is_file($file)) {
+            require_once $file;
+            return;
+        }
     }
 });
 

@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>داشبورد — مدیر گروه بله</title>
-
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -154,10 +153,10 @@ svg{max-width:100%;height:auto;display:block}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-body{padding:14px}</style>
-<title>داشبورد پنل — پیش‌نمایش</title>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
 </head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت (Static Preview)</b> — این صفحه یک اسکرین‌شات HTML از پنل واقعی است: دکمه‌ها و فرم‌ها در این فایل کار نمی‌کنند، اما چیدمان، رنگ‌ها و نمودارها همان چیزی است که روی سرور می‌بینید. همه چیز درون‌خطی است (بدون CSS/JS/CDN خارجی).</div>
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
@@ -168,27 +167,28 @@ body{padding:14px}</style>
       </div>
     </div>
     <nav class="nav">
-      <a href="http://localhost:8080/panel/index.php?p=dashboard" class="active">📊 داشبورد</a>
-      <a href="http://localhost:8080/panel/index.php?p=groups" class="">👥 گروه‌ها</a>
-      <a href="http://localhost:8080/panel/index.php?p=moderation" class="">🛡 تخلفات</a>
-      <a href="http://localhost:8080/panel/index.php?p=users" class="">🙋 کاربران</a>
-      <a href="http://localhost:8080/panel/index.php?p=logs" class="">📜 رخدادها</a>
-      <a href="http://localhost:8080/panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
-      <a href="http://localhost:8080/panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
-      <a href="http://localhost:8080/panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
-      <a href="http://localhost:8080/panel/index.php?p=store" class="">📦 انبار</a>
-      <a href="http://localhost:8080/panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <a href="#panel/index.php?p=dashboard" class="active">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
       <div class="sep">مدیریت سیستم</div>
-              <a href="http://localhost:8080/panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
-        <a href="http://localhost:8080/panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
-        <a href="http://localhost:8080/panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
-        <a href="http://localhost:8080/panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
-        <a href="http://localhost:8080/panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
-        <a href="http://localhost:8080/panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
-            <a href="http://localhost:8080/panel/index.php?p=account" class="">👤 حساب من</a>
-      <a href="http://localhost:8080/panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
       <div class="sep">خروج</div>
-      <a href="http://localhost:8080/panel/logout.php">🚪 خروج از پنل</a>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
     </nav>
   </aside>
 
@@ -200,7 +200,7 @@ body{padding:14px}</style>
               </div>
       <div class="inline">
                         <span class="pill">admin · مدیر ارشد</span>
-        <a class="btn ghost sm" href="http://localhost:8080/panel/logout.php">خروج</a>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
       </div>
     </div>
 
@@ -208,17 +208,17 @@ body{padding:14px}</style>
                   <div class="grid g4 mb">
       <div class="kpi">
       <div class="i">👥</div>
-      <div class="v">۲</div>
+      <div class="v">۳</div>
       <div class="l">گروه فعال</div>
     </div>
       <div class="kpi">
       <div class="i">🙋</div>
-      <div class="v">۱۶</div>
+      <div class="v">۱۷</div>
       <div class="l">کاربر شناخته‌شده</div>
     </div>
       <div class="kpi">
       <div class="i">📜</div>
-      <div class="v">۶۲</div>
+      <div class="v">۱۰۰</div>
       <div class="l">رخداد ۲۴ ساعت</div>
     </div>
       <div class="kpi">
@@ -252,12 +252,12 @@ body{padding:14px}</style>
   <div class="card-header">
     <h2>🛒 فروشگاه</h2>
     <div class="btn-group">
-      <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=store">انبار</a>
-      <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=orders">سفارش‌ها</a>
+      <a class="btn ghost sm" href="#panel/index.php?p=store">انبار</a>
+      <a class="btn ghost sm" href="#panel/index.php?p=orders">سفارش‌ها</a>
     </div>
   </div>
   <div class="grid g4 mb">
-    <div class="kpi"><div class="v">۱</div><div class="l">کالای فعال</div></div>
+    <div class="kpi"><div class="v">۴</div><div class="l">کالای فعال</div></div>
     <div class="kpi"><div class="v">۴</div><div class="l">سفارش امروز</div></div>
     <div class="kpi"><div class="v">۰</div><div class="l">رسید در انتظار</div></div>
     <div class="kpi"><div class="v">۲۷۰,۰۰۰</div><div class="l">فروش ۳۰ روز (تومان)</div></div>
@@ -268,39 +268,39 @@ body{padding:14px}</style>
 <div class="card">
   <div class="card-header">
     <h2>📈 ۱۴ روز اخیر</h2>
-    <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=analytics">گزارش کامل</a>
+    <a class="btn ghost sm" href="#panel/index.php?p=analytics">گزارش کامل</a>
   </div>
   <div class="grid g3">
     <div>
       <div class="small muted">پیام‌ها (۷ روز): <b>۹۳</b></div>
       <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,4 184.2,9.5 206.9,14.9 229.7,20.4 252.5,25.8 275.2,31.3 298,33.1" fill="none" stroke="#3b82f6" stroke-width="1.8"/></svg>    </div>
     <div>
-      <div class="small muted">تخلف/اقدام: <b>۹</b></div>
-      <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,44 184.2,17.3 206.9,30.7 229.7,44 252.5,17.3 275.2,30.7 298,4" fill="none" stroke="#ef4444" stroke-width="1.8"/></svg>    </div>
+      <div class="small muted">تخلف/اقدام: <b>۱۱</b></div>
+      <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,44 184.2,28 206.9,36 229.7,44 252.5,28 275.2,36 298,4" fill="none" stroke="#ef4444" stroke-width="1.8"/></svg>    </div>
     <div>
       <div class="small muted">ورود اعضا: <b>۱۰</b></div>
       <svg viewBox="0 0 300 48" width="300" height="48" role="img"><polyline points="2,44 24.8,44 47.5,44 70.3,44 93.1,44 115.8,44 138.6,44 161.4,34 184.2,34 206.9,34 229.7,34 252.5,34 275.2,34 298,4" fill="none" stroke="#22c55e" stroke-width="1.8"/></svg>    </div>
   </div>
   <div class="rowline mt">
     <span>🌱 دعوت‌های تاییدشده: <b>۱</b> · در انتظار: ۰</span>
-    <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=referrals">مدیریت</a>
+    <a class="btn ghost sm" href="#panel/index.php?p=referrals">مدیریت</a>
   </div>
   <div class="rowline">
-    <span>🗄 آخرین بکاپ: <b>2026/10/22 19:27</b></span>
-    <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=backup">بکاپ</a>
+    <span>🗄 آخرین بکاپ: <b>2026/10/22 19:43</b></span>
+    <a class="btn ghost sm" href="#panel/index.php?p=backup">بکاپ</a>
   </div>
 </div>
 
 <div class="card">
   <div class="card-header"><h2>وضعیت سیستم</h2>
-    <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=system">مدیریت</a>
+    <a class="btn ghost sm" href="#panel/index.php?p=system">مدیریت</a>
   </div>
   <div class="rowline"><span>حالت دریافت پیام</span>
     <span class="badge b-ok">وب‌هوک</span>
   </div>
   <div class="rowline"><span>ربات</span><span class="mono">@mock_bot</span></div>
   <div class="rowline"><span>آخرین اجرای کرون</span>
-    <span>2026/10/22 19:27</span>
+    <span>2026/10/22 19:43</span>
   </div>
   <div class="rowline"><span>آخرین پولینگ</span>
     <span>—</span>
@@ -310,100 +310,100 @@ body{padding:14px}</style>
 <div class="grid g2">
   <div class="card">
     <div class="card-header"><h2>آخرین رخدادها</h2>
-      <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=logs">همه</a></div>
+      <a class="btn ghost sm" href="#panel/index.php?p=logs">همه</a></div>
           <div class="table-wrap">
         <table>
           <thead><tr><th>زمان</th><th>گروه</th><th>اقدام</th><th>کاربر</th></tr></thead>
           <tbody>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">warn</span></td>
               <td class="mono small">222</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">mute</span></td>
               <td class="mono small">4242</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">seller_request</span></td>
+              <td class="mono small">930001</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_receipt</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930003</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
+              <td class="mono small"></td>
+              <td><span class="badge b-info">order_create</span></td>
+              <td class="mono small">930002</td>
+            </tr>
+                      <tr>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">command</span></td>
               <td class="mono small">222</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">mute</span></td>
               <td class="mono small">999</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">unmute</span></td>
               <td class="mono small">999</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">command</span></td>
               <td class="mono small">222</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small"></td>
               <td><span class="badge b-info">referral_pending</span></td>
               <td class="mono small">910002</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">referral_verified</span></td>
               <td class="mono small">910002</td>
             </tr>
                       <tr>
-              <td class="mono small">10/22 19:27</td>
+              <td class="mono small">10/22 19:43</td>
               <td class="mono small">-1009999990001</td>
               <td><span class="badge b-info">command</span></td>
               <td class="mono small">910001</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small">-1009999990001</td>
-              <td><span class="badge b-info">command</span></td>
-              <td class="mono small">111</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small">-1009999990001</td>
-              <td><span class="badge b-info">command</span></td>
-              <td class="mono small">222</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small">-1009999990001</td>
-              <td><span class="badge b-info">command</span></td>
-              <td class="mono small">222</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small"></td>
-              <td><span class="badge b-info">order_create</span></td>
-              <td class="mono small">222</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small">-1009999990001</td>
-              <td><span class="badge b-info">referral_pending</span></td>
-              <td class="mono small">900002</td>
-            </tr>
-                      <tr>
-              <td class="mono small">10/22 19:27</td>
-              <td class="mono small">-1009999990001</td>
-              <td><span class="badge b-info">referral_verified</span></td>
-              <td class="mono small">900002</td>
             </tr>
                     </tbody>
         </table>
@@ -412,9 +412,9 @@ body{padding:14px}</style>
 
   <div class="card">
     <div class="card-header"><h2>گزارش‌های باز</h2>
-      <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=moderation&amp;tab=reports">مدیریت</a></div>
+      <a class="btn ghost sm" href="#panel/index.php?p=moderation&amp;tab=reports">مدیریت</a></div>
                   <div class="rowline">
-          <span>#۱۲ · گروه تست</span>
+          <span>#۱۴ · گروه تست</span>
           <span class="mono small">هدف 321</span>
         </div>
         <div class="small muted">تبلیغ</div>
@@ -430,18 +430,22 @@ body{padding:14px}</style>
   <div class="card">
     <div class="card-header"><h2>فعال‌ترین گروه‌ها (۷ روز)</h2></div>
                   <div class="rowline">
-          <a href="http://localhost:8080/panel/index.php?p=group&amp;chat_id=-1009999990001">گروه تست</a>
+          <a href="#panel/index.php?p=group&amp;chat_id=-1009999990001">گروه تست</a>
           <span class="badge b-info">۳۳ رخداد</span>
         </div>
               <div class="rowline">
-          <a href="http://localhost:8080/panel/index.php?p=group&amp;chat_id=-1001234567890">گروه تست خانواده</a>
+          <a href="#panel/index.php?p=group&amp;chat_id=-1001234567890">گروه تست خانواده</a>
           <span class="badge b-info">۲ رخداد</span>
+        </div>
+              <div class="rowline">
+          <a href="#panel/index.php?p=group&amp;chat_id=-1005550001111">گروه تبلیغ تست</a>
+          <span class="badge b-info">۰ رخداد</span>
         </div>
             </div>
 
   <div class="card">
     <div class="card-header"><h2>آخرین بن‌ها</h2>
-      <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=moderation">همه</a></div>
+      <a class="btn ghost sm" href="#panel/index.php?p=moderation">همه</a></div>
                   <div class="rowline">
           <span class="mono small">777</span>
           <span class="small muted">تبلیغ · 10/22 18:26</span>
@@ -451,5 +455,6 @@ body{padding:14px}</style>
     </div>
   </main>
 </div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>

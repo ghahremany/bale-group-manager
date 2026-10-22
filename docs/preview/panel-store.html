@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>انبار و فروشگاه — مدیر گروه بله</title>
-
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -154,10 +153,10 @@ svg{max-width:100%;height:auto;display:block}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-body{padding:14px}</style>
-<title>انبار و فروشگاه — پیش‌نمایش</title>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
 </head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت (Static Preview)</b> — این صفحه یک اسکرین‌شات HTML از پنل واقعی است: دکمه‌ها و فرم‌ها در این فایل کار نمی‌کنند، اما چیدمان، رنگ‌ها و نمودارها همان چیزی است که روی سرور می‌بینید. همه چیز درون‌خطی است (بدون CSS/JS/CDN خارجی).</div>
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
@@ -168,27 +167,28 @@ body{padding:14px}</style>
       </div>
     </div>
     <nav class="nav">
-      <a href="http://localhost:8080/panel/index.php?p=dashboard" class="">📊 داشبورد</a>
-      <a href="http://localhost:8080/panel/index.php?p=groups" class="">👥 گروه‌ها</a>
-      <a href="http://localhost:8080/panel/index.php?p=moderation" class="">🛡 تخلفات</a>
-      <a href="http://localhost:8080/panel/index.php?p=users" class="">🙋 کاربران</a>
-      <a href="http://localhost:8080/panel/index.php?p=logs" class="">📜 رخدادها</a>
-      <a href="http://localhost:8080/panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
-      <a href="http://localhost:8080/panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
-      <a href="http://localhost:8080/panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
-      <a href="http://localhost:8080/panel/index.php?p=store" class="active">📦 انبار</a>
-      <a href="http://localhost:8080/panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="active">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
       <div class="sep">مدیریت سیستم</div>
-              <a href="http://localhost:8080/panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
-        <a href="http://localhost:8080/panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
-        <a href="http://localhost:8080/panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
-        <a href="http://localhost:8080/panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
-        <a href="http://localhost:8080/panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
-        <a href="http://localhost:8080/panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
-            <a href="http://localhost:8080/panel/index.php?p=account" class="">👤 حساب من</a>
-      <a href="http://localhost:8080/panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
       <div class="sep">خروج</div>
-      <a href="http://localhost:8080/panel/logout.php">🚪 خروج از پنل</a>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
     </nav>
   </aside>
 
@@ -200,23 +200,26 @@ body{padding:14px}</style>
               </div>
       <div class="inline">
                         <span class="pill">admin · مدیر ارشد</span>
-        <a class="btn ghost sm" href="http://localhost:8080/panel/logout.php">خروج</a>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
       </div>
     </div>
 
     <div class="content">
                   <div class="tabs mb">
-  <a class="btn  sm" href="http://localhost:8080/panel/index.php?p=store&amp;tab=products">📦 کالاها</a>
-  <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=store&amp;tab=sellers">🏪 فروشندگان</a>
-  <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=store&amp;tab=campaigns">📣 کمپین تبلیغ</a>
-  <a class="btn ghost sm" href="http://localhost:8080/panel/index.php?p=store&amp;tab=categories">🗂 دسته‌بندی</a>
-  <a class="btn ghost sm" href="http://localhost:8080/shop/index.php">👁 مشاهده فروشگاه</a>
+  <a class="btn  sm" href="#panel/index.php?p=store&amp;tab=products">📦 کالاها</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=sellers">🏪 فروشندگان</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=campaigns">📣 کمپین تبلیغ</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=categories">🗂 دسته‌بندی</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=coupons">🎟 کد تخفیف</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=reviews">⭐ نظرات</a>
+  <a class="btn ghost sm" href="#panel/index.php?p=store&amp;tab=csv">📄 CSV انبار</a>
+  <a class="btn ghost sm" href="#shop/index.php">👁 مشاهده فروشگاه</a>
 </div>
 
 <div class="grid g4 mb">
-  <div class="kpi"><div class="i">📦</div><div class="v">۲</div><div class="l">کالا (۱ فعال، ۱ در انتظار)</div></div>
-  <div class="kpi"><div class="i">📊</div><div class="v">۲۳</div><div class="l">موجودی کل انبار</div></div>
-  <div class="kpi"><div class="i">💰</div><div class="v">۱,۶۴۵,۰۰۰</div><div class="l">ارزش انبار (تومان)</div></div>
+  <div class="kpi"><div class="i">📦</div><div class="v">۵</div><div class="l">کالا (۴ فعال، ۱ در انتظار)</div></div>
+  <div class="kpi"><div class="i">📊</div><div class="v">۲۵۴</div><div class="l">موجودی کل انبار</div></div>
+  <div class="kpi"><div class="i">💰</div><div class="v">۲۹,۳۶۵,۰۰۰</div><div class="l">ارزش انبار (تومان)</div></div>
   <div class="kpi"><div class="i">⚠️</div><div class="v">۰</div><div class="l">کالای کم‌موجود</div></div>
 </div>
 
@@ -241,7 +244,7 @@ body{padding:14px}</style>
         <thead><tr><th>کد</th><th>عنوان</th><th>فروشنده</th><th>قیمت</th><th>موجودی</th><th>فروش</th><th>وضعیت</th><th>عملیات</th></tr></thead>
         <tbody>
                   <tr>
-            <td class="mono small">334F17C7</td>
+            <td class="mono small">4C5E920E</td>
             <td class="small">TEST-غیرفعال<div class="muted mono"></div></td>
             <td class="small">فروشگاه تست</td>
             <td class="small">۵,۰۰۰ تومان</td>
@@ -250,11 +253,11 @@ body{padding:14px}</style>
             <td><span class="badge b-warn">در انتظار تایید</span></td>
             <td>
               <div class="btn-group">
-                                  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="8">
+                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="31">
                     <input type="hidden" name="status" value="active">
                     <button class="btn ok sm" type="submit">تایید</button>
                   </form>
-                                                <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="inline"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="8">
+                                                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="31">
                   <input type="number" name="delta" value="0" style="width:70px" dir="ltr" title="تغییر موجودی (+/-)">
                   <button class="btn ghost sm" type="submit">اعمال</button>
                 </form>
@@ -262,7 +265,7 @@ body{padding:14px}</style>
             </td>
           </tr>
                   <tr>
-            <td class="mono small">35913020</td>
+            <td class="mono small">7964868C</td>
             <td class="small">TEST-کالای یک<div class="muted mono"></div></td>
             <td class="small">فروشگاه تست</td>
             <td class="small">۹۰,۰۰۰ تومان</td>
@@ -271,15 +274,87 @@ body{padding:14px}</style>
             <td><span class="badge b-ok">فعال</span></td>
             <td>
               <div class="btn-group">
-                                                  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="7">
+                                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="30">
                     <input type="hidden" name="status" value="archived">
                     <button class="btn ghost sm" type="submit">بایگانی</button>
                   </form>
-                                <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="inline"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="7">
+                                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="30">
                   <input type="number" name="delta" value="0" style="width:70px" dir="ltr" title="تغییر موجودی (+/-)">
                   <button class="btn ghost sm" type="submit">اعمال</button>
                 </form>
-                                  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">                    <input type="hidden" name="a" value="promo_create"><input type="hidden" name="product_id" value="7">
+                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="promo_create"><input type="hidden" name="product_id" value="30">
+                    <button class="btn ghost sm" type="submit">📣 کمپین</button>
+                  </form>
+                              </div>
+            </td>
+          </tr>
+                  <tr>
+            <td class="mono small">2D93CBCA</td>
+            <td class="small">کالای تست الف<div class="muted mono"></div></td>
+            <td class="small">—</td>
+            <td class="small">۱۲۰,۰۰۰ تومان</td>
+            <td class="small">۷۷                          </td>
+            <td class="small">۰</td>
+            <td><span class="badge b-ok">فعال</span></td>
+            <td>
+              <div class="btn-group">
+                                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="28">
+                    <input type="hidden" name="status" value="archived">
+                    <button class="btn ghost sm" type="submit">بایگانی</button>
+                  </form>
+                                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="28">
+                  <input type="number" name="delta" value="0" style="width:70px" dir="ltr" title="تغییر موجودی (+/-)">
+                  <button class="btn ghost sm" type="submit">اعمال</button>
+                </form>
+                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="promo_create"><input type="hidden" name="product_id" value="28">
+                    <button class="btn ghost sm" type="submit">📣 کمپین</button>
+                  </form>
+                              </div>
+            </td>
+          </tr>
+                  <tr>
+            <td class="mono small">11AE3C51</td>
+            <td class="small">کالای تست الف<div class="muted mono"></div></td>
+            <td class="small">—</td>
+            <td class="small">۱۲۰,۰۰۰ تومان</td>
+            <td class="small">۷۷                          </td>
+            <td class="small">۰</td>
+            <td><span class="badge b-ok">فعال</span></td>
+            <td>
+              <div class="btn-group">
+                                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="20">
+                    <input type="hidden" name="status" value="archived">
+                    <button class="btn ghost sm" type="submit">بایگانی</button>
+                  </form>
+                                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="20">
+                  <input type="number" name="delta" value="0" style="width:70px" dir="ltr" title="تغییر موجودی (+/-)">
+                  <button class="btn ghost sm" type="submit">اعمال</button>
+                </form>
+                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="promo_create"><input type="hidden" name="product_id" value="20">
+                    <button class="btn ghost sm" type="submit">📣 کمپین</button>
+                  </form>
+                              </div>
+            </td>
+          </tr>
+                  <tr>
+            <td class="mono small">3829D4D6</td>
+            <td class="small">کالای تست الف<div class="muted mono"></div></td>
+            <td class="small">—</td>
+            <td class="small">۱۲۰,۰۰۰ تومان</td>
+            <td class="small">۷۷                          </td>
+            <td class="small">۰</td>
+            <td><span class="badge b-ok">فعال</span></td>
+            <td>
+              <div class="btn-group">
+                                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="product_status"><input type="hidden" name="id" value="15">
+                    <input type="hidden" name="status" value="archived">
+                    <button class="btn ghost sm" type="submit">بایگانی</button>
+                  </form>
+                                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                  <input type="hidden" name="a" value="product_stock"><input type="hidden" name="id" value="15">
+                  <input type="number" name="delta" value="0" style="width:70px" dir="ltr" title="تغییر موجودی (+/-)">
+                  <button class="btn ghost sm" type="submit">اعمال</button>
+                </form>
+                                  <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">                    <input type="hidden" name="a" value="promo_create"><input type="hidden" name="product_id" value="15">
                     <button class="btn ghost sm" type="submit">📣 کمپین</button>
                   </form>
                               </div>
@@ -291,13 +366,13 @@ body{padding:14px}</style>
 
   <div class="card">
     <h2>➕ افزودن کالا به انبار (بدون فروشنده)</h2>
-    <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="grid g3">
-      <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">      <input type="hidden" name="a" value="product_save">
+    <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g3">
+      <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">      <input type="hidden" name="a" value="product_save">
       <div>
         <label>عنوان *</label><input type="text" name="title" required>
         <label>دسته</label>
         <select name="category_id"><option value="0">بدون دسته</option>
-          <option value="1">تست دسته</option><option value="2">تست دسته</option><option value="3">تست دسته</option><option value="4">تست دسته</option>        </select>
+          <option value="1">تست دسته</option><option value="2">تست دسته</option><option value="3">تست دسته</option><option value="4">تست دسته</option><option value="5">تست دسته</option><option value="6">تست دسته</option>        </select>
       </div>
       <div>
         <label>قیمت (تومان) *</label><input type="number" name="price" min="0" required dir="ltr">
@@ -315,5 +390,6 @@ body{padding:14px}</style>
     </div>
   </main>
 </div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>

@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>سیستم و وب‌هوک — مدیر گروه بله</title>
-
-
-<style>/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
 :root{
   --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
   --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
@@ -154,10 +153,10 @@ svg{max-width:100%;height:auto;display:block}
 .mt{margin-top:14px}.mb{margin-bottom:14px}
 hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-body{padding:14px}</style>
-<title>سیستم — پیش‌نمایش</title>
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
 </head>
-<body><div style="background:#1d3a5f;border:1px solid #2f5d8f;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-family:Tahoma,sans-serif;font-size:12.5px;color:#cfe2ff;line-height:1.9"><b>پیش‌نمایش ثابت (Static Preview)</b> — این صفحه یک اسکرین‌شات HTML از پنل واقعی است: دکمه‌ها و فرم‌ها در این فایل کار نمی‌کنند، اما چیدمان، رنگ‌ها و نمودارها همان چیزی است که روی سرور می‌بینید. همه چیز درون‌خطی است (بدون CSS/JS/CDN خارجی).</div>
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
@@ -168,27 +167,28 @@ body{padding:14px}</style>
       </div>
     </div>
     <nav class="nav">
-      <a href="http://localhost:8080/panel/index.php?p=dashboard" class="">📊 داشبورد</a>
-      <a href="http://localhost:8080/panel/index.php?p=groups" class="">👥 گروه‌ها</a>
-      <a href="http://localhost:8080/panel/index.php?p=moderation" class="">🛡 تخلفات</a>
-      <a href="http://localhost:8080/panel/index.php?p=users" class="">🙋 کاربران</a>
-      <a href="http://localhost:8080/panel/index.php?p=logs" class="">📜 رخدادها</a>
-      <a href="http://localhost:8080/panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
-      <a href="http://localhost:8080/panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
-      <a href="http://localhost:8080/panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
-      <a href="http://localhost:8080/panel/index.php?p=store" class="">📦 انبار</a>
-      <a href="http://localhost:8080/panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
       <div class="sep">مدیریت سیستم</div>
-              <a href="http://localhost:8080/panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
-        <a href="http://localhost:8080/panel/index.php?p=system" class="active">⚙️ سیستم و وب‌هوک</a>
-        <a href="http://localhost:8080/panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
-        <a href="http://localhost:8080/panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
-        <a href="http://localhost:8080/panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
-        <a href="http://localhost:8080/panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
-            <a href="http://localhost:8080/panel/index.php?p=account" class="">👤 حساب من</a>
-      <a href="http://localhost:8080/panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="active">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
       <div class="sep">خروج</div>
-      <a href="http://localhost:8080/panel/logout.php">🚪 خروج از پنل</a>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
     </nav>
   </aside>
 
@@ -200,7 +200,7 @@ body{padding:14px}</style>
               </div>
       <div class="inline">
                         <span class="pill">admin · مدیر ارشد</span>
-        <a class="btn ghost sm" href="http://localhost:8080/panel/logout.php">خروج</a>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
       </div>
     </div>
 
@@ -215,20 +215,20 @@ body{padding:14px}</style>
     <div class="rowline"><span>یوزرنیم</span><span class="mono">@mock_bot</span></div>
     <div class="rowline"><span>شناسه ربات</span><span class="mono">999</span></div>
     <div class="rowline"><span>حالت دریافت</span><span class="badge b-ok">webhook</span></div>
-    <div class="rowline"><span>آخرین کرون</span><span>2026/10/22 19:27</span></div>
+    <div class="rowline"><span>آخرین کرون</span><span>2026/10/22 19:43</span></div>
     <div class="rowline"><span>آخرین پولینگ</span><span>—</span></div>
     <div class="rowline"><span>نسخه PHP</span><span class="mono">8.4.26</span></div>
     <div class="btn-group mt">
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_test">
+      <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_test">
         <button class="btn sm" type="submit">تست ارتباط</button>
       </form>
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_cron">
+      <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_cron">
         <button class="btn ghost sm" type="submit">اجرای دستی کرون</button>
       </form>
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_cache">
+      <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_cache">
         <button class="btn ghost sm" type="submit">پاک‌کردن کش</button>
       </form>
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_upgrade">
+      <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_upgrade">
         <button class="btn ghost sm" type="submit">⬆️ آپدیت دیتابیس</button>
       </form>
     </div>
@@ -241,10 +241,10 @@ body{padding:14px}</style>
           <div class="rowline mt"><span>URL در بله</span><span class="mono small">http://localhost/webhook.php</span></div>
       <div class="rowline"><span>پیام‌های در انتظار</span><span>0</span></div>
               <div class="btn-group mt">
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_webhook">
+      <form onsubmit="return false" method="post" action="#panel/index.php"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_webhook">
         <button class="btn sm" type="submit">تنظیم / بازتنظیم وب‌هوک</button>
       </form>
-      <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" onsubmit="return confirm('وب‌هوک حذف شود؟ (حالت پولینگ)')"><input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">        <input type="hidden" name="a" value="system_webhook_del">
+      <form method="post" action="#panel/index.php" onsubmit="return confirm('وب‌هوک حذف شود؟ (حالت پولینگ)')"><input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">        <input type="hidden" name="a" value="system_webhook_del">
         <button class="btn danger sm" type="submit">حذف وب‌هوک</button>
       </form>
     </div>
@@ -258,14 +258,14 @@ body{padding:14px}</style>
 <div class="card">
   <h2>⏱ کرون</h2>
   <div class="hint mb">برای آن‌میوت/آنبن خودکار، اخراج کپچاهای منقضی و گزارش روزانه، این آدرس را هر ۱ دقیقه صدا بزن:</div>
-  <div class="mono">http://localhost:8080/cron.php?key=cronsecret123</div>
+  <div class="mono">#cron.php?key=cronsecret123</div>
   <div class="hint mt">یا در کرون هاست: <code class="mono">* * * * * php /home/user/bale-group-manager/cron.php >/dev/null 2>&1</code></div>
 </div>
 
 <div class="card">
   <h2>⚙️ تنظیمات سراسری</h2>
-  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" class="grid g3">
-    <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">    <input type="hidden" name="a" value="system_settings">
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g3">
+    <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">    <input type="hidden" name="a" value="system_settings">
     <div>
       <label>آیدی گروه/کانال جایگزین برای کد یکبارمصرف</label>
       <input type="text" name="otp_chat_id" class="mono" value="0" placeholder="-100123456789">
@@ -280,21 +280,21 @@ body{padding:14px}</style>
 
 <div class="card">
   <h2>📢 ارسال پیام همگانی به همه گروه‌ها</h2>
-  <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php" onsubmit="return confirm('به همه گروه‌های فعال ارسال شود؟')">
-    <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">    <input type="hidden" name="a" value="broadcast">
+  <form method="post" action="#panel/index.php" onsubmit="return confirm('به همه گروه‌های فعال ارسال شود؟')">
+    <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">    <input type="hidden" name="a" value="broadcast">
     <textarea name="text" placeholder="متن پیام... (HTML ساده مجاز است)" required></textarea>
-    <div class="hint mt">تعداد گروه‌های فعال: ۲ — پیام در <b>صف</b> قرار می‌گیرد و کرون با نرخ‌سنجی ارسال می‌کند.</div>
+    <div class="hint mt">تعداد گروه‌های فعال: ۳ — پیام در <b>صف</b> قرار می‌گیرد و کرون با نرخ‌سنجی ارسال می‌کند.</div>
     <div class="btn-group mt">
       <button class="btn warn" type="submit">افزودن به صف ارسال</button>
-      <a class="btn ghost" href="http://localhost:8080/panel/index.php?p=broadcast">صفحه صف و زمان‌بندی</a>
+      <a class="btn ghost" href="#panel/index.php?p=broadcast">صفحه صف و زمان‌بندی</a>
     </div>
   </form>
 </div>
 
 <div class="card">
   <h2>🤬 کلمات ممنوعه سراسری</h2>
-    <form onsubmit="return false" method="post" action="http://localhost:8080/panel/index.php">
-    <input type="hidden" name="_csrf" value="d31ca5f9c90b68405bc851ce696eaa2eaf9607d1f2fa9f086c74beccf37d5b16">    <input type="hidden" name="a" value="badwords_save">
+    <form onsubmit="return false" method="post" action="#panel/index.php">
+    <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">    <input type="hidden" name="a" value="badwords_save">
     <input type="hidden" name="chat_id" value="0">
     <textarea name="words" class="mono" style="min-height:140px">bitch
 fuck
@@ -313,12 +313,13 @@ shit
 <div class="card">
   <h2>📄 اطلاعات محیط</h2>
   <div class="rowline"><span>مسیر نصب</span><span class="mono small">/home/user/bale-group-manager</span></div>
-  <div class="rowline"><span>نسخه اسکیما</span><span class="mono small">1.3.0 / 1.3.0</span></div>
+  <div class="rowline"><span>نسخه اسکیما</span><span class="mono small">1.4.0 / 1.4.0</span></div>
   <div class="rowline"><span>زمان نصب</span><span class="small">—</span></div>
     <div class="rowline"><span>افزونه‌ها</span><span class="small mono">pdo_mysql:✅ · curl:✅ · mbstring:✅ · openssl:✅ · json:✅ · fileinfo:✅</span></div>
 </div>
     </div>
   </main>
 </div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
 </body>
 </html>
