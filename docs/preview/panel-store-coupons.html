@@ -217,10 +217,10 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 </div>
 
 <div class="grid g4 mb">
-  <div class="kpi"><div class="i">📦</div><div class="v">۶</div><div class="l">کالا (۵ فعال، ۱ در انتظار)</div></div>
-  <div class="kpi"><div class="i">📊</div><div class="v">۳۳۱</div><div class="l">موجودی کل انبار</div></div>
-  <div class="kpi"><div class="i">💰</div><div class="v">۳۸,۶۰۵,۰۰۰</div><div class="l">ارزش انبار (تومان)</div></div>
-  <div class="kpi"><div class="i">⚠️</div><div class="v">۰</div><div class="l">کالای کم‌موجود</div></div>
+  <div class="kpi"><div class="i">📦</div><div class="v">۸</div><div class="l">کالا (۷ فعال، ۱ در انتظار)</div></div>
+  <div class="kpi"><div class="i">📊</div><div class="v">۱۲۶</div><div class="l">موجودی کل انبار</div></div>
+  <div class="kpi"><div class="i">💰</div><div class="v">۳۴,۷۲۵,۰۰۰</div><div class="l">ارزش انبار (تومان)</div></div>
+  <div class="kpi"><div class="i">⚠️</div><div class="v">۳</div><div class="l">کالای کم‌موجود</div></div>
 </div>
 
     <div class="grid g4 mb">
@@ -237,7 +237,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
         <hr>
     <h3>کد جدید</h3>
     <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g3">
-      <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">      <input type="hidden" name="a" value="coupon_save">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="coupon_save">
       <div>
         <label>کد (خالی = تصادفی)</label>
         <input type="text" name="code" class="mono" dir="ltr" placeholder="YALDA40">
@@ -269,20 +269,23 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
         <label>محدود به کالا (اختیاری)</label>
         <select name="product_id">
           <option value="0">همه کالاها</option>
-                      <option value="39">کالای تست الف</option>
-                      <option value="35">TEST-غیرفعال</option>
-                      <option value="34">TEST-کالای یک</option>
-                      <option value="28">کالای تست الف</option>
-                      <option value="20">کالای تست الف</option>
-                      <option value="15">کالای تست الف</option>
+                      <option value="24">پیش‌نمایش کیبورد مکانیکی</option>
+                      <option value="23">پیش‌نمایش ماوس بی‌سیم</option>
+                      <option value="22">پیش‌نمایش هندزفری بلوتوث</option>
+                      <option value="21">پیش‌نمایش پاوربانک ۲۰هزار</option>
+                      <option value="16">TEST-ربات</option>
+                      <option value="10">کالای تست الف</option>
+                      <option value="6">TEST-غیرفعال</option>
+                      <option value="5">TEST-کالای یک</option>
                   </select>
       </div>
       <div>
         <label>محدود به فروشنده (اختیاری)</label>
         <select name="seller_id">
           <option value="0">همه فروشندگان</option>
-                      <option value="8">فروشگاه تست</option>
-                      <option value="6">فروشگاه تست ۱۴</option>
+                      <option value="3">فروشگاه تست ۱۴</option>
+                      <option value="2">فروشگاه تست</option>
+                      <option value="1">فروشگاه تست</option>
                   </select>
       </div>
       <div>

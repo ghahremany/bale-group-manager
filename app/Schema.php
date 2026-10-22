@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 final class Schema
 {
-    public const VERSION = '1.5.0';
+    public const VERSION = '1.6.0';
 
     public static function statements(): array
     {
@@ -732,6 +732,71 @@ final class Schema
                 error VARCHAR(255) NULL,
                 created_at INT UNSIGNED NOT NULL,
                 KEY idx_status (status, created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- امنیت و مدیریت از ربات (۱.۶) ----------
+            "CREATE TABLE IF NOT EXISTS event_log (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                etype VARCHAR(60) NOT NULL,
+                severity ENUM('info','warn','critical') NOT NULL DEFAULT 'warn',
+                ip VARCHAR(45) NULL,
+                actor_id BIGINT NULL,
+                detail VARCHAR(255) NULL,
+                meta TEXT NULL,
+                notified TINYINT(1) NOT NULL DEFAULT 0,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_type (etype, created_at),
+                KEY idx_notified (notified, id),
+                KEY idx_time (created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS bot_links (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                bale_user_id BIGINT NOT NULL,
+                admin_id INT UNSIGNED NOT NULL,
+                verified_at INT UNSIGNED NULL,
+                otp_ok_until INT UNSIGNED NOT NULL DEFAULT 0,
+                otp_fail_count TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                alert_opt TINYINT(1) NOT NULL DEFAULT 1,
+                last_seen_at INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_user (bale_user_id),
+                KEY idx_admin (admin_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS bot_pairs (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                code VARCHAR(16) NOT NULL,
+                admin_id INT UNSIGNED NOT NULL,
+                expires_at INT UNSIGNED NOT NULL,
+                used_at INT UNSIGNED NULL,
+                used_by BIGINT NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_code (code),
+                KEY idx_admin (admin_id),
+                KEY idx_exp (expires_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS bot_otps (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                bale_user_id BIGINT NOT NULL,
+                code_hash CHAR(64) NOT NULL,
+                expires_at INT UNSIGNED NOT NULL,
+                attempts TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                used_at INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_user (bale_user_id, used_at),
+                KEY idx_exp (expires_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS stock_alerts (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                product_id INT UNSIGNED NOT NULL,
+                last_stock INT NOT NULL DEFAULT 0,
+                last_alert_at INT UNSIGNED NOT NULL DEFAULT 0,
+                alert_count INT UNSIGNED NOT NULL DEFAULT 0,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_product (product_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
             // ---------- تنظیمات کلید/مقدار ----------

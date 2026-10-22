@@ -35,6 +35,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['step'] ?? '') === 
     $ip       = client_ip();
 
     if (RateLimit::loginBlocked($ip, $username)) {
+        Events::emit('security.login_locked', ['detail' => 'user=' . str_limit($username, 40)], 'critical');
         $flash[] = ['type' => 'err', 'msg' => 'تلاش‌های ناموفق زیاد بود. چند دقیقه بعد تلاش کن.'];
     } else {
         $row = DB::one("SELECT * FROM panel_admins WHERE username=? AND is_active=1", [$username]);
@@ -65,6 +66,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['step'] ?? '') === 
             }
         } else {
             RateLimit::loginFail($ip, $username);
+            $fails = (int)Cache::get('login_fail_ip:' . $ip, 0);
+            Events::emit('security.login_failed', [
+                'detail' => 'user=' . str_limit($username, 40) . ' fails_ip=' . $fails,
+                'known'  => $row ? 1 : 0,
+            ], $fails >= 5 ? 'critical' : 'warn');
             if ($row) {
                 DB::q("UPDATE panel_admins SET failed_count=failed_count+1 WHERE id=?", [(int)$row['id']]);
             }

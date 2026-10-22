@@ -12,6 +12,14 @@ Auth::boot();
 $admin = Auth::requireLogin();
 $super = (string)$admin['role'] === 'super';
 
+// سد نرخ درخواست برای پنل (نشانه حمله/اسکریپت خودکار)
+if (RateLimit::hit('panel:' . client_ip(), 240, 60)) {
+    Events::emit('security.panel_flood', ['detail' => 'post/page flood'], 'critical');
+    http_response_code(429);
+    echo 'درخواست‌های بیش از حد؛ یک دقیقه بعد تلاش کن.';
+    exit;
+}
+
 // عملیات POST
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     Auth::checkCsrf();

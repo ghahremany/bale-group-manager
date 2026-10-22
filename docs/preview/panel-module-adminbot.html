@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>مدیریت با ربات — ماژول — مدیر گروه بله</title>
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+:root{
+  --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
+  --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
+  --ok:#22c55e; --err:#ef4444; --warn:#f59e0b; --purple:#8b5cf6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 600px at 80% -10%,#132a4d 0%,transparent 60%),var(--bg);
+  color:var(--txt); font-family:Tahoma,"Segoe UI",system-ui,sans-serif; font-size:14px; line-height:1.8;
+  min-height:100vh;
+}
+a{color:#93c5fd;text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{margin:0 0 12px}
+h1{font-size:20px}
+h2{font-size:16px}
+h3{font-size:14px}
+small,.small{font-size:12px}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mono{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+code{background:#0a1424;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:12.5px;direction:ltr;display:inline-block}
+
+/* ---------- layout ---------- */
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:236px;flex:0 0 236px;background:linear-gradient(180deg,#0c1626,#0a1322);
+  border-left:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto
+}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.brand .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#22d3ee);display:grid;place-items:center;font-size:20px}
+.brand b{display:block;font-size:14px}
+.brand span{font-size:11px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav a{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;color:#c8d6ef;font-size:13.5px}
+.nav a:hover{background:#132039;text-decoration:none}
+.nav a.active{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;font-weight:bold;box-shadow:0 8px 20px rgba(37,99,235,.25)}
+.nav .sep{margin:12px 0 4px;font-size:11px;color:#5b6f92;padding:0 8px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 22px;border-bottom:1px solid var(--line);background:rgba(10,19,34,.7);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5
+}
+.content{padding:22px;max-width:1400px;width:100%}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;flex:none;height:auto;position:static;border-left:0;border-bottom:1px solid var(--line)}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .nav .sep{display:none}
+  .content{padding:14px}
+}
+
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.card.tight{padding:14px}
+.card-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+
+.kpi{background:linear-gradient(160deg,#132340,#0e1a2c);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi .v{font-size:24px;font-weight:bold;letter-spacing:.5px}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .i{float:left;font-size:20px;opacity:.8}
+
+/* ---------- tables ---------- */
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+th{background:#0d1a2d;color:#b9c9e6;font-weight:bold;font-size:12.5px;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#101d33}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+
+/* ---------- forms ---------- */
+label{display:block;font-size:12.5px;color:#c7d5ee;margin:10px 0 5px}
+input[type=text],input[type=password],input[type=number],input[type=search],input[type=url],select,textarea{
+  width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#0a1424;color:var(--txt);
+  font-family:inherit;font-size:13.5px
+}
+textarea{min-height:90px;resize:vertical;line-height:1.9}
+input:focus,select:focus,textarea:focus{outline:2px solid #1d4ed8;border-color:transparent}
+.inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.inline > *{width:auto}
+.check{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13.5px}
+.check input{width:16px;height:16px;accent-color:#3b82f6}
+.hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;border:0;cursor:pointer;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-family:inherit;font-size:13.5px;font-weight:bold}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+.btn.ghost{background:#132039;border:1px solid var(--line);color:var(--txt);font-weight:normal}
+.btn.danger{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+.btn.ok{background:linear-gradient(135deg,#15803d,#22c55e)}
+.btn.warn{background:linear-gradient(135deg,#b45309,#f59e0b)}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- badges / alerts ---------- */
+.badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;border:1px solid transparent;white-space:nowrap}
+.b-ok{background:#052e16;color:#86efac;border-color:#14532d}
+.b-err{background:#3f0d0d;color:#fecaca;border-color:#7f1d1d}
+.b-warn{background:#3b2a05;color:#fde68a;border-color:#78350f}
+.b-info{background:#0c2340;color:#bae6fd;border-color:#1e3a5f}
+.b-mute{background:#1f2340;color:#c7d2fe;border-color:#3730a3}
+.alert{padding:11px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;border:1px solid}
+.alert.ok{background:#052e16;border-color:#14532d;color:#bbf7d0}
+.alert.err{background:#3f0d0d;border-color:#7f1d1d;color:#fecaca}
+.alert.warn{background:#3b2a05;border-color:#78350f;color:#fde68a}
+.alert.info{background:#0c2340;border-color:#1e3a5f;color:#bae6fd}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow:auto}
+.tabs a{padding:9px 14px;border-radius:10px 10px 0 0;color:#b9c9e6;font-size:13px;white-space:nowrap}
+.tabs a.active{background:#132039;color:#fff;font-weight:bold;border-bottom:2px solid var(--accent)}
+.tabs a:hover{text-decoration:none;background:#0f1c30}
+
+/* ---------- login ---------- */
+.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:22px}
+.auth-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.auth-card .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#22d3ee);display:grid;place-items:center;font-size:26px;margin:0 auto 12px}
+.otp-input{letter-spacing:12px;text-align:center;font-size:26px;direction:ltr;font-weight:bold;padding:12px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{font-size:11.5px;padding:2px 9px;border-radius:999px;background:#0f1c30;border:1px solid var(--line);color:#b9c9e6}
+
+/* ---------- misc ---------- */
+.rowline{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed #1b2942;font-size:13px}
+.rowline:last-child{border-bottom:0}
+.switch-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px}
+@media(max-width:700px){.switch-list{grid-template-columns:1fr}}
+pre{background:#0a1424;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;direction:ltr;text-align:left;font-size:12px}
+.pager{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.pager a,.pager span{padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:#0f1c30;font-size:12.5px}
+.pager .cur{background:#1d4ed8;color:#fff;border-color:transparent}
+.tag{font-size:11px;color:#93a4c4;background:#0f1c30;border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.card.tight{padding:10px 14px}
+/* ---------- نمودارها و بلوک‌های نسخه ۱.۱ ---------- */
+svg{max-width:100%;height:auto;display:block}
+.chart-box{background:#0b1424;border:1px solid var(--line);border-radius:12px;padding:6px;overflow:hidden}
+.kpi .v small{font-size:12px;color:var(--muted);font-weight:normal}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">🤖</div>
+      <div>
+        <b>مدیر گروه بله</b>
+        <span>نسخه ۱.۰.۰</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="active">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <div class="sep">مدیریت سیستم</div>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+      <div class="sep">خروج</div>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <b>مدیریت با ربات — ماژول</b>
+                  <span class="badge b-ok">وب‌هوک</span>
+              </div>
+      <div class="inline">
+                        <span class="pill">admin · مدیر ارشد</span>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
+      </div>
+    </div>
+
+    <div class="content">
+                  <div class="grid g4 mb">
+  <div class="kpi"><div class="i">🤖</div><div class="v">۱</div><div class="l">چت متصل به پنل</div></div>
+  <div class="kpi"><div class="i">🚨</div><div class="v">۴</div><div class="l">رویداد بحرانی (۲۴س)</div></div>
+  <div class="kpi"><div class="i">📦</div><div class="v">۳</div><div class="l">کالای کم‌موجود</div></div>
+  <div class="kpi"><div class="i">🔐</div><div class="v">۰</div><div class="l">کد تایید ۲۴ساعته</div></div>
+</div>
+
+<div class="card">
+  <h2>🔗 اتصال چت بله به حساب پنل</h2>
+  <div class="hint mb">
+    کد اتصال یک‌بارمصرف بساز و در <b>چت خصوصی ربات</b> بفرست: <code class="mono">اتصال CODE</code>.
+    بعد از آن هر بار با دستور <code class="mono">تایید</code> یک کد شش‌رقمی در بله دریافت می‌شود و دسترسی
+    ۱۵ دقیقه باز می‌ماند.
+  </div>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="inline mb">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="adminbot_pair">
+    <input type="hidden" name="m" value="adminbot">
+    <select name="admin_id">
+              <option value="1">admin (super)</option>
+              <option value="6">operator (admin)</option>
+              <option value="7">ops_admin (admin)</option>
+          </select>
+    <button class="btn ok" type="submit">🎟 ساخت کد اتصال</button>
+  </form>
+
+      <div class="table-wrap"><table>
+      <thead><tr><th>کد</th><th>ادمین</th><th>انقضا</th></tr></thead>
+      <tbody>
+              <tr>
+          <td class="mono"><b>CMMK29</b></td>
+          <td class="small">ops_admin</td>
+          <td class="small mono">21:41</td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <div class="card-header"><h2>📋 چت‌های متصل</h2></div>
+      <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>ادمین</th><th>آیدی بله</th><th>نشست</th><th>هشدار</th><th>عملیات</th></tr></thead>
+      <tbody>
+              <tr>
+          <td class="small">۱۰</td>
+          <td class="small"><b>admin</b> <span class="badge b-info">super</span></td>
+          <td class="small mono" dir="ltr">123456789</td>
+          <td class="small">
+                          <span class="badge b-ok">باز تا 21:40</span>
+                      </td>
+          <td>
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="adminbot_alert_opt">
+              <input type="hidden" name="m" value="adminbot">
+              <input type="hidden" name="id" value="10">
+              <input type="hidden" name="on" value="0">
+              <button class="btn ghost sm" type="submit">
+                🔔 روشن              </button>
+            </form>
+          </td>
+          <td>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('اتصال حذف شود؟')">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="adminbot_unlink">
+              <input type="hidden" name="m" value="adminbot">
+              <input type="hidden" name="id" value="10">
+              <button class="btn danger sm" type="submit">🗑 قطع اتصال</button>
+            </form>
+          </td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <h2>⚙️ تنظیمات هشدار و کد تایید</h2>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="adminbot_settings">
+    <input type="hidden" name="m" value="adminbot">
+    <div>
+      <label>حداقل شدت برای ارسال هشدار</label>
+      <select name="alert_level">
+                  <option value="info" >همه رویدادها</option>
+                  <option value="warn" selected>هشدار و بحرانی</option>
+                  <option value="critical" >فقط بحرانی</option>
+              </select>
+      <label>فاصله خنک‌شدن هشدار (ثانیه)</label>
+      <input type="number" name="alert_cooldown" value="0" min="0" dir="ltr">
+      <div class="hint">برای جلوگیری از بمباران پیام؛ رویدادهای تکراری فقط ثبت می‌شوند.</div>
+      <label>چت پشتیبان هشدار (آیدی عددی — اختیاری)</label>
+      <input type="text" name="alert_chat" class="mono" dir="ltr" value="" placeholder="123456789">
+    </div>
+    <div>
+      <label class="check"><input type="checkbox" name="stock_enabled" value="1" checked> هشدار خودکار کمبود موجودی</label>
+      <label>فاصله تکرار هشدار موجودی (ثانیه)</label>
+      <input type="number" name="stock_cooldown" value="21600" min="0" dir="ltr">
+      <label>اعتبار کد تایید (ثانیه)</label>
+      <input type="number" name="otp_ttl" value="180" min="60" dir="ltr">
+      <label>طول نشست مدیریتی پس از تایید (ثانیه)</label>
+      <input type="number" name="session_ttl" value="900" min="120" dir="ltr">
+      <button class="btn mt" type="submit">💾 ذخیره تنظیمات</button>
+    </div>
+  </form>
+  <div class="btn-group mt">
+    <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="adminbot_test">
+      <input type="hidden" name="m" value="adminbot">
+      <button class="btn ghost sm" type="submit">🧪 ارسال پیام آزمایشی</button>
+    </form>
+    <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="adminbot_stock_now">
+      <input type="hidden" name="m" value="adminbot">
+      <button class="btn ghost sm" type="submit">📦 بررسی فوری موجودی</button>
+    </form>
+    <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('رویدادهای قدیمی پاک شوند؟')">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="adminbot_clear_events">
+      <input type="hidden" name="m" value="adminbot">
+      <button class="btn ghost sm" type="submit">🧹 پاک‌سازی رویدادهای قدیمی</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>🚨 رویدادهای امنیتی اخیر</h2></div>
+      <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>زمان</th><th>نوع</th><th>شدت</th><th>IP</th><th>جزئیات</th><th>هشدار</th></tr></thead>
+      <tbody>
+                      <tr>
+          <td class="small">۸۳</td>
+          <td class="small mono">10/22 21:31:25</td>
+          <td class="small">کمبود موجودی کالا            <div class="mono small muted">store.low_stock</div>
+          </td>
+          <td><span class="badge b-warn">هشدار</span></td>
+          <td class="small mono" dir="ltr">cli</td>
+          <td class="small">count=3</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۸۲</td>
+          <td class="small mono">10/22 21:24:25</td>
+          <td class="small">ثبت کالای تازه از ربات            <div class="mono small muted">store.product_added</div>
+          </td>
+          <td><span class="badge b-info">اطلاع</span></td>
+          <td class="small mono" dir="ltr">cli</td>
+          <td class="small">p#12 پیش‌نمایش ماوس بی‌سیم price=320000</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۸۱</td>
+          <td class="small mono">10/22 21:31:25</td>
+          <td class="small">قفل شدن حساب پس از تلاش‌های ناموفق            <div class="mono small muted">security.login_locked</div>
+          </td>
+          <td><span class="badge b-warn">هشدار</span></td>
+          <td class="small mono" dir="ltr">cli</td>
+          <td class="small">user=ops_admin</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۸۰</td>
+          <td class="small mono">10/22 21:24:25</td>
+          <td class="small">کد تایید اشتباه در ربات            <div class="mono small muted">security.bot_otp_failed</div>
+          </td>
+          <td><span class="badge b-warn">هشدار</span></td>
+          <td class="small mono" dir="ltr">91.240.118.12</td>
+          <td class="small">wrong code</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۷۹</td>
+          <td class="small mono">10/22 21:31:25</td>
+          <td class="small">ترافیک غیرعادی روی پنل            <div class="mono small muted">security.panel_flood</div>
+          </td>
+          <td><span class="badge b-err">بحرانی</span></td>
+          <td class="small mono" dir="ltr">91.240.118.12</td>
+          <td class="small">post/page flood</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۷۸</td>
+          <td class="small mono">10/22 21:24:25</td>
+          <td class="small">درخواست جعلی به وب‌هوک ربات            <div class="mono small muted">security.webhook_forged</div>
+          </td>
+          <td><span class="badge b-err">بحرانی</span></td>
+          <td class="small mono" dir="ltr">45.148.10.77</td>
+          <td class="small">s=wrong ua=Go-http-client/1.1</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۷۷</td>
+          <td class="small mono">10/22 21:31:25</td>
+          <td class="small">درخواست جعلی به وب‌هوک ربات            <div class="mono small muted">security.webhook_forged</div>
+          </td>
+          <td><span class="badge b-err">بحرانی</span></td>
+          <td class="small mono" dir="ltr">45.148.10.77</td>
+          <td class="small">s=wrong ua=python-requests/2.31</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۷۶</td>
+          <td class="small mono">10/22 21:24:25</td>
+          <td class="small">درخواست بدون توکن امنیتی (CSRF)            <div class="mono small muted">security.csrf_fail</div>
+          </td>
+          <td><span class="badge b-warn">هشدار</span></td>
+          <td class="small mono" dir="ltr">185.203.116.4</td>
+          <td class="small">path=/panel/index.php a=module_toggle</td>
+          <td class="small">✅</td>
+        </tr>
+                      <tr>
+          <td class="small">۷۵</td>
+          <td class="small mono">10/22 21:31:25</td>
+          <td class="small">ورود ناموفق به پنل            <div class="mono small muted">security.login_failed</div>
+          </td>
+          <td><span class="badge b-err">بحرانی</span></td>
+          <td class="small mono" dir="ltr">185.203.116.4</td>
+          <td class="small">user=admin fails_ip=7</td>
+          <td class="small">✅</td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <div class="card-header"><h2>📦 کالاهای کم‌موجود</h2></div>
+      <div class="table-wrap"><table>
+      <thead><tr><th>کد</th><th>کالا</th><th>قابل فروش</th><th>حد هشدار</th><th>وضعیت</th></tr></thead>
+      <tbody>
+                      <tr>
+          <td class="small mono">A33DACFA</td>
+          <td class="small">پیش‌نمایش هندزفری بلوتوث</td>
+          <td class="small"><b>۰</b> عدد</td>
+          <td class="small">۲</td>
+          <td><span class="badge b-err">ناموجود</span></td>
+        </tr>
+                      <tr>
+          <td class="small mono">2E646228</td>
+          <td class="small">پیش‌نمایش پاوربانک ۲۰هزار</td>
+          <td class="small"><b>۱</b> عدد</td>
+          <td class="small">۳</td>
+          <td><span class="badge b-warn">کم‌موجود</span></td>
+        </tr>
+                      <tr>
+          <td class="small mono">4265A9F7</td>
+          <td class="small">پیش‌نمایش ماوس بی‌سیم</td>
+          <td class="small"><b>۲</b> عدد</td>
+          <td class="small">۵</td>
+          <td><span class="badge b-warn">کم‌موجود</span></td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <h2>🤖 دستورهای ربات (فقط چت خصوصی + کد تایید)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>دستور</th><th>کار</th><th>نیاز به تایید</th></tr></thead>
+    <tbody>
+      <tr><td class="mono small">اتصال CODE</td><td class="small">اتصال این چت به حساب پنل</td><td class="small">—</td></tr>
+      <tr><td class="mono small">تایید</td><td class="small">دریافت کد شش‌رقمی در بله</td><td class="small">—</td></tr>
+      <tr><td class="mono small">تایید 123456</td><td class="small">باز کردن نشست مدیریتی</td><td class="small">کد</td></tr>
+      <tr><td class="mono small">گزارش [روز]</td><td class="small">گزارش کاربران، فروش، سفارش، صف، امنیت</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">امنیت [تعداد]</td><td class="small">آخرین رویدادهای امنیتی</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">انبار</td><td class="small">خلاصه انبار و کالاهای کم‌موجود</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">موجودی CODE</td><td class="small">موجودی یک کالا</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">افزودن_کالا عنوان | قیمت | موجودی | حد</td><td class="small">ثبت کالای تازه</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">ویرایش_موجودی CODE 10</td><td class="small">تنظیم موجودی روی عدد</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">حذف_کالا CODE</td><td class="small">بایگانی کالا و برداشتن از فروشگاه</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">ورود_پنل</td><td class="small">لینک ورود یک‌بارمصرف به پنل</td><td class="small">✅</td></tr>
+      <tr><td class="mono small">قفل</td><td class="small">بستن نشست مدیریتی</td><td class="small">—</td></tr>
+    </tbody>
+  </table></div>
+</div>
+    </div>
+  </main>
+</div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
+</body>
+</html>

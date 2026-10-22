@@ -103,11 +103,19 @@ final class Login
         }
         $max = (int)config('security.otp_max_attempts', 5);
         if ((int)$row['attempts'] >= $max) {
+            Events::emit('security.otp_failed', [
+                'detail'   => 'admin=' . $adminId . ' attempts=' . (int)$row['attempts'],
+                'actor_id' => $adminId,
+            ], 'critical');
             return [false, 'تعداد تلاش‌ها بیش از حد مجاز است؛ کد جدید بگیر.'];
         }
         DB::q("UPDATE login_otps SET attempts=attempts+1 WHERE id=?", [(int)$row['id']]);
         if (!hash_equals((string)$row['code_hash'], self::hmac($code))) {
             Recovery::log($adminId, 'login_otp', 'panel', null, 'wrong_code');
+            Events::emit('security.otp_failed', [
+                'detail'   => 'admin=' . $adminId,
+                'actor_id' => $adminId,
+            ], 'warn');
             return [false, 'کد وارد‌شده اشتباه است.'];
         }
         DB::q("UPDATE login_otps SET used_at=? WHERE id=?", [time(), (int)$row['id']]);

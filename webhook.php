@@ -29,6 +29,10 @@ $secret = (string)config('bot.webhook_secret', '');
 $given  = (string)($_GET['s'] ?? $_GET['secret'] ?? $_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] ?? '');
 if ($secret !== '' && !hash_equals($secret, $given)) {
     Logger::warn('webhook', 'unauthorized call', ['ip' => client_ip()]);
+    // رویداد امنیتی: درخواست جعلی/بدون توکن به وب‌هوک (احتمال حمله یا اسکن)
+    Events::emit('security.webhook_forged', [
+        'detail' => 's=' . ($given === '' ? 'empty' : 'wrong') . ' ua=' . str_limit((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 60),
+    ], 'critical');
     http_response_code(403);
     echo json_encode(['ok' => false, 'error' => 'forbidden']);
     exit;
@@ -36,6 +40,7 @@ if ($secret !== '' && !hash_equals($secret, $given)) {
 
 // محدودیت نرخ کلی برای جلوگیری از بمباران
 if (RateLimit::hit('webhook:' . client_ip(), 300, 10)) {
+    Events::emit('security.webhook_flood', ['detail' => 'ip rate limit'], 'critical');
     http_response_code(429);
     echo json_encode(['ok' => false, 'error' => 'rate limited']);
     exit;

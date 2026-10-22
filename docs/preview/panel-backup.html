@@ -208,7 +208,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                   <div class="grid g4 mb">
   <div class="kpi"><div class="i">🗄</div><div class="v">۵</div><div class="l">نسخه موجود</div></div>
   <div class="kpi"><div class="i">⏱</div><div class="v">۰ ساعت</div><div class="l">از آخرین بکاپ</div></div>
-  <div class="kpi"><div class="i">📦</div><div class="v">۲.۱ MB</div><div class="l">حجم دیتابیس (۵۳ جدول)</div></div>
+  <div class="kpi"><div class="i">📦</div><div class="v">۲.۲ MB</div><div class="l">حجم دیتابیس (۵۸ جدول)</div></div>
   <div class="kpi"><div class="i">🔄</div><div class="v">روشن</div><div class="l">بکاپ خودکار هر ۶ ساعت</div></div>
 </div>
 
@@ -218,7 +218,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     <h2>📥 گرفتن بکاپ جدید</h2>
     <p class="small muted">خروجی یک فایل <code>.sql</code> کامل (ساختار + داده) است که با همین پنل یا phpMyAdmin قابل بازیابی است.</p>
     <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-      <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">      <input type="hidden" name="a" value="backup_create">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="backup_create">
       <button class="btn" type="submit">🗄 ساخت نسخه پشتیبان</button>
     </form>
     <div class="hint mt">
@@ -229,7 +229,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <div class="card">
     <h2>📤 آپلود فایل بکاپ</h2>
     <form onsubmit="return false" method="post" action="#panel/index.php" enctype="multipart/form-data">
-      <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">      <input type="hidden" name="a" value="backup_upload">
+      <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">      <input type="hidden" name="a" value="backup_upload">
       <label>فایل .sql</label>
       <input type="file" name="file" accept=".sql" required>
       <label class="check mt"><input type="checkbox" name="do_restore" value="1"> بلافاصله بعد از آپلود، بازیابی کن</label>
@@ -242,7 +242,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 <div class="card">
   <div class="card-header"><h2>⚙️ تنظیمات بکاپ و گزارش خودکار</h2></div>
   <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g3">
-    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="backup_settings">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="backup_settings">
     <div>
       <label class="check"><input type="checkbox" name="backup_auto" value="1" checked> بکاپ خودکار (توسط کرون)</label>
       <label>هر چند ساعت</label>
@@ -280,109 +280,115 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
       <thead><tr><th>فایل</th><th>حجم</th><th>محتوا</th><th>نوع</th><th>زمان</th><th>وضعیت</th><th>عملیات</th></tr></thead>
       <tbody>
               <tr>
-          <td class="mono small">backup-20261022-195405-b1ee.sql</td>
-          <td class="small">۱۷۷.۰ KB</td>
-          <td class="small">۵۳ جدول · ۱۷۳۴ ردیف</td>
+          <td class="mono small">backup-20261022-213105-79d6.sql</td>
+          <td class="small">۹۱.۰ KB</td>
+          <td class="small">۵۸ جدول · ۷۰۵ ردیف</td>
           <td><span class="badge b-mute">دستی</span></td>
-          <td class="small">2026/10/22 19:54</td>
+          <td class="small">2026/10/22 21:31</td>
           <td><span class="badge b-ok">موجود</span></td>
           <td>
             <div class="btn-group">
-                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-195405-b1ee.sql">دانلود</a>
+                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-213105-79d6.sql">دانلود</a>
                 <form method="post" action="#panel/index.php" onsubmit="return confirm('بازیابی از این نسخه؟ داده‌های فعلی با نسخه ایمنی جایگزین می‌شوند.')">
-                  <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                  <input type="hidden" name="a" value="backup_restore">
-                  <input type="hidden" name="filename" value="backup-20261022-195405-b1ee.sql">
+                  <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                  <input type="hidden" name="a" value="backup_restore">
+                  <input type="hidden" name="filename" value="backup-20261022-213105-79d6.sql">
                   <button class="btn warn sm" type="submit">بازیابی</button>
                 </form>
                             <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="backup_delete">
-                <input type="hidden" name="filename" value="backup-20261022-195405-b1ee.sql">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="backup_delete">
+                <input type="hidden" name="filename" value="backup-20261022-213105-79d6.sql">
                 <button class="btn danger sm" type="submit">حذف</button>
               </form>
             </div>
           </td>
         </tr>
               <tr>
-          <td class="mono small">backup-20261022-195356-d0c8.sql</td>
-          <td class="small">۱۷۲.۹ KB</td>
-          <td class="small">۵۳ جدول · ۱۶۸۶ ردیف</td>
+          <td class="mono small">backup-20261022-213058-7fc3.sql</td>
+          <td class="small">۸۶.۶ KB</td>
+          <td class="small">۵۸ جدول · ۶۵۱ ردیف</td>
           <td><span class="badge b-mute">دستی</span></td>
-          <td class="small">2026/10/22 19:53</td>
+          <td class="small">2026/10/22 21:30</td>
           <td><span class="badge b-ok">موجود</span></td>
           <td>
             <div class="btn-group">
-                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-195356-d0c8.sql">دانلود</a>
+                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-213058-7fc3.sql">دانلود</a>
                 <form method="post" action="#panel/index.php" onsubmit="return confirm('بازیابی از این نسخه؟ داده‌های فعلی با نسخه ایمنی جایگزین می‌شوند.')">
-                  <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                  <input type="hidden" name="a" value="backup_restore">
-                  <input type="hidden" name="filename" value="backup-20261022-195356-d0c8.sql">
+                  <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                  <input type="hidden" name="a" value="backup_restore">
+                  <input type="hidden" name="filename" value="backup-20261022-213058-7fc3.sql">
                   <button class="btn warn sm" type="submit">بازیابی</button>
                 </form>
                             <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="backup_delete">
-                <input type="hidden" name="filename" value="backup-20261022-195356-d0c8.sql">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="backup_delete">
+                <input type="hidden" name="filename" value="backup-20261022-213058-7fc3.sql">
                 <button class="btn danger sm" type="submit">حذف</button>
               </form>
             </div>
           </td>
         </tr>
               <tr>
-          <td class="mono small">backup-20261022-195335-b336.sql</td>
-          <td class="small">۱۶۹.۴ KB</td>
-          <td class="small">۵۳ جدول · ۱۶۴۴ ردیف</td>
+          <td class="mono small">backup-20261022-213043-18c7.sql</td>
+          <td class="small">۸۳.۰ KB</td>
+          <td class="small">۵۸ جدول · ۶۰۶ ردیف</td>
           <td><span class="badge b-mute">دستی</span></td>
-          <td class="small">2026/10/22 19:53</td>
+          <td class="small">2026/10/22 21:30</td>
           <td><span class="badge b-ok">موجود</span></td>
           <td>
             <div class="btn-group">
-                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-195335-b336.sql">دانلود</a>
+                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-213043-18c7.sql">دانلود</a>
                 <form method="post" action="#panel/index.php" onsubmit="return confirm('بازیابی از این نسخه؟ داده‌های فعلی با نسخه ایمنی جایگزین می‌شوند.')">
-                  <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                  <input type="hidden" name="a" value="backup_restore">
-                  <input type="hidden" name="filename" value="backup-20261022-195335-b336.sql">
+                  <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                  <input type="hidden" name="a" value="backup_restore">
+                  <input type="hidden" name="filename" value="backup-20261022-213043-18c7.sql">
                   <button class="btn warn sm" type="submit">بازیابی</button>
                 </form>
                             <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="backup_delete">
-                <input type="hidden" name="filename" value="backup-20261022-195335-b336.sql">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="backup_delete">
+                <input type="hidden" name="filename" value="backup-20261022-213043-18c7.sql">
                 <button class="btn danger sm" type="submit">حذف</button>
               </form>
             </div>
           </td>
         </tr>
               <tr>
-          <td class="mono small">backup-20261022-195330-7a70.sql</td>
-          <td class="small">۱۶۰.۹ KB</td>
-          <td class="small">۵۳ جدول · ۱۵۳۳ ردیف</td>
+          <td class="mono small">backup-20261022-213025-5d87.sql</td>
+          <td class="small">۷۸.۱ KB</td>
+          <td class="small">۵۸ جدول · ۵۴۰ ردیف</td>
+          <td><span class="badge b-mute">دستی</span></td>
+          <td class="small">2026/10/22 21:30</td>
+          <td><span class="badge b-ok">موجود</span></td>
+          <td>
+            <div class="btn-group">
+                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-213025-5d87.sql">دانلود</a>
+                <form method="post" action="#panel/index.php" onsubmit="return confirm('بازیابی از این نسخه؟ داده‌های فعلی با نسخه ایمنی جایگزین می‌شوند.')">
+                  <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                  <input type="hidden" name="a" value="backup_restore">
+                  <input type="hidden" name="filename" value="backup-20261022-213025-5d87.sql">
+                  <button class="btn warn sm" type="submit">بازیابی</button>
+                </form>
+                            <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="backup_delete">
+                <input type="hidden" name="filename" value="backup-20261022-213025-5d87.sql">
+                <button class="btn danger sm" type="submit">حذف</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+              <tr>
+          <td class="mono small">backup-20261022-212949-fd97.sql</td>
+          <td class="small">۵۴.۸ KB</td>
+          <td class="small">۵۸ جدول · ۲۷۶ ردیف</td>
           <td><span class="badge b-info">خودکار</span></td>
-          <td class="small">2026/10/22 19:53</td>
+          <td class="small">2026/10/22 21:29</td>
           <td><span class="badge b-ok">موجود</span></td>
           <td>
             <div class="btn-group">
-                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-195330-7a70.sql">دانلود</a>
+                              <a class="btn ghost sm" href="#panel/download.php?type=backup&amp;file=backup-20261022-212949-fd97.sql">دانلود</a>
                 <form method="post" action="#panel/index.php" onsubmit="return confirm('بازیابی از این نسخه؟ داده‌های فعلی با نسخه ایمنی جایگزین می‌شوند.')">
-                  <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                  <input type="hidden" name="a" value="backup_restore">
-                  <input type="hidden" name="filename" value="backup-20261022-195330-7a70.sql">
+                  <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                  <input type="hidden" name="a" value="backup_restore">
+                  <input type="hidden" name="filename" value="backup-20261022-212949-fd97.sql">
                   <button class="btn warn sm" type="submit">بازیابی</button>
                 </form>
                             <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="backup_delete">
-                <input type="hidden" name="filename" value="backup-20261022-195330-7a70.sql">
-                <button class="btn danger sm" type="submit">حذف</button>
-              </form>
-            </div>
-          </td>
-        </tr>
-              <tr>
-          <td class="mono small">backup-20261022-194312-6c3f.sql</td>
-          <td class="small">۱۳۳.۱ KB</td>
-          <td class="small">۴۵ جدول · ۱۲۵۴ ردیف</td>
-          <td><span class="badge b-mute">دستی</span></td>
-          <td class="small">2026/10/22 19:43</td>
-          <td><span class="badge b-err">فایل نیست</span></td>
-          <td>
-            <div class="btn-group">
-                            <form method="post" action="#panel/index.php" onsubmit="return confirm('حذف فایل بکاپ؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="backup_delete">
-                <input type="hidden" name="filename" value="backup-20261022-194312-6c3f.sql">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="backup_delete">
+                <input type="hidden" name="filename" value="backup-20261022-212949-fd97.sql">
                 <button class="btn danger sm" type="submit">حذف</button>
               </form>
             </div>
@@ -396,6 +402,15 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     <div class="hint">این فایل‌ها در پوشه بکاپ هستند ولی در دیتابیس ثبت نشده‌اند (مثلاً دستی کپی شده‌اند).</div>
           <div class="rowline"><span class="mono small">backup-20261022-195330-429d.sql</span><span class="small">۱۶۰.۷ KB</span></div>
           <div class="rowline"><span class="mono small">backup-20261022-195330-faba.sql</span><span class="small">۱۶۰.۹ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195335-b336.sql</span><span class="small">۱۶۹.۴ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195356-d0c8.sql</span><span class="small">۱۷۲.۹ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195405-b1ee.sql</span><span class="small">۱۷۷.۰ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195507-a02e.sql</span><span class="small">۱۸۶.۵ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195507-b5d6.sql</span><span class="small">۱۸۶.۵ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195507-e047.sql</span><span class="small">۱۸۶.۳ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-195510-8f59.sql</span><span class="small">۱۹۵.۷ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-212949-4c50.sql</span><span class="small">۵۴.۹ KB</span></div>
+          <div class="rowline"><span class="mono small">backup-20261022-212949-6d64.sql</span><span class="small">۵۴.۵ KB</span></div>
       </div>
 
 <div class="card">

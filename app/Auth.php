@@ -149,6 +149,12 @@ final class Auth
         }
         $sent = (string)($_POST['_csrf'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
         if ($sent === '' || !hash_equals(self::csrf(), $sent)) {
+            // رویداد امنیتی: تلاش برای ارسال فرم بدون/با توکن نامعتبر (CSRF)
+            Events::emit('security.csrf_fail', [
+                'detail'   => 'path=' . str_limit((string)($_SERVER['REQUEST_URI'] ?? ''), 120),
+                'actor_id' => (int)($_SESSION['admin_id'] ?? 0) ?: null,
+                'action'   => str_limit((string)($_POST['a'] ?? ''), 40),
+            ], 'warn');
             http_response_code(419);
             echo 'توکن امنیتی نامعتبر/منقضی است. صفحه را رفرش کن.';
             exit;

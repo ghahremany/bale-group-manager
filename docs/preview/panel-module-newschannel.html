@@ -209,23 +209,23 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <div class="kpi"><div class="i">📡</div><div class="v">۳</div><div class="l">کانال منبع فعال</div></div>
   <div class="kpi"><div class="i">🏷</div><div class="v">۳</div><div class="l">دسته فعال</div></div>
   <div class="kpi"><div class="i">✅</div><div class="v">۲</div><div class="l">خبر ارسال‌شده</div></div>
-  <div class="kpi"><div class="i">⏳</div><div class="v">۲</div><div class="l">در انتظار</div></div>
+  <div class="kpi"><div class="i">⏳</div><div class="v">۱</div><div class="l">در انتظار</div></div>
 </div>
 
 <div class="card">
   <h2>⚙️ تنظیمات کلی</h2>
   <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2">
-    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_settings">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="newshub_settings">
     <input type="hidden" name="m" value="newshub">
     <div>
       <label class="check"><input type="checkbox" name="newshub_auto" value="1" checked> ارسال خودکار خبرهای تازه</label>
-      <label class="check"><input type="checkbox" name="newshub_header" value="1" checked> درج نام دسته در ابتدای خبر</label>
+      <label class="check"><input type="checkbox" name="newshub_header" value="1" > درج نام دسته در ابتدای خبر</label>
       <div class="hint">اگر خودکار خاموش باشد، خبرها در «صندوق ورودی» می‌مانند و با دکمه «ارسال» فرستاده می‌شوند.</div>
     </div>
     <div>
       <label>کانال مقصد پیش‌فرض (برای دسته‌های بدون مقصد)</label>
       <input type="text" name="newshub_default_target" class="mono" dir="ltr"
-             value="-1009999990001" placeholder="-1001234567890">
+             value="" placeholder="-1001234567890">
       <div class="hint">آیدی عددی یا <span class="mono">@username</span> کانال مقصد.</div>
       <button class="btn mt" type="submit">💾 ذخیره تنظیمات</button>
     </div>
@@ -239,7 +239,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     آیدی عددی یا <span class="mono">@username</span> کانال را وارد کن.
   </div>
   <form onsubmit="return false" method="post" action="#panel/index.php" class="inline mb">
-    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_source_add">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="newshub_source_add">
     <input type="hidden" name="m" value="newshub">
     <input type="text" name="chat_id" class="mono" dir="ltr" placeholder="-1001234567890 یا @mynews" required>
     <input type="text" name="title" placeholder="نام نمایشی (اختیاری)">
@@ -249,7 +249,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
       <thead><tr><th>#</th><th>نام</th><th>آیدی</th><th>وضعیت</th><th>عملیات</th></tr></thead>
       <tbody>
               <tr>
-          <td class="small">۲۱</td>
+          <td class="small">۱۷</td>
           <td class="small">کانال خبر اقتصادی</td>
           <td class="small mono" dir="ltr">-1009999990777</td>
           <td>
@@ -257,22 +257,22 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_toggle">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="21">
+              <input type="hidden" name="id" value="17">
               <input type="hidden" name="on" value="0">
               <button class="btn ghost sm" type="submit">⏸ خاموش</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_delete">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="21">
+              <input type="hidden" name="id" value="17">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
         </tr>
               <tr>
-          <td class="small">۲۲</td>
+          <td class="small">۱۸</td>
           <td class="small">کانال خبر ورزشی</td>
           <td class="small mono" dir="ltr">-1009999990888</td>
           <td>
@@ -280,22 +280,22 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_toggle">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="22">
+              <input type="hidden" name="id" value="18">
               <input type="hidden" name="on" value="0">
               <button class="btn ghost sm" type="submit">⏸ خاموش</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_delete">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="22">
+              <input type="hidden" name="id" value="18">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
         </tr>
               <tr>
-          <td class="small">۲۳</td>
+          <td class="small">۱۹</td>
           <td class="small">کانال فناوری</td>
           <td class="small mono" dir="ltr">-1009999990999</td>
           <td>
@@ -303,16 +303,16 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_toggle">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="23">
+              <input type="hidden" name="id" value="19">
               <input type="hidden" name="on" value="0">
               <button class="btn ghost sm" type="submit">⏸ خاموش</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_source_delete">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="23">
+              <input type="hidden" name="id" value="19">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
@@ -328,7 +328,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     سپس به «کانال مقصد» همان دسته ارسال می‌شود. اگر دسته‌ای مقصد نداشته باشد از مقصد پیش‌فرض استفاده می‌شود.
   </div>
   <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2 mb">
-    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_category_save">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="newshub_category_save">
     <input type="hidden" name="m" value="newshub">
     <div>
       <label>نام دسته</label>
@@ -348,7 +348,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
       <thead><tr><th>#</th><th>دسته</th><th>کلیدواژه‌ها</th><th>مقصد</th><th>اولویت</th><th>وضعیت</th><th>عملیات</th></tr></thead>
       <tbody>
               <tr>
-          <td class="small">۲۲</td>
+          <td class="small">۱۷</td>
           <td class="small"><b>اقتصادی</b></td>
           <td class="small">دلار، طلا، بورس، تورم</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -357,9 +357,9 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           <td>
             <div class="btn-group">
               <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_save">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="22">
+                <input type="hidden" name="id" value="17">
                 <input type="hidden" name="is_active" value="1">
                 <input type="text" name="keywords" value="دلار، طلا، بورس، تورم" class="small">
                 <input type="hidden" name="name" value="اقتصادی">
@@ -368,16 +368,16 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                 <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
               </form>
               <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_delete">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="22">
+                <input type="hidden" name="id" value="17">
                 <button class="btn danger sm" type="submit">🗑</button>
               </form>
             </div>
           </td>
         </tr>
               <tr>
-          <td class="small">۲۳</td>
+          <td class="small">۱۸</td>
           <td class="small"><b>ورزشی</b></td>
           <td class="small">فوتبال، والیبال، لیگ</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -386,9 +386,9 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           <td>
             <div class="btn-group">
               <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_save">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="23">
+                <input type="hidden" name="id" value="18">
                 <input type="hidden" name="is_active" value="1">
                 <input type="text" name="keywords" value="فوتبال، والیبال، لیگ" class="small">
                 <input type="hidden" name="name" value="ورزشی">
@@ -397,16 +397,16 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                 <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
               </form>
               <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_delete">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="23">
+                <input type="hidden" name="id" value="18">
                 <button class="btn danger sm" type="submit">🗑</button>
               </form>
             </div>
           </td>
         </tr>
               <tr>
-          <td class="small">۲۴</td>
+          <td class="small">۱۹</td>
           <td class="small"><b>فناوری</b></td>
           <td class="small">موبایل، هوش مصنوعی، اپلیکیشن</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -415,9 +415,9 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
           <td>
             <div class="btn-group">
               <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_save">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="24">
+                <input type="hidden" name="id" value="19">
                 <input type="hidden" name="is_active" value="1">
                 <input type="text" name="keywords" value="موبایل، هوش مصنوعی، اپلیکیشن" class="small">
                 <input type="hidden" name="name" value="فناوری">
@@ -426,9 +426,9 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                 <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
               </form>
               <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">                <input type="hidden" name="a" value="newshub_category_delete">
                 <input type="hidden" name="m" value="newshub">
-                <input type="hidden" name="id" value="24">
+                <input type="hidden" name="id" value="19">
                 <button class="btn danger sm" type="submit">🗑</button>
               </form>
             </div>
@@ -452,7 +452,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <h2>✍️ ارسال دستی خبر</h2>
   <div class="hint mb">اگر دسترسی به پست‌های کانال ممکن نبود، متن خبر را اینجا بگذار؛ همان دسته‌بندی و مقصد اعمال می‌شود.</div>
   <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2">
-    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_send_manual">
+    <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">    <input type="hidden" name="a" value="newshub_send_manual">
     <input type="hidden" name="m" value="newshub">
     <div>
       <label>متن خبر</label>
@@ -462,9 +462,9 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
       <label>دسته (اختیاری — خالی = تشخیص خودکار)</label>
       <select name="category_id">
         <option value="0">تشخیص خودکار</option>
-                  <option value="22">اقتصادی</option>
-                  <option value="23">ورزشی</option>
-                  <option value="24">فناوری</option>
+                  <option value="17">اقتصادی</option>
+                  <option value="18">ورزشی</option>
+                  <option value="19">فناوری</option>
               </select>
       <button class="btn mt" type="submit">📤 پردازش و ارسال</button>
     </div>
@@ -477,32 +477,32 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
       <thead><tr><th>#</th><th>زمان</th><th>متن</th><th>دسته</th><th>مقصد</th><th>وضعیت</th><th>عملیات</th></tr></thead>
       <tbody>
                       <tr>
-          <td class="small">۴۹</td>
-          <td class="small mono">10/22 19:54</td>
+          <td class="small">۳۶</td>
+          <td class="small mono">10/22 21:31</td>
           <td class="small">خبر عمومی بدون کلیدواژه برای بازبینی.</td>
           <td class="small">—</td>
-          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small mono" dir="ltr">—</td>
           <td class="small">
-            <span class="badge b-warn">در انتظار</span>
-                      </td>
+            <span class="badge b-mute">رد‌شده (بدون مقصد)</span>
+            <div class="small muted">مقصدی تعیین نشده</div>          </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_send_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="49">
+              <input type="hidden" name="id" value="36">
               <button class="btn ok sm" type="submit">📤 ارسال</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_delete_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="49">
+              <input type="hidden" name="id" value="36">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
         </tr>
                       <tr>
-          <td class="small">۴۸</td>
-          <td class="small mono">10/22 19:54</td>
+          <td class="small">۳۵</td>
+          <td class="small mono">10/22 21:31</td>
           <td class="small">اپلیکیشن جدید مبتنی بر هوش مصنوعی معرفی شد.</td>
           <td class="small">فناوری</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -511,22 +511,22 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                       </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_send_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="48">
+              <input type="hidden" name="id" value="35">
               <button class="btn ok sm" type="submit">📤 ارسال</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_delete_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="48">
+              <input type="hidden" name="id" value="35">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
         </tr>
                       <tr>
-          <td class="small">۴۷</td>
-          <td class="small mono">10/22 19:54</td>
+          <td class="small">۳۴</td>
+          <td class="small mono">10/22 21:31</td>
           <td class="small">تیم ملی فوتبال در دیداری دوستانه به برتری رسید.</td>
           <td class="small">ورزشی</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -535,22 +535,22 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                       </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_send_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="47">
+              <input type="hidden" name="id" value="34">
               <button class="btn ok sm" type="submit">📤 ارسال</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_delete_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="47">
+              <input type="hidden" name="id" value="34">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>
         </tr>
                       <tr>
-          <td class="small">۴۶</td>
-          <td class="small mono">10/22 19:54</td>
+          <td class="small">۳۳</td>
+          <td class="small mono">10/22 21:31</td>
           <td class="small">قیمت دلار امروز با رشد ۲ درصدی به مرز جدیدی رسید و طلا هم بالا رفت.</td>
           <td class="small">اقتصادی</td>
           <td class="small mono" dir="ltr">-1009999990001</td>
@@ -559,15 +559,15 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                       </td>
           <td class="btn-group">
             <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_send_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="46">
+              <input type="hidden" name="id" value="33">
               <button class="btn ok sm" type="submit">📤 ارسال</button>
             </form>
             <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
-              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="_csrf" value="fbf87b9a8762517ef3b82b844805ed63cddfc31cd330e15950d5d370a37efa20">              <input type="hidden" name="a" value="newshub_delete_item">
               <input type="hidden" name="m" value="newshub">
-              <input type="hidden" name="id" value="46">
+              <input type="hidden" name="id" value="33">
               <button class="btn danger sm" type="submit">🗑</button>
             </form>
           </td>

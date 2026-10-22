@@ -102,6 +102,14 @@ abstract class Module
         return false;
     }
 
+    /**
+     * رویداد سیستمی/امنیتی (Events::emit) — ماژول می‌تواند هشدار بدهد
+     * @param array<string,mixed> $data
+     */
+    public static function onEvent(string $type, array $data): void
+    {
+    }
+
     /** کارهای دوره‌ای (کرون) — پیش‌فرض هیچ */
     public static function cron(): void
     {

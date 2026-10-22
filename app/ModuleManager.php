@@ -127,6 +127,23 @@ final class ModuleManager
         return false;
     }
 
+    /**
+     * پخش رویداد سیستمی/امنیتی بین ماژول‌های فعال
+     * @param array<string,mixed> $data
+     */
+    public static function dispatchEvent(string $type, array $data): void
+    {
+        foreach (self::enabled() as $class) {
+            try {
+                if (method_exists($class, 'onEvent')) {
+                    $class::onEvent($type, $data);
+                }
+            } catch (Throwable $e) {
+                Logger::error('module', 'event failed: ' . $class . ' / ' . $type . ' — ' . $e->getMessage());
+            }
+        }
+    }
+
     /** همه دستورهای ماژول‌های فعال (برای راهنما) */
     public static function commands(): array
     {
