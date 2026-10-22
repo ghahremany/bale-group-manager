@@ -104,18 +104,26 @@ final class Commands
         if ($raw === '' || str_starts_with($raw, '/')) {
             $raw = ltrim($raw, '/');
         }
-        $names = self::names();
-        foreach (self::moduleCommands() as $mc) {
-            $names[] = $mc;
+        // نام‌ها با نرمال‌سازی تطبیق داده می‌شوند (ی/ك عربی، نیم‌فاصله، اعراب، رقم فارسی)
+        $names = [];
+        foreach (self::names() as $n) {
+            $names[Text::normalize($n)] = $n;
         }
-        $found = Text::looksLikeCommand($raw, $names);
+        foreach (self::moduleCommands() as $mc) {
+            $norm = Text::normalize($mc);
+            if (!isset($names[$norm])) {
+                $names[$norm] = $mc;
+            }
+        }
+        $found = Text::looksLikeCommand($raw, array_keys($names));
         if ($found === null) {
             return null;
         }
-        $canonical = self::MAP[$found['cmd']] ?? null;
+        $rawName   = $names[$found['cmd']] ?? $found['cmd'];
+        $canonical = self::MAP[$rawName] ?? null;
         if ($canonical === null) {
             // ممکن است دستور یکی از ماژول‌ها باشد
-            $canonical = 'module:' . $found['cmd'];
+            $canonical = 'module:' . $rawName;
         }
         return [
             'chat_id'  => $chatId,
@@ -124,7 +132,7 @@ final class Commands
             'user_id'  => $userId,
             'msg_id'   => $msgId,
             'message'  => $message,
-            'cmd_name' => $found['cmd'],
+            'cmd_name' => $rawName,
             'cmd'      => $canonical,
             'rest'     => $found['rest'],
             'is_admin' => $isAdmin,

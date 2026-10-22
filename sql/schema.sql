@@ -1,6 +1,6 @@
 -- ---------------------------------------------------------------
--- bale-group-manager — ساختار پایگاه‌داده (نسخه ۱.۴.۰)
--- ۴۵ جدول · MySQL 5.7+ / MariaDB 10.2+ · utf8mb4
+-- bale-group-manager — ساختار پایگاه‌داده (نسخه ۱.۵.۰)
+-- 53 جدول · MySQL 5.7+ / MariaDB 10.2+ · utf8mb4
 --
 -- این فایل فقط برای مرجع/بازیابی دستی است؛ نصب‌کننده (install.php) و
 -- ارتقای خودکار (Schema::upgrade) خودشان جدول‌ها را می‌سازند.
@@ -10,8 +10,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 CREATE TABLE `admins_cache` (
   `chat_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -30,7 +28,7 @@ CREATE TABLE `audit_log` (
   `ts` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_admin` (`admin_id`,`ts`)
-) ENGINE=InnoDB AUTO_INCREMENT=759 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `backup_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(190) NOT NULL,
@@ -43,7 +41,7 @@ CREATE TABLE `backup_log` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_created` (`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `bad_words` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) DEFAULT NULL,
@@ -52,7 +50,7 @@ CREATE TABLE `bad_words` (
   `created_at` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_chat` (`chat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `bans` (
   `chat_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -86,7 +84,7 @@ CREATE TABLE `broadcast_batches` (
   `finished_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_status` (`status`,`scheduled_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `broadcast_queue` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `batch_id` int(10) unsigned NOT NULL DEFAULT 0,
@@ -102,7 +100,7 @@ CREATE TABLE `broadcast_queue` (
   PRIMARY KEY (`id`),
   KEY `idx_status` (`status`,`id`),
   KEY `idx_batch` (`batch_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=212 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `captcha_pending` (
   `chat_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -121,7 +119,7 @@ CREATE TABLE `categories` (
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_slug` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `channels` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) NOT NULL,
@@ -134,7 +132,7 @@ CREATE TABLE `channels` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_chat` (`chat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `chat_settings` (
   `chat_id` bigint(20) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
@@ -190,7 +188,7 @@ CREATE TABLE `coupon_uses` (
   PRIMARY KEY (`id`),
   KEY `idx_coupon` (`coupon_id`),
   KEY `idx_user` (`user_id`,`coupon_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `coupons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(32) NOT NULL,
@@ -208,7 +206,7 @@ CREATE TABLE `coupons` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_code` (`code`),
   KEY `idx_active` (`is_active`,`expires_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `forcejoin_state` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -219,7 +217,7 @@ CREATE TABLE `forcejoin_state` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `login_attempts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(64) DEFAULT NULL,
@@ -230,7 +228,7 @@ CREATE TABLE `login_attempts` (
   PRIMARY KEY (`id`),
   KEY `idx_ip` (`ip`,`created_at`),
   KEY `idx_kind` (`kind`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `login_otps` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` int(10) unsigned NOT NULL,
@@ -247,7 +245,7 @@ CREATE TABLE `login_otps` (
   PRIMARY KEY (`id`),
   KEY `idx_admin` (`admin_id`,`expires_at`),
   CONSTRAINT `fk_otp_admin` FOREIGN KEY (`admin_id`) REFERENCES `panel_admins` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) DEFAULT NULL,
@@ -259,7 +257,7 @@ CREATE TABLE `logs` (
   PRIMARY KEY (`id`),
   KEY `idx_chat` (`chat_id`,`ts`),
   KEY `idx_action` (`action`,`ts`)
-) ENGINE=InnoDB AUTO_INCREMENT=450 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=548 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `metrics_daily` (
   `day` date NOT NULL,
   `chat_id` bigint(20) NOT NULL,
@@ -281,6 +279,31 @@ CREATE TABLE `mutes` (
   PRIMARY KEY (`chat_id`,`user_id`),
   KEY `idx_until` (`until_ts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `news_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL,
+  `keywords` varchar(600) NOT NULL,
+  `target_chat` bigint(20) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `sort` smallint(6) NOT NULL DEFAULT 0,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_sort` (`sort`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `news_inbox` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `source_chat` bigint(20) NOT NULL,
+  `source_msg` bigint(20) DEFAULT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `body` text NOT NULL,
+  `status` enum('new','sent','skipped','failed') NOT NULL DEFAULT 'new',
+  `target_chat` bigint(20) DEFAULT NULL,
+  `sent_msg` bigint(20) DEFAULT NULL,
+  `error` varchar(255) DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_status` (`status`,`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `news_posts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `channel_id` bigint(20) DEFAULT NULL,
@@ -295,7 +318,16 @@ CREATE TABLE `news_posts` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_due` (`status`,`scheduled_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `news_sources` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `chat_id` bigint(20) NOT NULL,
+  `title` varchar(160) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_src_chat` (`chat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `order_items` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) unsigned NOT NULL,
@@ -306,7 +338,7 @@ CREATE TABLE `order_items` (
   `total` bigint(20) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_order` (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `orders` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(16) NOT NULL,
@@ -339,7 +371,7 @@ CREATE TABLE `orders` (
   KEY `idx_user` (`user_id`,`id`),
   KEY `idx_status` (`status`,`id`),
   KEY `idx_aff` (`affiliate_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `otp_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` int(10) unsigned DEFAULT NULL,
@@ -352,7 +384,7 @@ CREATE TABLE `otp_logs` (
   PRIMARY KEY (`id`),
   KEY `idx_created` (`created_at`),
   KEY `idx_admin` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=237 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=283 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `panel_admins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(64) NOT NULL,
@@ -396,7 +428,43 @@ CREATE TABLE `payments` (
   PRIMARY KEY (`id`),
   KEY `idx_order` (`order_id`),
   KEY `idx_status` (`status`,`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `poll_options` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `poll_id` int(10) unsigned NOT NULL,
+  `idx` tinyint(3) unsigned NOT NULL,
+  `label` varchar(120) NOT NULL,
+  `votes` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_poll` (`poll_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `poll_votes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `poll_id` int(10) unsigned NOT NULL,
+  `option_idx` tinyint(3) unsigned NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_vote` (`poll_id`,`user_id`,`option_idx`),
+  KEY `idx_user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `polls` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(12) NOT NULL,
+  `chat_id` bigint(20) DEFAULT NULL,
+  `message_id` bigint(20) DEFAULT NULL,
+  `question` varchar(300) NOT NULL,
+  `description` varchar(600) DEFAULT NULL,
+  `multi` tinyint(1) NOT NULL DEFAULT 0,
+  `anonymous` tinyint(1) NOT NULL DEFAULT 0,
+  `status` enum('draft','active','closed') NOT NULL DEFAULT 'draft',
+  `expires_at` int(10) unsigned DEFAULT NULL,
+  `admin_id` int(10) unsigned DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_code` (`code`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `product_reviews` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
@@ -410,7 +478,7 @@ CREATE TABLE `product_reviews` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_user_product_order` (`user_id`,`product_id`,`order_id`),
   KEY `idx_product` (`product_id`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `seller_id` int(10) unsigned DEFAULT NULL,
@@ -437,7 +505,7 @@ CREATE TABLE `products` (
   KEY `idx_status` (`status`,`id`),
   KEY `idx_seller` (`seller_id`),
   KEY `idx_cat` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `promo_campaigns` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
@@ -455,7 +523,36 @@ CREATE TABLE `promo_campaigns` (
   `rotate_pool` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_due` (`status`,`next_run_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `raffle_entries` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `raffle_id` int(10) unsigned NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_entry` (`raffle_id`,`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `raffles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(12) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `prize` varchar(200) NOT NULL,
+  `description` varchar(600) DEFAULT NULL,
+  `chat_id` bigint(20) DEFAULT NULL,
+  `message_id` bigint(20) DEFAULT NULL,
+  `require_chat` bigint(20) DEFAULT NULL,
+  `ends_at` int(10) unsigned NOT NULL DEFAULT 0,
+  `winners_count` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `status` enum('draft','active','drawn','canceled') NOT NULL DEFAULT 'active',
+  `winner_ids` varchar(255) DEFAULT NULL,
+  `entrants` int(10) unsigned NOT NULL DEFAULT 0,
+  `drawn_at` int(10) unsigned DEFAULT NULL,
+  `admin_id` int(10) unsigned DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_code` (`code`),
+  KEY `idx_due` (`status`,`ends_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `recovery_codes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` int(10) unsigned NOT NULL,
@@ -466,7 +563,7 @@ CREATE TABLE `recovery_codes` (
   PRIMARY KEY (`id`),
   KEY `idx_admin` (`admin_id`,`used_at`),
   CONSTRAINT `fk_recovery_admin` FOREIGN KEY (`admin_id`) REFERENCES `panel_admins` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `referrals` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `inviter_id` bigint(20) NOT NULL,
@@ -480,7 +577,7 @@ CREATE TABLE `referrals` (
   UNIQUE KEY `uq_invitee` (`invitee_id`),
   KEY `idx_inviter` (`inviter_id`,`status`),
   KEY `idx_chat` (`chat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `reports` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) NOT NULL,
@@ -493,7 +590,7 @@ CREATE TABLE `reports` (
   `ts` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_chat` (`chat_id`,`ts`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `scheduled_actions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) NOT NULL,
@@ -505,7 +602,7 @@ CREATE TABLE `scheduled_actions` (
   `created_at` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_run` (`done`,`run_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `sellers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -519,7 +616,7 @@ CREATE TABLE `sellers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_user` (`user_id`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `settings` (
   `skey` varchar(64) NOT NULL,
   `svalue` text DEFAULT NULL,
@@ -538,7 +635,7 @@ CREATE TABLE `shop_tokens` (
   PRIMARY KEY (`id`),
   KEY `idx_token` (`token_hash`),
   KEY `idx_user` (`user_id`,`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `stock_moves` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
@@ -551,7 +648,7 @@ CREATE TABLE `stock_moves` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_product` (`product_id`,`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `users` (
   `user_id` bigint(20) NOT NULL,
   `username` varchar(64) DEFAULT NULL,
@@ -578,7 +675,7 @@ CREATE TABLE `wallet_tx` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_user` (`user_id`,`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `wallets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -586,7 +683,7 @@ CREATE TABLE `wallets` (
   `updated_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `warns` (
   `chat_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
@@ -602,7 +699,7 @@ CREATE TABLE `webhook_log` (
   `ts` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_ts` (`ts`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `welcome_buttons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` bigint(20) NOT NULL,
@@ -625,8 +722,6 @@ CREATE TABLE `withdraw_requests` (
   PRIMARY KEY (`id`),
   KEY `idx_status` (`status`,`id`),
   KEY `idx_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

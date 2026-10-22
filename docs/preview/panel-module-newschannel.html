@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>کانال خبر — ماژول — مدیر گروه بله</title>
+<style>
+/* پنل مدیریت — استایل اختصاصی، RTL، بدون وابستگی خارجی */
+:root{
+  --bg:#0b1220; --bg2:#0e1728; --card:#111c2f; --card2:#0d1728;
+  --line:#1e2d47; --txt:#e8eefb; --muted:#93a4c4; --accent:#3b82f6; --accent2:#22d3ee;
+  --ok:#22c55e; --err:#ef4444; --warn:#f59e0b; --purple:#8b5cf6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 600px at 80% -10%,#132a4d 0%,transparent 60%),var(--bg);
+  color:var(--txt); font-family:Tahoma,"Segoe UI",system-ui,sans-serif; font-size:14px; line-height:1.8;
+  min-height:100vh;
+}
+a{color:#93c5fd;text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{margin:0 0 12px}
+h1{font-size:20px}
+h2{font-size:16px}
+h3{font-size:14px}
+small,.small{font-size:12px}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mono{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+code{background:#0a1424;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:12.5px;direction:ltr;display:inline-block}
+
+/* ---------- layout ---------- */
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:236px;flex:0 0 236px;background:linear-gradient(180deg,#0c1626,#0a1322);
+  border-left:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto
+}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.brand .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#22d3ee);display:grid;place-items:center;font-size:20px}
+.brand b{display:block;font-size:14px}
+.brand span{font-size:11px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav a{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;color:#c8d6ef;font-size:13.5px}
+.nav a:hover{background:#132039;text-decoration:none}
+.nav a.active{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;font-weight:bold;box-shadow:0 8px 20px rgba(37,99,235,.25)}
+.nav .sep{margin:12px 0 4px;font-size:11px;color:#5b6f92;padding:0 8px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 22px;border-bottom:1px solid var(--line);background:rgba(10,19,34,.7);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5
+}
+.content{padding:22px;max-width:1400px;width:100%}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;flex:none;height:auto;position:static;border-left:0;border-bottom:1px solid var(--line)}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .nav .sep{display:none}
+  .content{padding:14px}
+}
+
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.card.tight{padding:14px}
+.card-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+
+.kpi{background:linear-gradient(160deg,#132340,#0e1a2c);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi .v{font-size:24px;font-weight:bold;letter-spacing:.5px}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .i{float:left;font-size:20px;opacity:.8}
+
+/* ---------- tables ---------- */
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+th{background:#0d1a2d;color:#b9c9e6;font-weight:bold;font-size:12.5px;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#101d33}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+
+/* ---------- forms ---------- */
+label{display:block;font-size:12.5px;color:#c7d5ee;margin:10px 0 5px}
+input[type=text],input[type=password],input[type=number],input[type=search],input[type=url],select,textarea{
+  width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#0a1424;color:var(--txt);
+  font-family:inherit;font-size:13.5px
+}
+textarea{min-height:90px;resize:vertical;line-height:1.9}
+input:focus,select:focus,textarea:focus{outline:2px solid #1d4ed8;border-color:transparent}
+.inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.inline > *{width:auto}
+.check{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13.5px}
+.check input{width:16px;height:16px;accent-color:#3b82f6}
+.hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;border:0;cursor:pointer;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-family:inherit;font-size:13.5px;font-weight:bold}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+.btn.ghost{background:#132039;border:1px solid var(--line);color:var(--txt);font-weight:normal}
+.btn.danger{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+.btn.ok{background:linear-gradient(135deg,#15803d,#22c55e)}
+.btn.warn{background:linear-gradient(135deg,#b45309,#f59e0b)}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- badges / alerts ---------- */
+.badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;border:1px solid transparent;white-space:nowrap}
+.b-ok{background:#052e16;color:#86efac;border-color:#14532d}
+.b-err{background:#3f0d0d;color:#fecaca;border-color:#7f1d1d}
+.b-warn{background:#3b2a05;color:#fde68a;border-color:#78350f}
+.b-info{background:#0c2340;color:#bae6fd;border-color:#1e3a5f}
+.b-mute{background:#1f2340;color:#c7d2fe;border-color:#3730a3}
+.alert{padding:11px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;border:1px solid}
+.alert.ok{background:#052e16;border-color:#14532d;color:#bbf7d0}
+.alert.err{background:#3f0d0d;border-color:#7f1d1d;color:#fecaca}
+.alert.warn{background:#3b2a05;border-color:#78350f;color:#fde68a}
+.alert.info{background:#0c2340;border-color:#1e3a5f;color:#bae6fd}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow:auto}
+.tabs a{padding:9px 14px;border-radius:10px 10px 0 0;color:#b9c9e6;font-size:13px;white-space:nowrap}
+.tabs a.active{background:#132039;color:#fff;font-weight:bold;border-bottom:2px solid var(--accent)}
+.tabs a:hover{text-decoration:none;background:#0f1c30}
+
+/* ---------- login ---------- */
+.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:22px}
+.auth-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.auth-card .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#22d3ee);display:grid;place-items:center;font-size:26px;margin:0 auto 12px}
+.otp-input{letter-spacing:12px;text-align:center;font-size:26px;direction:ltr;font-weight:bold;padding:12px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{font-size:11.5px;padding:2px 9px;border-radius:999px;background:#0f1c30;border:1px solid var(--line);color:#b9c9e6}
+
+/* ---------- misc ---------- */
+.rowline{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed #1b2942;font-size:13px}
+.rowline:last-child{border-bottom:0}
+.switch-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px}
+@media(max-width:700px){.switch-list{grid-template-columns:1fr}}
+pre{background:#0a1424;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;direction:ltr;text-align:left;font-size:12px}
+.pager{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.pager a,.pager span{padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:#0f1c30;font-size:12.5px}
+.pager .cur{background:#1d4ed8;color:#fff;border-color:transparent}
+.tag{font-size:11px;color:#93a4c4;background:#0f1c30;border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.card.tight{padding:10px 14px}
+/* ---------- نمودارها و بلوک‌های نسخه ۱.۱ ---------- */
+svg{max-width:100%;height:auto;display:block}
+.chart-box{background:#0b1424;border:1px solid var(--line);border-radius:12px;padding:6px;overflow:hidden}
+.kpi .v small{font-size:12px;color:var(--muted);font-weight:normal}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+
+</style>
+<style>body{background-image:radial-gradient(1000px 500px at 85% -10%,#12294a 0%,transparent 60%)}</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">🤖</div>
+      <div>
+        <b>مدیر گروه بله</b>
+        <span>نسخه ۱.۰.۰</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#panel/index.php?p=dashboard" class="">📊 داشبورد</a>
+      <a href="#panel/index.php?p=groups" class="">👥 گروه‌ها</a>
+      <a href="#panel/index.php?p=moderation" class="">🛡 تخلفات</a>
+      <a href="#panel/index.php?p=users" class="">🙋 کاربران</a>
+      <a href="#panel/index.php?p=logs" class="">📜 رخدادها</a>
+      <a href="#panel/index.php?p=analytics" class="">📊 گزارش نموداری</a>
+      <a href="#panel/index.php?p=referrals" class="">🌱 زیرمجموعه‌گیری</a>
+      <a href="#panel/index.php?p=modules" class="active">🧩 ماژول‌ها</a>
+      <a href="#panel/index.php?p=broadcast" class="">📤 ارسال همگانی</a>
+      <a href="#panel/index.php?p=store" class="">📦 انبار</a>
+      <a href="#panel/index.php?p=orders" class="">🧾 سفارش‌ها</a>
+      <div class="sep">مدیریت سیستم</div>
+              <a href="#panel/index.php?p=admins" class="">🔑 ادمین‌های پنل</a>
+        <a href="#panel/index.php?p=system" class="">⚙️ سیستم و وب‌هوک</a>
+        <a href="#panel/index.php?p=audit" class="">🧾 لاگ ممیزی</a>
+        <a href="#panel/index.php?p=backup" class="">🗄 بکاپ و گزارش خودکار</a>
+        <a href="#panel/index.php?p=recovery" class="">🔑 کدهای بازیابی</a>
+        <a href="#panel/index.php?p=wallets" class="">💳 کیف پول و برداشت</a>
+            <a href="#panel/index.php?p=account" class="">👤 حساب من</a>
+      <a href="#panel/index.php?p=setup" class="">🚀 راه‌اندازی</a>
+      <div class="sep">خروج</div>
+      <a href="#panel/logout.php">🚪 خروج از پنل</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <b>کانال خبر — ماژول</b>
+                  <span class="badge b-ok">وب‌هوک</span>
+              </div>
+      <div class="inline">
+                        <span class="pill">admin · مدیر ارشد</span>
+        <a class="btn ghost sm" href="#panel/logout.php">خروج</a>
+      </div>
+    </div>
+
+    <div class="content">
+                  <div class="grid g4 mb">
+  <div class="kpi"><div class="i">📡</div><div class="v">۳</div><div class="l">کانال منبع فعال</div></div>
+  <div class="kpi"><div class="i">🏷</div><div class="v">۳</div><div class="l">دسته فعال</div></div>
+  <div class="kpi"><div class="i">✅</div><div class="v">۲</div><div class="l">خبر ارسال‌شده</div></div>
+  <div class="kpi"><div class="i">⏳</div><div class="v">۲</div><div class="l">در انتظار</div></div>
+</div>
+
+<div class="card">
+  <h2>⚙️ تنظیمات کلی</h2>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2">
+    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_settings">
+    <input type="hidden" name="m" value="newshub">
+    <div>
+      <label class="check"><input type="checkbox" name="newshub_auto" value="1" checked> ارسال خودکار خبرهای تازه</label>
+      <label class="check"><input type="checkbox" name="newshub_header" value="1" checked> درج نام دسته در ابتدای خبر</label>
+      <div class="hint">اگر خودکار خاموش باشد، خبرها در «صندوق ورودی» می‌مانند و با دکمه «ارسال» فرستاده می‌شوند.</div>
+    </div>
+    <div>
+      <label>کانال مقصد پیش‌فرض (برای دسته‌های بدون مقصد)</label>
+      <input type="text" name="newshub_default_target" class="mono" dir="ltr"
+             value="-1009999990001" placeholder="-1001234567890">
+      <div class="hint">آیدی عددی یا <span class="mono">@username</span> کانال مقصد.</div>
+      <button class="btn mt" type="submit">💾 ذخیره تنظیمات</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h2>📡 کانال‌های منبع</h2>
+  <div class="hint mb">
+    ربات باید در هر کانال منبع <b>ادمین</b> باشد، وگرنه بله پست‌های آن کانال را برای ربات نمی‌فرستد.
+    آیدی عددی یا <span class="mono">@username</span> کانال را وارد کن.
+  </div>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="inline mb">
+    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_source_add">
+    <input type="hidden" name="m" value="newshub">
+    <input type="text" name="chat_id" class="mono" dir="ltr" placeholder="-1001234567890 یا @mynews" required>
+    <input type="text" name="title" placeholder="نام نمایشی (اختیاری)">
+    <button class="btn ok" type="submit">➕ افزودن منبع</button>
+  </form>
+      <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>نام</th><th>آیدی</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+      <tbody>
+              <tr>
+          <td class="small">۲۱</td>
+          <td class="small">کانال خبر اقتصادی</td>
+          <td class="small mono" dir="ltr">-1009999990777</td>
+          <td>
+            <span class="badge b-ok">فعال</span>
+          </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="21">
+              <input type="hidden" name="on" value="0">
+              <button class="btn ghost sm" type="submit">⏸ خاموش</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="21">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+              <tr>
+          <td class="small">۲۲</td>
+          <td class="small">کانال خبر ورزشی</td>
+          <td class="small mono" dir="ltr">-1009999990888</td>
+          <td>
+            <span class="badge b-ok">فعال</span>
+          </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="22">
+              <input type="hidden" name="on" value="0">
+              <button class="btn ghost sm" type="submit">⏸ خاموش</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="22">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+              <tr>
+          <td class="small">۲۳</td>
+          <td class="small">کانال فناوری</td>
+          <td class="small mono" dir="ltr">-1009999990999</td>
+          <td>
+            <span class="badge b-ok">فعال</span>
+          </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_toggle">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="23">
+              <input type="hidden" name="on" value="0">
+              <button class="btn ghost sm" type="submit">⏸ خاموش</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_source_delete">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="23">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <h2>🏷 دسته‌بندی و مقصدها</h2>
+  <div class="hint mb">
+    هر خبر با کلیدواژه‌های دسته‌ها تطبیق داده می‌شود و به <b>دسته‌ای که بیشترین تطبیق را دارد</b> می‌رود؛
+    سپس به «کانال مقصد» همان دسته ارسال می‌شود. اگر دسته‌ای مقصد نداشته باشد از مقصد پیش‌فرض استفاده می‌شود.
+  </div>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2 mb">
+    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_category_save">
+    <input type="hidden" name="m" value="newshub">
+    <div>
+      <label>نام دسته</label>
+      <input type="text" name="name" placeholder="اقتصادی / ورزشی / فناوری" required>
+      <label>کلیدواژه‌ها (با کاما جدا کن)</label>
+      <textarea name="keywords" rows="2" placeholder="دلار، طلا، بورس، تورم" required></textarea>
+    </div>
+    <div>
+      <label>کانال مقصد این دسته</label>
+      <input type="text" name="target_chat" class="mono" dir="ltr" placeholder="-1001234567890">
+      <label>اولویت (عدد کمتر = بالاتر)</label>
+      <input type="number" name="sort" value="0" dir="ltr">
+      <button class="btn mt" type="submit">➕ افزودن دسته</button>
+    </div>
+  </form>
+      <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>دسته</th><th>کلیدواژه‌ها</th><th>مقصد</th><th>اولویت</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+      <tbody>
+              <tr>
+          <td class="small">۲۲</td>
+          <td class="small"><b>اقتصادی</b></td>
+          <td class="small">دلار، طلا، بورس، تورم</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">۱</td>
+          <td><span class="badge b-ok">فعال</span></td>
+          <td>
+            <div class="btn-group">
+              <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="22">
+                <input type="hidden" name="is_active" value="1">
+                <input type="text" name="keywords" value="دلار، طلا، بورس، تورم" class="small">
+                <input type="hidden" name="name" value="اقتصادی">
+                <input type="hidden" name="target_chat" value="-1009999990001">
+                <input type="hidden" name="sort" value="1">
+                <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
+              </form>
+              <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="22">
+                <button class="btn danger sm" type="submit">🗑</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+              <tr>
+          <td class="small">۲۳</td>
+          <td class="small"><b>ورزشی</b></td>
+          <td class="small">فوتبال، والیبال، لیگ</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">۲</td>
+          <td><span class="badge b-ok">فعال</span></td>
+          <td>
+            <div class="btn-group">
+              <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="23">
+                <input type="hidden" name="is_active" value="1">
+                <input type="text" name="keywords" value="فوتبال، والیبال، لیگ" class="small">
+                <input type="hidden" name="name" value="ورزشی">
+                <input type="hidden" name="target_chat" value="-1009999990001">
+                <input type="hidden" name="sort" value="2">
+                <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
+              </form>
+              <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="23">
+                <button class="btn danger sm" type="submit">🗑</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+              <tr>
+          <td class="small">۲۴</td>
+          <td class="small"><b>فناوری</b></td>
+          <td class="small">موبایل، هوش مصنوعی، اپلیکیشن</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">۳</td>
+          <td><span class="badge b-ok">فعال</span></td>
+          <td>
+            <div class="btn-group">
+              <form onsubmit="return false" method="post" action="#panel/index.php" class="inline inline-form">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_save">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="24">
+                <input type="hidden" name="is_active" value="1">
+                <input type="text" name="keywords" value="موبایل، هوش مصنوعی، اپلیکیشن" class="small">
+                <input type="hidden" name="name" value="فناوری">
+                <input type="hidden" name="target_chat" value="-1009999990001">
+                <input type="hidden" name="sort" value="3">
+                <button class="btn ghost sm" type="submit">💾 کلیدواژه</button>
+              </form>
+              <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+                <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">                <input type="hidden" name="a" value="newshub_category_delete">
+                <input type="hidden" name="m" value="newshub">
+                <input type="hidden" name="id" value="24">
+                <button class="btn danger sm" type="submit">🗑</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <h2>🧪 آزمایش دسته‌بندی</h2>
+  <form onsubmit="return false" method="get" action="#panel/index.php" class="inline mb">
+    <input type="hidden" name="p" value="module">
+    <input type="hidden" name="m" value="newshub">
+    <input type="text" name="try" value="" placeholder="مثلاً: قیمت دلار امروز بالا رفت" style="min-width:320px">
+    <button class="btn ghost" type="submit">🔍 بررسی</button>
+  </form>
+  </div>
+
+<div class="card">
+  <h2>✍️ ارسال دستی خبر</h2>
+  <div class="hint mb">اگر دسترسی به پست‌های کانال ممکن نبود، متن خبر را اینجا بگذار؛ همان دسته‌بندی و مقصد اعمال می‌شود.</div>
+  <form onsubmit="return false" method="post" action="#panel/index.php" class="grid g2">
+    <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">    <input type="hidden" name="a" value="newshub_send_manual">
+    <input type="hidden" name="m" value="newshub">
+    <div>
+      <label>متن خبر</label>
+      <textarea name="body" rows="4" placeholder="متن کامل خبر…" required></textarea>
+    </div>
+    <div>
+      <label>دسته (اختیاری — خالی = تشخیص خودکار)</label>
+      <select name="category_id">
+        <option value="0">تشخیص خودکار</option>
+                  <option value="22">اقتصادی</option>
+                  <option value="23">ورزشی</option>
+                  <option value="24">فناوری</option>
+              </select>
+      <button class="btn mt" type="submit">📤 پردازش و ارسال</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>📥 صندوق ورودی (۴۰ خبر آخر)</h2></div>
+      <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>زمان</th><th>متن</th><th>دسته</th><th>مقصد</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+      <tbody>
+                      <tr>
+          <td class="small">۴۹</td>
+          <td class="small mono">10/22 19:54</td>
+          <td class="small">خبر عمومی بدون کلیدواژه برای بازبینی.</td>
+          <td class="small">—</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">
+            <span class="badge b-warn">در انتظار</span>
+                      </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="49">
+              <button class="btn ok sm" type="submit">📤 ارسال</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="49">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+                      <tr>
+          <td class="small">۴۸</td>
+          <td class="small mono">10/22 19:54</td>
+          <td class="small">اپلیکیشن جدید مبتنی بر هوش مصنوعی معرفی شد.</td>
+          <td class="small">فناوری</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">
+            <span class="badge b-warn">در انتظار</span>
+                      </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="48">
+              <button class="btn ok sm" type="submit">📤 ارسال</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="48">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+                      <tr>
+          <td class="small">۴۷</td>
+          <td class="small mono">10/22 19:54</td>
+          <td class="small">تیم ملی فوتبال در دیداری دوستانه به برتری رسید.</td>
+          <td class="small">ورزشی</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">
+            <span class="badge b-ok">ارسال‌شده</span>
+                      </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="47">
+              <button class="btn ok sm" type="submit">📤 ارسال</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="47">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+                      <tr>
+          <td class="small">۴۶</td>
+          <td class="small mono">10/22 19:54</td>
+          <td class="small">قیمت دلار امروز با رشد ۲ درصدی به مرز جدیدی رسید و طلا هم بالا رفت.</td>
+          <td class="small">اقتصادی</td>
+          <td class="small mono" dir="ltr">-1009999990001</td>
+          <td class="small">
+            <span class="badge b-ok">ارسال‌شده</span>
+                      </td>
+          <td class="btn-group">
+            <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_send_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="46">
+              <button class="btn ok sm" type="submit">📤 ارسال</button>
+            </form>
+            <form method="post" action="#panel/index.php" class="inline" onsubmit="return confirm('حذف شود؟')">
+              <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">              <input type="hidden" name="a" value="newshub_delete_item">
+              <input type="hidden" name="m" value="newshub">
+              <input type="hidden" name="id" value="46">
+              <button class="btn danger sm" type="submit">🗑</button>
+            </form>
+          </td>
+        </tr>
+            </tbody>
+    </table></div>
+  </div>
+
+<div class="card">
+  <h2>🤖 دستورهای ربات</h2>
+  <div class="hint">
+    <code class="mono">کانال_خبر</code> — نمایش منابع و دسته‌ها ·
+    <code class="mono">خبر_دستی متن خبر</code> — ثبت و ارسال فوری خبر از طرف ادمین
+  </div>
+</div>
+    </div>
+  </main>
+</div>
+<div style="position:fixed;bottom:10px;left:10px;z-index:99;background:#0b1220;border:1px solid #1e3050;border-radius:8px;padding:6px 10px;font:12px sans-serif;color:#8fa6c8">پیش‌نمایش استاتیک — دکمه‌ها غیرفعال‌اند</div>
+</body>
+</html>

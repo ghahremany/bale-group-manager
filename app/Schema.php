@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 final class Schema
 {
-    public const VERSION = '1.4.0';
+    public const VERSION = '1.5.0';
 
     public static function statements(): array
     {
@@ -630,6 +630,108 @@ final class Schema
                 verified_at INT UNSIGNED NULL,
                 created_at INT UNSIGNED NOT NULL,
                 UNIQUE KEY uq_user (user_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: نظرسنجی (۱.۵) ----------
+            "CREATE TABLE IF NOT EXISTS polls (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                code VARCHAR(12) NOT NULL,
+                chat_id BIGINT NULL,
+                message_id BIGINT NULL,
+                question VARCHAR(300) NOT NULL,
+                description VARCHAR(600) NULL,
+                multi TINYINT(1) NOT NULL DEFAULT 0,
+                anonymous TINYINT(1) NOT NULL DEFAULT 0,
+                status ENUM('draft','active','closed') NOT NULL DEFAULT 'draft',
+                expires_at INT UNSIGNED NULL,
+                admin_id INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_code (code),
+                KEY idx_status (status)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS poll_options (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                poll_id INT UNSIGNED NOT NULL,
+                idx TINYINT UNSIGNED NOT NULL,
+                label VARCHAR(120) NOT NULL,
+                votes INT UNSIGNED NOT NULL DEFAULT 0,
+                KEY idx_poll (poll_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS poll_votes (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                poll_id INT UNSIGNED NOT NULL,
+                option_idx TINYINT UNSIGNED NOT NULL,
+                user_id BIGINT NOT NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_vote (poll_id, user_id, option_idx),
+                KEY idx_user (user_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: قرعه‌کشی (۱.۵) ----------
+            "CREATE TABLE IF NOT EXISTS raffles (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                code VARCHAR(12) NOT NULL,
+                title VARCHAR(200) NOT NULL,
+                prize VARCHAR(200) NOT NULL,
+                description VARCHAR(600) NULL,
+                chat_id BIGINT NULL,
+                message_id BIGINT NULL,
+                require_chat BIGINT NULL,
+                ends_at INT UNSIGNED NOT NULL DEFAULT 0,
+                winners_count TINYINT UNSIGNED NOT NULL DEFAULT 1,
+                status ENUM('draft','active','drawn','canceled') NOT NULL DEFAULT 'active',
+                winner_ids VARCHAR(255) NULL,
+                entrants INT UNSIGNED NOT NULL DEFAULT 0,
+                drawn_at INT UNSIGNED NULL,
+                admin_id INT UNSIGNED NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_code (code),
+                KEY idx_due (status, ends_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS raffle_entries (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                raffle_id INT UNSIGNED NOT NULL,
+                user_id BIGINT NOT NULL,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_entry (raffle_id, user_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            // ---------- ماژول: کانال خبر (۱.۵) ----------
+            "CREATE TABLE IF NOT EXISTS news_sources (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                chat_id BIGINT NOT NULL,
+                title VARCHAR(160) NOT NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                created_at INT UNSIGNED NOT NULL,
+                UNIQUE KEY uq_src_chat (chat_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS news_categories (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(80) NOT NULL,
+                keywords VARCHAR(600) NOT NULL,
+                target_chat BIGINT NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                sort SMALLINT NOT NULL DEFAULT 0,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_sort (sort)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE IF NOT EXISTS news_inbox (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                source_chat BIGINT NOT NULL,
+                source_msg BIGINT NULL,
+                category_id INT UNSIGNED NULL,
+                body TEXT NOT NULL,
+                status ENUM('new','sent','skipped','failed') NOT NULL DEFAULT 'new',
+                target_chat BIGINT NULL,
+                sent_msg BIGINT NULL,
+                error VARCHAR(255) NULL,
+                created_at INT UNSIGNED NOT NULL,
+                KEY idx_status (status, created_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
             // ---------- تنظیمات کلید/مقدار ----------

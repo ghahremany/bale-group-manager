@@ -208,7 +208,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
                   <div class="card">
   <div class="card-header">
     <h2>🧩 ماژول‌ها</h2>
-    <span class="badge b-info">۴ ماژول</span>
+    <span class="badge b-info">۷ ماژول</span>
   </div>
   <div class="hint">
     هر بخش از ربات یک «ماژول» مستقل است: می‌توانی هر کدام را جدا روشن/خاموش کنی.
@@ -233,7 +233,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
             <div class="btn-group mt">
                   <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=channels">⚙️ تنظیمات ماژول</a>
                 <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-          <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
           <input type="hidden" name="m" value="channels">
           <input type="hidden" name="on" value="0">
           <button class="btn warn sm" type="submit">
@@ -258,7 +258,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
             <div class="btn-group mt">
                   <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=forcejoin">⚙️ تنظیمات ماژول</a>
                 <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-          <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
           <input type="hidden" name="m" value="forcejoin">
           <input type="hidden" name="on" value="1">
           <button class="btn ok sm" type="submit">
@@ -282,8 +282,88 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
             <div class="btn-group mt">
                   <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=news">⚙️ تنظیمات ماژول</a>
                 <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-          <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
           <input type="hidden" name="m" value="news">
+          <input type="hidden" name="on" value="0">
+          <button class="btn warn sm" type="submit">
+            ⏸ خاموش کردن          </button>
+        </form>
+      </div>
+    </div>
+      <div class="card">
+      <div class="card-header">
+        <h2>📡 کانال خبر                      <span class="badge b-ok">فعال</span>
+                  </h2>
+        <span class="pill mono small">newshub</span>
+      </div>
+      <p class="hint">چند کانال منبع → دسته‌بندی خودکار با کلیدواژه → ارسال به کانال مقصد هر دسته</p>
+              <div class="hint mt">📊 ۳ منبع · ۳ دسته · ۲ ارسال</div>
+                    <div class="hint mt">
+          دستورهای ربات:
+                      <code class="mono">منابع_خبر</code>
+                      <code class="mono">کانال_خبر</code>
+                      <code class="mono">خبر_دستی</code>
+                  </div>
+            <div class="btn-group mt">
+                  <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=newshub">⚙️ تنظیمات ماژول</a>
+                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="m" value="newshub">
+          <input type="hidden" name="on" value="0">
+          <button class="btn warn sm" type="submit">
+            ⏸ خاموش کردن          </button>
+        </form>
+      </div>
+    </div>
+      <div class="card">
+      <div class="card-header">
+        <h2>📊 نظرسنجی                      <span class="badge b-ok">فعال</span>
+                  </h2>
+        <span class="pill mono small">poll</span>
+      </div>
+      <p class="hint">ساخت نظرسنجی با گزینه‌های شیشه‌ای، رأی‌گیری، نتیجه زنده و بستن خودکار</p>
+              <div class="hint mt">📊 ۲ فعال · ۸ رأی</div>
+                    <div class="hint mt">
+          دستورهای ربات:
+                      <code class="mono">نظرسنجی</code>
+                      <code class="mono">نظرسنجی‌ها</code>
+                      <code class="mono">رای</code>
+                      <code class="mono">رأی</code>
+                      <code class="mono">نتیجه</code>
+                      <code class="mono">نظرسنجی_ساز</code>
+                  </div>
+            <div class="btn-group mt">
+                  <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=poll">⚙️ تنظیمات ماژول</a>
+                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="m" value="poll">
+          <input type="hidden" name="on" value="0">
+          <button class="btn warn sm" type="submit">
+            ⏸ خاموش کردن          </button>
+        </form>
+      </div>
+    </div>
+      <div class="card">
+      <div class="card-header">
+        <h2>🎁 قرعه‌کشی                      <span class="badge b-ok">فعال</span>
+                  </h2>
+        <span class="pill mono small">raffle</span>
+      </div>
+      <p class="hint">قرعه‌کشی با جایزه، شرط عضویت، شرکت با دکمه و انتخاب تصادفی برنده‌ها</p>
+              <div class="hint mt">📊 ۲ فعال · ۱۰ شرکت‌کننده</div>
+                    <div class="hint mt">
+          دستورهای ربات:
+                      <code class="mono">قرعه‌کشی</code>
+                      <code class="mono">قرعه‌کشی‌ها</code>
+                      <code class="mono">شرکت</code>
+                      <code class="mono">برنده</code>
+                      <code class="mono">قرعه‌کشی_ساز</code>
+                  </div>
+            <div class="btn-group mt">
+                  <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=raffle">⚙️ تنظیمات ماژول</a>
+                <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="m" value="raffle">
           <input type="hidden" name="on" value="0">
           <button class="btn warn sm" type="submit">
             ⏸ خاموش کردن          </button>
@@ -308,7 +388,7 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
             <div class="btn-group mt">
                   <a class="btn ghost sm" href="#panel/index.php?p=module&amp;m=referrals">⚙️ تنظیمات ماژول</a>
                 <form onsubmit="return false" method="post" action="#panel/index.php" class="inline">
-          <input type="hidden" name="_csrf" value="ae70bda6b4e61d44c93a332006329439e9641549840e16bebb7e058c716d8f32">          <input type="hidden" name="a" value="module_toggle">
+          <input type="hidden" name="_csrf" value="feda5b76d2f4badf4a10ef13b26dbbb11c2ba083a173dbf78a7b97d56d9a442b">          <input type="hidden" name="a" value="module_toggle">
           <input type="hidden" name="m" value="referrals">
           <input type="hidden" name="on" value="0">
           <button class="btn warn sm" type="submit">

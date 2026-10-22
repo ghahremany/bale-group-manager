@@ -28,7 +28,8 @@ final class Bot
             } elseif (isset($update['my_chat_member'])) {
                 self::handleBotMembership($update['my_chat_member']);
             } elseif (isset($update['channel_post'])) {
-                // فعلاً نادیده
+                // پست تازه در کانالی که ربات ادمین است → ماژول‌ها (کانال خبر، …)
+                ModuleManager::dispatchChannelPost((array)$update['channel_post']);
             }
         } catch (Throwable $e) {
             Logger::error('bot', get_class($e) . ': ' . $e->getMessage(), [
@@ -143,6 +144,10 @@ final class Bot
                     Logger::audit(null, 'bale:' . $uid, 'report_action_' . $op, "{$targetChat}/{$targetUser}");
                     return;
                 }
+            }
+            // دکمه‌های ماژول‌ها (نظرسنجی، قرعه‌کشی، …)
+            if ($data !== '' && ModuleManager::dispatchCallback($data, $cb)) {
+                return;
             }
             BaleApi::answerCallback((string)$cb['id'], '');
         } catch (Throwable $e) {

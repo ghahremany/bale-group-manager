@@ -82,6 +82,26 @@ abstract class Module
         return false;
     }
 
+    /**
+     * دکمه‌های شیشه‌ای (callback) مربوط به این ماژول
+     * @param array<string,mixed> $cb آپدیت callback_query
+     * @return bool آیا این ماژول داده را مصرف کرد؟
+     */
+    public static function handleCallback(string $data, array $cb): bool
+    {
+        return false;
+    }
+
+    /**
+     * پست تازه در کانالی که ربات ادمین آن است (آپدیت channel_post)
+     * @param array<string,mixed> $post
+     * @return bool آیا این ماژول پست را مصرف کرد؟
+     */
+    public static function handleChannelPost(array $post): bool
+    {
+        return false;
+    }
+
     /** کارهای دوره‌ای (کرون) — پیش‌فرض هیچ */
     public static function cron(): void
     {
@@ -133,6 +153,12 @@ abstract class Module
     }
 
     // ---------- کمکی ----------
+
+    /** ارسال پیام به هر چت (برای ماژول‌هایی که به کانال می‌فرستند) */
+    protected static function sayTo(int|string $chatId, string $text, ?array $markup = null): ?int
+    {
+        return BaleApi::sendMessage($chatId, $text, null, $markup, 'HTML');
+    }
 
     protected static function say(array $ctx, string $text): void
     {

@@ -91,6 +91,42 @@ final class ModuleManager
         return false;
     }
 
+    /**
+     * پخش callback (دکمه شیشه‌ای) بین ماژول‌های فعال
+     * @param array<string,mixed> $cb
+     */
+    public static function dispatchCallback(string $data, array $cb): bool
+    {
+        foreach (self::enabled() as $class) {
+            try {
+                if (method_exists($class, 'handleCallback') && $class::handleCallback($data, $cb)) {
+                    return true;
+                }
+            } catch (Throwable $e) {
+                Logger::error('module', 'callback failed: ' . $class . ' / ' . $data . ' — ' . $e->getMessage());
+            }
+        }
+        return false;
+    }
+
+    /**
+     * پخش پست کانال بین ماژول‌های فعال
+     * @param array<string,mixed> $post
+     */
+    public static function dispatchChannelPost(array $post): bool
+    {
+        foreach (self::enabled() as $class) {
+            try {
+                if (method_exists($class, 'handleChannelPost') && $class::handleChannelPost($post)) {
+                    return true;
+                }
+            } catch (Throwable $e) {
+                Logger::error('module', 'channel post failed: ' . $class . ' — ' . $e->getMessage());
+            }
+        }
+        return false;
+    }
+
     /** همه دستورهای ماژول‌های فعال (برای راهنما) */
     public static function commands(): array
     {
