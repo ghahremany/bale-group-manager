@@ -1,0 +1,21 @@
+# ---------- امنیت پایه ----------
+Options -Indexes
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # جلوگیری از دسترسی مستقیم به فایل‌های حساس
+  RewriteRule ^(config|storage|app|bin|sql)/ - [F,L]
+  RewriteRule \.(md|sql|lock|log|db)$ - [F,L]
+</IfModule>
+
+<FilesMatch "(^\.|composer\.(json|lock)$|\.(sql|lock|log|db)$)">
+  Require all denied
+</FilesMatch>
+
+# هدرهای امنیتی
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "no-referrer"
+</IfModule>

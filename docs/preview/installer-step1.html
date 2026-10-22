@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نصب ربات مدیر گروه بله</title>
+<style>
+:root{--bg:#0b1120;--card:#111c33;--line:#1f2f4d;--txt:#e7eefc;--muted:#93a4c4;--accent:#3b82f6;--ok:#16a34a;--err:#dc2626;--warn:#f59e0b}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#070d1a,#0b1120 45%,#101b30);color:var(--txt);font-family:Tahoma,"Segoe UI",system-ui,sans-serif;line-height:1.9;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;padding:28px 18px 60px}
+.hero{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#3b82f6,#22d3ee);display:grid;place-items:center;font-size:26px;box-shadow:0 10px 30px rgba(59,130,246,.35)}
+h1{font-size:20px;margin:0}
+.sub{color:var(--muted);font-size:13px}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}
+.step{flex:1;min-width:120px;padding:10px 12px;border-radius:12px;background:#0f1a2e;border:1px solid var(--line);font-size:13px;color:var(--muted);text-align:center}
+.step.active{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;border-color:transparent;font-weight:bold}
+.step.done{color:#86efac;border-color:#14532d;background:#0c1f17}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+h2{font-size:16px;margin:0 0 14px}
+label{display:block;font-size:13px;margin:12px 0 6px;color:#c7d5ee}
+input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0a1424;color:var(--txt);font-family:inherit;font-size:14px}
+input:focus,select:focus{outline:2px solid #1d4ed8;border-color:transparent}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.btn{display:inline-block;padding:11px 22px;border-radius:11px;border:0;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-family:inherit;font-size:14px;cursor:pointer;text-decoration:none;font-weight:bold}
+.btn.ghost{background:#132039;border:1px solid var(--line);color:var(--txt)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}
+.badge{padding:2px 9px;border-radius:999px;font-size:12px;display:inline-block}
+.b-ok{background:#052e16;color:#86efac;border:1px solid #14532d}
+.b-err{background:#3f0d0d;color:#fecaca;border:1px solid #7f1d1d}
+.alert{padding:12px 14px;border-radius:12px;margin-bottom:14px;font-size:13.5px}
+.alert.err{background:#3f0d0d;border:1px solid #7f1d1d;color:#fecaca}
+.alert.ok{background:#052e16;border:1px solid #14532d;color:#bbf7d0}
+.alert.warn{background:#3b2a05;border:1px solid #78350f;color:#fde68a}
+code{background:#0a1424;padding:2px 7px;border-radius:6px;font-size:12.5px;direction:ltr;display:inline-block}
+.mono{direction:ltr;text-align:left;word-break:break-all}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.footer{color:var(--muted);font-size:12px;text-align:center;margin-top:24px}
+.progress{height:6px;border-radius:99px;background:#0f1a2e;overflow:hidden;margin-bottom:20px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,#22d3ee,#3b82f6)}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-top:12px;background:#0d1728}
+summary{cursor:pointer;font-size:13px;color:#c7d5ee}
+</style>
+</head>
+<body><div style="background:#1d4ed8;color:#fff;padding:8px 14px;font:13px Tahoma;text-align:center">پیش‌نمایش استاتیک نصب‌کننده — مرحله ۱ از ۴</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="logo">🤖</div>
+    <div>
+      <h1>نصب ربات مدیر گروه بله</h1>
+      <div class="sub">PHP + MySQL — نسخه ۱.۰.۰</div>
+    </div>
+  </div>
+
+  <div class="progress"><i style="width:25%"></i></div>
+  <div class="steps">
+    <div class="step active">۱. بررسی پیش‌نیاز</div>
+    <div class="step ">۲. دیتابیس</div>
+    <div class="step ">۳. ربات و ادمین</div>
+    <div class="step ">۴. پایان</div>
+  </div>
+
+
+  <!-- ================= مرحله ۱ ================= -->
+  <div class="card">
+    <h2>۱. بررسی پیش‌نیازهای سرور</h2>
+    <table>
+              <tr>
+          <td>PHP نسخه ۸.۰ یا بالاتر</td>
+          <td class="hint">نسخه فعلی: 8.4.26</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه pdo</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه pdo_mysql</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه curl</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه mbstring</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه openssl</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه json</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه fileinfo</td>
+          <td class="hint">نصب است</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>قابل نوشتن: config/</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>قابل نوشتن: storage/</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>قابل نوشتن: storage/logs</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>قابل نوشتن: storage/cache</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>افزونه mbstring برای فارسی</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>cURL برای ارتباط با بله</td>
+          <td class="hint">OK</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+              <tr>
+          <td>allow_url_fopen / outbound HTTPS</td>
+          <td class="hint">در صورت بلاک بودن، سرور باید به tapi.bale.ai دسترسی داشته باشد</td>
+          <td style="width:90px"><span class="badge b-ok">✓ آماده</span></td>
+        </tr>
+          </table>
+        <div class="actions">
+      <a class="btn" href="install.php?step=2" >ادامه →</a>
+    </div>
+  </div>
+
+
+  <div class="footer">
+    ربات مدیر گروه بله • PHP/MySQL • امنیت: CSRF، OTP، قفل تلاش، محدودیت نرخ، لاگ کامل
+  </div>
+</div>
+</body>
+</html>

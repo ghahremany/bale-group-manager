@@ -1,0 +1,19 @@
+# تنظیمات محلی (نصب‌کننده می‌سازد)
+config/config.php
+config/installed.lock
+config/.install-result.json
+
+# داده‌های زمان اجرا
+storage/logs/*
+storage/cache/*
+storage/backups/*.sql
+storage/backups/*.sql.gz
+storage/receipts/*
+storage/stop-poller
+
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep
+!storage/backups/.gitkeep
+!storage/receipts/.gitkeep
+
+.DS_Store
