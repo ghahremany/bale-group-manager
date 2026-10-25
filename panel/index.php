@@ -263,7 +263,7 @@ switch ($page) {
             'report_days' => (int)(Schema::getSetting('report_daily_days', '1') ?: 1),
             'db_size'  => (int)DB::val("SELECT SUM(data_length+index_length) FROM information_schema.tables WHERE table_schema=DATABASE()", [], 0),
             'db_tables'=> (int)DB::val("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_type='BASE TABLE'", [], 0),
-            'mysqldump'=> trim((string)@shell_exec('command -v mysqldump 2>/dev/null')) !== '',
+            'mysqldump'=> function_exists('shell_exec') && trim((string)@shell_exec('command -v mysqldump 2>/dev/null')) !== '',
         ];
         $title = 'بکاپ و گزارش خودکار';
         break;

@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 final class Schema
 {
-    public const VERSION = '1.6.0';
+    public const VERSION = '1.6.1';
 
     public static function statements(): array
     {
@@ -899,6 +899,9 @@ final class Schema
         foreach ($all as $sql) {
             DB::pdo()->exec($sql);
         }
+        // ستون‌های نسخه‌های بعدی (referral_code و …) + جدول‌های ماژول‌ها — idempotent؛
+        // بدون این، نصب اولیه جدول users را بدون ستون‌های ارجاع می‌ساخت و صفحهٔ زیرمجموعه‌گیری خطا می‌داد.
+        self::upgrade();
     }
 
     public static function seedDefaults(): void
